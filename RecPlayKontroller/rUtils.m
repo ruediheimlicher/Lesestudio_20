@@ -2831,4 +2831,19 @@ OSErr rUtils_AddUserDataTextToMovie (Movie theMovie, char *theText, OSType theTy
 	return saveOK;
 }
 
+#pragma mark -
+#pragma mark calendar
+NSUInteger dayOfYearForDate(NSDate *dasDatum)
+{
+   NSTimeZone *gmtTimeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+   NSCalendar *calendar = [[NSCalendar alloc]
+                           initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+   [calendar setTimeZone:gmtTimeZone];
+   
+   NSUInteger day = [calendar ordinalityOfUnit:NSCalendarUnitDay
+                                 inUnit:NSCalendarUnitYear forDate:dasDatum];
+   return day;
+}
+
+
 @end
