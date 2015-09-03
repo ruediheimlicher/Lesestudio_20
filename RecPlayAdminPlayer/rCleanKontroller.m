@@ -9,12 +9,12 @@
 #import "rAdminPlayer.h"
 
 extern NSString* alle;
-extern NSString* name;
-extern NSString* titel;
-extern NSString* anzahl;
-extern NSString* auswahl;
-extern NSString* leser;
-extern NSString* anzleser;
+//extern NSString* name;
+//extern NSString* titel;
+//extern NSString* anzahl;
+//extern NSString* auswahl;
+//extern NSString* leser;
+//extern NSString* anzleser;
 
 enum
 {
@@ -72,10 +72,10 @@ enum
 		  {
 			NSDictionary* TempNamenDic=[OptionDic objectForKey:selektiertenamenzeile];
 			//NSLog(@"**  nurTitelZuNamenOption: TempNamenDic: %@",[TempNamenDic description]);
-			if([TempNamenDic objectForKey:name])
+			if([TempNamenDic objectForKey:@"name"])
 			  {
 				
-				NSString* tempname=[TempNamenDic objectForKey:name];
+				NSString* tempname=[TempNamenDic objectForKey:@"name"];
 				//NSLog(@"**  nurTitelZuNamenOption: tempname: %@",[tempname description]);
 				
 				[self setCleanTitelVonLeser:tempname];
@@ -112,7 +112,7 @@ enum
 		  {
 			case NamenViewTag:
 			{
-				NSString* tempName=[OptionDic objectForKey:name];//aktueller Name
+				NSString* tempName=[OptionDic objectForKey:@"name"];//aktueller Name
 				int NamenWeg=[[OptionDic objectForKey:@"namenweg"]intValue];//sollen die Titel zum Namen entfernt weden?
 				NSMutableArray* CleanTitelDicArray=[[NSMutableArray alloc]initWithCapacity:0];
 				//NSLog(@"\n\n-----------------------------CleanViewNotifikationAktion: CleanTitelDicArray: \n%@\n",[CleanTitelDicArray description]);
@@ -144,7 +144,7 @@ enum
 						int index=0;
 						while(einTitel=[TitelDicEnum nextObject])		//neue Titel einf체llen
 						  {
-							[neueTitelArray insertObject:[einTitel objectForKey:titel] atIndex:[neueTitelArray count]];
+							[neueTitelArray insertObject:[einTitel objectForKey:@"titel"] atIndex:[neueTitelArray count]];
 							index++;
 						  }
 						NSEnumerator* CleanTitelDicEnum=[CleanTitelDicArray objectEnumerator];	//Array mit Dics  aus Clean
@@ -155,7 +155,7 @@ enum
 							  
 							  //int neueAnzahl=[[eineZeile objectForKey:anzahl]intValue];
 							  //NSLog(@"eineZeile: %@ anzahl: %d",[eineZeile description],n);
-							  NSString* tempTitel=[eineCleanTitelDicZeile objectForKey:titel]; //Titel aus Clean
+							  NSString* tempTitel=[eineCleanTitelDicZeile objectForKey:@"titel"]; //Titel aus Clean
 							//NSLog(@"tempTitel: %@\n",[tempTitel description]);
 							  
 							  
@@ -166,19 +166,19 @@ enum
 								  
 								  NSEnumerator*neueTitelEnum=[TitelMitAnzahlArray objectEnumerator];
 								  id eineTitelZeile;
-								  int wegTitelIndex=-1;
+								  double wegTitelIndex=-1;
 								  BOOL NameSchonDa=NO;
 								  while ((eineTitelZeile=[neueTitelEnum nextObject])&&!gefunden)
 									{
 									  //NSLog(@"eineTitelZeile: %@  ",[eineTitelZeile description]);
-									  if ([[eineTitelZeile objectForKey:titel]isEqualToString:tempTitel])//Zeile in titelDic mit diesem Titel
+									  if ([[eineTitelZeile objectForKey:@"titel"]isEqualToString:tempTitel])//Zeile in titelDic mit diesem Titel
 										{
-											if ([[eineCleanTitelDicZeile objectForKey:leser]containsObject:tempName])
+											if ([[eineCleanTitelDicZeile objectForKey:@"leser"]containsObject:tempName])
 											  {
 												//NSLog(@"Name schon in Liste 'leser': %@",tempName);
 												wegTitelIndex=[TitelMitAnzahlArray indexOfObject:eineTitelZeile];
 												
-												TitelWegAnzahl=[[eineTitelZeile objectForKey:anzahl]intValue];
+												TitelWegAnzahl=[[eineTitelZeile objectForKey:@"anzahl"]intValue];
 												NameSchonDa=YES;
 												gefunden=1;
 											  }
@@ -203,24 +203,24 @@ enum
 								  if (gefunden==1)
 									{
 									  
-									  int alteAnzahl=[[eineCleanTitelDicZeile objectForKey:anzahl]intValue];//Anzahl Aufnahmen zum titel in Clean
+									  int alteAnzahl=[[eineCleanTitelDicZeile objectForKey:@"anzahl"]intValue];//Anzahl Aufnahmen zum titel in Clean
 									  
 									  //NSLog(@"alteAnzahl, %d  neueAnzahl: %d",alteAnzahl,neueAnzahl);
 									  NSNumber* neueAnzahlNumber=[NSNumber numberWithInt:alteAnzahl-TitelWegAnzahl];
-									  [eineCleanTitelDicZeile setObject:neueAnzahlNumber forKey:anzahl];
+									  [eineCleanTitelDicZeile setObject:neueAnzahlNumber forKey:@"anzahl"];
 									  //NSLog(@"eineCleanTitelDicZeile neu: %@",[eineCleanTitelDicZeile description]);
 									  
 									  //neuen namen aus Liste 'leser' entfernen
-									  NSMutableArray* tempArray=[[eineCleanTitelDicZeile objectForKey:leser]mutableCopy];
+									  NSMutableArray* tempArray=[[eineCleanTitelDicZeile objectForKey:@"leser"]mutableCopy];
 									  if (tempArray)
 										{
 										  //NSLog(@"tempArray: %@",[tempArray description]);
 										  [tempArray removeObject:tempName];
 										  //NSLog(@"tempArray neu: %@",[tempArray description]);
 										}
-									  [eineCleanTitelDicZeile setObject:tempArray forKey:leser];
-									  NSNumber* neueAnzahlLeserNumber=[NSNumber numberWithInt:[tempArray count]];
-									  [eineCleanTitelDicZeile setObject:neueAnzahlLeserNumber forKey:anzleser];
+									  [eineCleanTitelDicZeile setObject:tempArray forKey:@"leser"];
+									  NSNumber* neueAnzahlLeserNumber=[NSNumber numberWithDouble:[tempArray count]];
+									  [eineCleanTitelDicZeile setObject:neueAnzahlLeserNumber forKey:@"anzleser"];
 									  
 									  //NSLog(@"----- eineCleanTitelDicZeile erweitert: %@",[eineCleanTitelDicZeile description]);
 									}//gefunden
@@ -229,7 +229,7 @@ enum
 						  }//while (eineCleanTitelDicZeile
 						//NSLog(@"while (eineCleanTitelDicZeile) fertig");
 						BOOL nochZeilenMitNull=YES;
-						int schleifenindex=[CleanTitelDicArray count];
+						long schleifenindex=[CleanTitelDicArray count];
 						while (nochZeilenMitNull&&(schleifenindex>=0))
 						  {
 							//NSLog(@"Anzahl: %d  CleanTitelDicArray: %@  schleifenindex: %d",[CleanTitelDicArray count],[CleanTitelDicArray description],schleifenindex);
@@ -240,7 +240,7 @@ enum
 							int zeilenIndex=0;
 							while ((eineCleanTitelWegZeile=[CleanTitelWegEnum nextObject])&&(ZeileMitNullGefunden<0))//Zeilen mit Anzahl=0 entfernen
 							  {
-								if ([[eineCleanTitelWegZeile objectForKey:anzahl]intValue]==0)
+								if ([[eineCleanTitelWegZeile objectForKey:@"anzahl"]intValue]==0)
 								  {
 									ZeileMitNullGefunden=zeilenIndex;
 								  }
@@ -270,7 +270,7 @@ enum
 						int index=0;
 						while(einTitel=[TitelDicEnum nextObject])		//neue Titel einf체llen
 						  {
-							[neueTitelArray insertObject:[einTitel objectForKey:titel] atIndex:[neueTitelArray count]];
+							[neueTitelArray insertObject:[einTitel objectForKey:@"titel"] atIndex:[neueTitelArray count]];
 							index++;
 						  }
 						//NSLog(@"neueTitelArray neu eingef체llt aus TitelMitAnzahlArray: \n%@\n",[neueTitelArray description]);
@@ -284,7 +284,7 @@ enum
 							  
 							  //int neueAnzahl=[[eineZeile objectForKey:anzahl]intValue];
 							  //NSLog(@"eineZeile: %@ anzahl: %d",[eineZeile description],n);
-							  NSString* tempTitel=[eineCleanTitelDicZeile objectForKey:titel]; //Titel aus Clean
+							  NSString* tempTitel=[eineCleanTitelDicZeile objectForKey:@"titel"]; //Titel aus Clean
 																							   //NSLog(@"tempTitel: %@\n",[tempTitel description]);
 							  
 							  
@@ -295,14 +295,14 @@ enum
 								  
 								  NSEnumerator*neueTitelEnum=[TitelMitAnzahlArray objectEnumerator];
 								  id eineTitelZeile;
-								  int neuerTitelIndex=-1;
+								  double neuerTitelIndex=-1;
 								  BOOL NameSchonDa=NO;
 								  while ((eineTitelZeile=[neueTitelEnum nextObject])&&!gefunden)
 									{
 									  //NSLog(@"eineTitelZeile: %@  ",[eineTitelZeile description]);
-									  if ([[eineTitelZeile objectForKey:titel]isEqualToString:tempTitel])//Zeile in titelDic mit diesem Titel
+									  if ([[eineTitelZeile objectForKey:@"titel"]isEqualToString:tempTitel])//Zeile in titelDic mit diesem Titel
 										{
-											if ([[eineCleanTitelDicZeile objectForKey:leser]containsObject:tempName])
+											if ([[eineCleanTitelDicZeile objectForKey:@"leser"]containsObject:tempName])
 											  {
 												//NSLog(@"Name schon da: %@",tempName);
 												neuerTitelIndex=[TitelMitAnzahlArray indexOfObject:eineTitelZeile];
@@ -311,7 +311,7 @@ enum
 											else
 											  {
 												//NSLog(@"Name noch nicht da: %@",tempName);
-												neueAnzahl=[[eineTitelZeile objectForKey:anzahl]intValue];
+												neueAnzahl=[[eineTitelZeile objectForKey:@"anzahl"]intValue];
 												neuerTitelIndex=[TitelMitAnzahlArray indexOfObject:eineTitelZeile];
 												gefunden=1;
 											  }
@@ -329,24 +329,24 @@ enum
 								  if (gefunden==1)
 									{
 									  
-									  int alteAnzahl=[[eineCleanTitelDicZeile objectForKey:anzahl]intValue];//Anzahl Aufnahmen zum titel in Clean
+									  int alteAnzahl=[[eineCleanTitelDicZeile objectForKey:@"anzahl"]intValue];//Anzahl Aufnahmen zum titel in Clean
 									  
 									  //NSLog(@"alteAnzahl, %d  neueAnzahl: %d",alteAnzahl,neueAnzahl);
 									  NSNumber* neueAnzahlNumber=[NSNumber numberWithInt:neueAnzahl+alteAnzahl];
-									  [eineCleanTitelDicZeile setObject:neueAnzahlNumber forKey:anzahl];
+									  [eineCleanTitelDicZeile setObject:neueAnzahlNumber forKey:@"anzahl"];
 									  //NSLog(@"eineCleanTitelDicZeile neu: %@",[eineCleanTitelDicZeile description]);
 									  
 									  //neuen namen in Liste 'leser'
-									  NSMutableArray* tempArray=[[eineCleanTitelDicZeile objectForKey:leser]mutableCopy];
+									  NSMutableArray* tempArray=[[eineCleanTitelDicZeile objectForKey:@"leser"]mutableCopy];
 									  if (tempArray)
 										{
 										  //NSLog(@"tempArray: %@",[tempArray description]);
 										  [tempArray addObject:tempName];
 										  //NSLog(@"tempArray neu: %@",[tempArray description]);
 										}
-									  [eineCleanTitelDicZeile setObject:tempArray forKey:leser];
-									  NSNumber* neueAnzahlLeserNumber=[NSNumber numberWithInt:[tempArray count]];
-									  [eineCleanTitelDicZeile setObject:neueAnzahlLeserNumber forKey:anzleser];
+									  [eineCleanTitelDicZeile setObject:tempArray forKey:@"leser"];
+									  NSNumber* neueAnzahlLeserNumber=[NSNumber numberWithDouble:[tempArray count]];
+									  [eineCleanTitelDicZeile setObject:neueAnzahlLeserNumber forKey:@"anzleser"];
 									  
 									  //NSLog(@"----- eineCleanTitelDicZeile erweitert: %@",[eineCleanTitelDicZeile description]);
 									  if (neuerTitelIndex>=0)
@@ -371,18 +371,18 @@ enum
 						id einNeuerTitel;	
 						while (einNeuerTitel=[nochTitelEnum nextObject])
 						{
-							NSMutableDictionary* tempDic=[NSMutableDictionary dictionaryWithObject:[einNeuerTitel objectForKey:titel]
-																							forKey:titel];
+							NSMutableDictionary* tempDic=[NSMutableDictionary dictionaryWithObject:[einNeuerTitel objectForKey:@"titel"]
+																							forKey:@"titel"];
 							//NSNumber* tempNumber=[einNeuerTitel objectForKey:anzahl];
-							[tempDic setObject:[einNeuerTitel objectForKey:anzahl]
-										forKey:anzahl];
+							[tempDic setObject:[einNeuerTitel objectForKey:@"anzahl"]
+										forKey:@"anzahl"];
 							//NSArray* tempNamenArray=[NSArray arrayWithObjects:tempName,nil];
 							[tempDic setObject:[NSArray arrayWithObjects:tempName,nil]
-										forKey:leser];
+										forKey:@"leser"];
 							[tempDic setObject:[NSNumber numberWithInt:0]
-										forKey:auswahl];
+										forKey:@"auswahl"];
 							[tempDic setObject:[NSNumber numberWithInt:1]
-										forKey:anzleser];
+										forKey:@"anzleser"];
 
 							//NSLog(@"CleanViewNotifikationAktion: tempDic f웦 neuen Titel: %@",[tempDic description]);
 							[CleanTitelDicArray insertObject:tempDic 
@@ -435,18 +435,18 @@ enum
 			id einNeuerTitel;	
 			while (einNeuerTitel=[TitelEnum nextObject])
 			{
-				NSMutableDictionary* tempDic=[NSMutableDictionary dictionaryWithObject:[einNeuerTitel objectForKey:titel]
-																				forKey:titel];
+				NSMutableDictionary* tempDic=[NSMutableDictionary dictionaryWithObject:[einNeuerTitel objectForKey:@"titel"]
+																				forKey:@"titel"];
 				//NSNumber* tempNumber=[einNeuerTitel objectForKey:anzahl];
-				[tempDic setObject:[einNeuerTitel objectForKey:anzahl]
-							forKey:anzahl];
+				[tempDic setObject:[einNeuerTitel objectForKey:@"anzahl"]
+							forKey:@"anzahl"];
 				//NSArray* tempNamenArray=[NSArray arrayWithObjects:derLeser,nil];
 				[tempDic setObject:[NSArray arrayWithObjects:derLeser,nil]
-							forKey:leser];
+							forKey:@"leser"];
 				[tempDic setObject:[NSNumber numberWithInt:0]
-							forKey:auswahl];
+							forKey:@"auswahl"];
 				[tempDic setObject:[NSNumber numberWithInt:1]
-							forKey:anzleser];
+							forKey:@"anzleser"];
 				
 				//NSLog(@"CleanViewNotifikationAktion: tempDic f웦 neuen Titel: %@",[tempDic description]);
 				[CleanTitelDicArray insertObject:tempDic 
@@ -474,11 +474,11 @@ enum
 				id einName;
 				while (einName=[NamenResetEnum nextObject])
 				  {
-					//if ([[einName objectForKey:auswahl]intValue])//Name ist angeklickt, also einsetzen
+					//if ([[einName objectForKey:@"auswahl"]intValue])//Name ist angeklickt, also einsetzen
 					  {
-						  //NSLog(@"Clean NamenResetEnum: einName objectForKey:name : %@",[[einName objectForKey:name] description]);
-						  NSString* tempName=[einName objectForKey:name];
-						  //[self setCleanTitelVonLeser:[einName objectForKey:name]];
+						  //NSLog(@"Clean NamenResetEnum: einName objectForKey:@"name" : %@",[[einName objectForKey:name] description]);
+						  NSString* tempName=[einName objectForKey:@"name"];
+						  //[self setCleanTitelVonLeser:[einName objectForKey:@"name"]];
 						  NSMutableArray* CleanTitelDicArray=[[NSMutableArray alloc]initWithCapacity:0];
 //						  NSLog(@"\n\n-----------------------------Clean");//leerer Array f웦 schon vorhandenen TitelDics in Clean
 						  NSMutableArray* neueTitelArray=[[NSMutableArray alloc]initWithCapacity:0]; //Kontrollarray nur mit Titeln
@@ -493,7 +493,7 @@ enum
 								int index=0;
 								while(einTitel=[TitelDicEnum nextObject])		//in neueTitelArray neue Titel(nur String) einf체llen
 								  {
-									[neueTitelArray insertObject:[einTitel objectForKey:titel] atIndex:[neueTitelArray count]];
+									[neueTitelArray insertObject:[einTitel objectForKey:@"titel"] atIndex:[neueTitelArray count]];
 									index++;
 								  }
 								//NSLog(@"neueTitelArray neu eingef체llt aus TitelMitAnzahlArray: \n%@\n",[neueTitelArray description]);
@@ -505,7 +505,7 @@ enum
 								  {
 									  int gefunden=0;//Abfrage Titel in TitelMitAnzahlArray ?
 									  
-									  NSString* tempTitel=[eineCleanTitelDicZeile objectForKey:titel]; //Titel aus Clean
+									  NSString* tempTitel=[eineCleanTitelDicZeile objectForKey:@"titel"]; //Titel aus Clean
 																									   //NSLog(@"tempTitel: %@\n",[tempTitel description]);
 									  
 									  if ([neueTitelArray containsObject:tempTitel])//tempTitel ist schon in neueTitelArray
@@ -515,14 +515,14 @@ enum
 											
 											NSEnumerator*neueTitelEnum=[TitelMitAnzahlArray objectEnumerator];
 											id eineTitelZeile;
-											int neuerTitelIndex=-1;
+											double neuerTitelIndex=-1;
 											BOOL NameSchonDa=NO;
 											while ((eineTitelZeile=[neueTitelEnum nextObject])&&!gefunden)
 											  {
 												//NSLog(@"eineTitelZeile: %@  ",[eineTitelZeile description]);
-												if ([[eineTitelZeile objectForKey:titel]isEqualToString:tempTitel])//Zeile in titelDic mit diesem Titel
+												if ([[eineTitelZeile objectForKey:@"titel"]isEqualToString:tempTitel])//Zeile in titelDic mit diesem Titel
 												  {
-													  if ([[eineCleanTitelDicZeile objectForKey:leser]containsObject:tempName])
+													  if ([[eineCleanTitelDicZeile objectForKey:@"leser"]containsObject:tempName])
 														{
 														  //NSLog(@"Name schon da: %@",tempName);
 														  neuerTitelIndex=[TitelMitAnzahlArray indexOfObject:eineTitelZeile];
@@ -531,7 +531,7 @@ enum
 													  else
 														{
 														  //NSLog(@"Name noch nicht da: %@",tempName);
-														  neueAnzahl=[[eineTitelZeile objectForKey:anzahl]intValue];
+														  neueAnzahl=[[eineTitelZeile objectForKey:@"anzahl"]intValue];
 														  neuerTitelIndex=[TitelMitAnzahlArray indexOfObject:eineTitelZeile];
 														  gefunden=1;
 														}
@@ -549,24 +549,24 @@ enum
 											if (gefunden==1)
 											  {
 												
-												int alteAnzahl=[[eineCleanTitelDicZeile objectForKey:anzahl]intValue];//Anzahl Aufnahmen zum titel in Clean
+												int alteAnzahl=[[eineCleanTitelDicZeile objectForKey:@"anzahl"]intValue];//Anzahl Aufnahmen zum titel in Clean
 												
 												//NSLog(@"alteAnzahl, %d  neueAnzahl: %d",alteAnzahl,neueAnzahl);
 												NSNumber* neueAnzahlNumber=[NSNumber numberWithInt:neueAnzahl+alteAnzahl];
-												[eineCleanTitelDicZeile setObject:neueAnzahlNumber forKey:anzahl];
+												[eineCleanTitelDicZeile setObject:neueAnzahlNumber forKey:@"anzahl"];
 												//NSLog(@"eineCleanTitelDicZeile neu: %@",[eineCleanTitelDicZeile description]);
 												
 												//neuen namen in Liste 'leser'
-												NSMutableArray* tempArray=[[eineCleanTitelDicZeile objectForKey:leser]mutableCopy];
+												NSMutableArray* tempArray=[[eineCleanTitelDicZeile objectForKey:@"leser"]mutableCopy];
 												if (tempArray)
 												  {
 													//NSLog(@"tempArray: %@",[tempArray description]);
 													[tempArray addObject:tempName];
 													//NSLog(@"tempArray neu: %@",[tempArray description]);
 												  }
-												[eineCleanTitelDicZeile setObject:tempArray forKey:leser];
-												NSNumber* neueAnzahlLeserNumber=[NSNumber numberWithInt:[tempArray count]];
-												[eineCleanTitelDicZeile setObject:neueAnzahlLeserNumber forKey:anzleser];
+												[eineCleanTitelDicZeile setObject:tempArray forKey:@"leser"];
+												NSNumber* neueAnzahlLeserNumber=[NSNumber numberWithInteger:[tempArray count]];
+												[eineCleanTitelDicZeile setObject:neueAnzahlLeserNumber forKey:@"anzleser"];
 												
 												//NSLog(@"----- eineCleanTitelDicZeile erweitert: %@",[eineCleanTitelDicZeile description]);
 												if (neuerTitelIndex>=0)
@@ -589,18 +589,18 @@ enum
 									id einNeuerTitel;	
 									while (einNeuerTitel=[nochTitelEnum nextObject])
 									  {
-										NSMutableDictionary* tempDic=[NSMutableDictionary dictionaryWithObject:[einNeuerTitel objectForKey:titel]
-																										forKey:titel];
+										NSMutableDictionary* tempDic=[NSMutableDictionary dictionaryWithObject:[einNeuerTitel objectForKey:@"titel"]
+																										forKey:@"titel"];
 										//NSNumber* tempNumber=[einNeuerTitel objectForKey:anzahl];
-										[tempDic setObject:[einNeuerTitel objectForKey:anzahl]
-													forKey:anzahl];
+										[tempDic setObject:[einNeuerTitel objectForKey:@"anzahl"]
+													forKey:@"anzahl"];
 										//NSArray* tempNamenArray=[NSArray arrayWithObjects:tempName,nil];
 										[tempDic setObject:[NSArray arrayWithObjects:tempName,nil]
-													forKey:leser];
+													forKey:@"leser"];
 										[tempDic setObject:[NSNumber numberWithInt:0]
-													forKey:auswahl];
+													forKey:@"auswahl"];
 										[tempDic setObject:[NSNumber numberWithInt:1]
-													forKey:anzleser];
+													forKey:@"anzleser"];
 										
 										//NSLog(@"CleanViewNotifikationAktion: tempDic f웦 neuen Titel: %@",[tempDic description]);
 										[CleanTitelDicArray insertObject:tempDic 
@@ -655,7 +655,7 @@ enum
 	int var=[[derCleanDic objectForKey:@"clearentfernen"]intValue];
 	int behalten=[[derCleanDic objectForKey:@"clearbehalten"]intValue];
 	int anzahlBehalten=[[derCleanDic objectForKey:@"clearanzahl"]intValue];
-	if (anzahl<0)
+	if (anzahlBehalten<0)
 	{
 		//NSLog(@"Anzahl nochmals 웑erlegen");
 		return;
@@ -879,11 +879,11 @@ enum
 				id einName;
 				while (einName=[NamenResetEnum nextObject])
 				  {
-					if ([[einName objectForKey:auswahl]intValue])//Name ist angeklickt, also einsetzen
+					if ([[einName objectForKey:@"auswahl"]intValue])//Name ist angeklickt, also einsetzen
 					  {
-						//NSLog(@"Clean NamenResetEnum: einName objectForKey:name : %@",[[einName objectForKey:name] description]);
-						NSString* tempName=[einName objectForKey:name];
-						//[self setCleanTitelVonLeser:[einName objectForKey:name]];
+						//NSLog(@"Clean NamenResetEnum: einName objectForKey:@"name" : %@",[[einName objectForKey:@"name"] description]);
+						NSString* tempName=[einName objectForKey:@"name"];
+						//[self setCleanTitelVonLeser:[einName objectForKey:@"name"]];
 						NSMutableArray* CleanTitelDicArray=[[NSMutableArray alloc]initWithCapacity:0];
 //						NSLog(@"\n\n-----------------------------Clean");//leerer Array f웦 schon vorhandenen TitelDics in Clean
 						NSMutableArray* neueTitelArray=[[NSMutableArray alloc]initWithCapacity:0]; //Kontrollarray nur mit Titeln
@@ -898,7 +898,7 @@ enum
 							  int index=0;
 							  while(einTitel=[TitelDicEnum nextObject])		//in neueTitelArray neue Titel(nur String) einf체llen
 								{
-								  [neueTitelArray insertObject:[einTitel objectForKey:titel] atIndex:[neueTitelArray count]];
+								  [neueTitelArray insertObject:[einTitel objectForKey:@"titel"] atIndex:[neueTitelArray count]];
 								  index++;
 								}
 							  //NSLog(@"neueTitelArray neu eingef체llt aus TitelMitAnzahlArray: \n%@\n",[neueTitelArray description]);
@@ -910,7 +910,7 @@ enum
 								{
 									int gefunden=0;//Abfrage Titel in TitelMitAnzahlArray ?
 									
-									NSString* tempTitel=[eineCleanTitelDicZeile objectForKey:titel]; //Titel aus Clean
+									NSString* tempTitel=[eineCleanTitelDicZeile objectForKey:@"titel"]; //Titel aus Clean
 									//NSLog(@"tempTitel: %@\n",[tempTitel description]);
 									
 									if ([neueTitelArray containsObject:tempTitel])//tempTitel ist schon in neueTitelArray
@@ -920,14 +920,14 @@ enum
 										
 										NSEnumerator*neueTitelEnum=[TitelMitAnzahlArray objectEnumerator];
 										id eineTitelZeile;
-										int neuerTitelIndex=-1;
+										double neuerTitelIndex=-1;
 										BOOL NameSchonDa=NO;
 										while ((eineTitelZeile=[neueTitelEnum nextObject])&&!gefunden)
 										  {
 											//NSLog(@"eineTitelZeile: %@  ",[eineTitelZeile description]);
-											if ([[eineTitelZeile objectForKey:titel]isEqualToString:tempTitel])//Zeile in titelDic mit diesem Titel
+											if ([[eineTitelZeile objectForKey:@"titel"]isEqualToString:tempTitel])//Zeile in titelDic mit diesem Titel
 											  {
-												  if ([[eineCleanTitelDicZeile objectForKey:leser]containsObject:tempName])
+												  if ([[eineCleanTitelDicZeile objectForKey:@"leser"]containsObject:tempName])
 													{
 													  //NSLog(@"Name schon da: %@",tempName);
 													  neuerTitelIndex=[TitelMitAnzahlArray indexOfObject:eineTitelZeile];
@@ -936,7 +936,7 @@ enum
 												  else
 													{
 													  //NSLog(@"Name noch nicht da: %@",tempName);
-													  neueAnzahl=[[eineTitelZeile objectForKey:anzahl]intValue];
+													  neueAnzahl=[[eineTitelZeile objectForKey:@"clearanzahl"]intValue];
 													  neuerTitelIndex=[TitelMitAnzahlArray indexOfObject:eineTitelZeile];
 													  gefunden=1;
 													}
@@ -954,24 +954,24 @@ enum
 										if (gefunden==1)
 										  {
 											
-											int alteAnzahl=[[eineCleanTitelDicZeile objectForKey:anzahl]intValue];//Anzahl Aufnahmen zum titel in Clean
+											int alteAnzahl=[[eineCleanTitelDicZeile objectForKey:@"clearanzahl"]intValue];//Anzahl Aufnahmen zum titel in Clean
 											
 											//NSLog(@"alteAnzahl, %d  neueAnzahl: %d",alteAnzahl,neueAnzahl);
 											NSNumber* neueAnzahlNumber=[NSNumber numberWithInt:neueAnzahl+alteAnzahl];
-											[eineCleanTitelDicZeile setObject:neueAnzahlNumber forKey:anzahl];
+											[eineCleanTitelDicZeile setObject:neueAnzahlNumber forKey:@"clearanzahl"];
 											//NSLog(@"eineCleanTitelDicZeile neu: %@",[eineCleanTitelDicZeile description]);
 											
 											//neuen namen in Liste 'leser'
-											NSMutableArray* tempArray=[[eineCleanTitelDicZeile objectForKey:leser]mutableCopy];
+											NSMutableArray* tempArray=[[eineCleanTitelDicZeile objectForKey:@"leser"]mutableCopy];
 											if (tempArray)
 											  {
 												//NSLog(@"tempArray: %@",[tempArray description]);
 												[tempArray addObject:tempName];
 												//NSLog(@"tempArray neu: %@",[tempArray description]);
 											  }
-											[eineCleanTitelDicZeile setObject:tempArray forKey:leser];
-											NSNumber* neueAnzahlLeserNumber=[NSNumber numberWithInt:[tempArray count]];
-											[eineCleanTitelDicZeile setObject:neueAnzahlLeserNumber forKey:anzleser];
+											[eineCleanTitelDicZeile setObject:tempArray forKey:@"leser"];
+											NSNumber* neueAnzahlLeserNumber=[NSNumber numberWithDouble:[tempArray count]];
+											[eineCleanTitelDicZeile setObject:neueAnzahlLeserNumber forKey:@"anzleser"];
 											
 											//NSLog(@"----- eineCleanTitelDicZeile erweitert: %@",[eineCleanTitelDicZeile description]);
 											if (neuerTitelIndex>=0)
@@ -994,18 +994,18 @@ enum
 							  id einNeuerTitel;	
 							  while (einNeuerTitel=[nochTitelEnum nextObject])
 								{
-								  NSMutableDictionary* tempDic=[NSMutableDictionary dictionaryWithObject:[einNeuerTitel objectForKey:titel]
-																								  forKey:titel];
+								  NSMutableDictionary* tempDic=[NSMutableDictionary dictionaryWithObject:[einNeuerTitel objectForKey:@"titel"]
+																								  forKey:@"titel"];
 								  //NSNumber* tempNumber=[einNeuerTitel objectForKey:anzahl];
-								  [tempDic setObject:[einNeuerTitel objectForKey:anzahl]
-											  forKey:anzahl];
+								  [tempDic setObject:[einNeuerTitel objectForKey:@"anzahl"]
+											  forKey:@"anzahl"];
 								  //NSArray* tempNamenArray=[NSArray arrayWithObjects:tempName,nil];
 								  [tempDic setObject:[NSArray arrayWithObjects:tempName,nil]
-											  forKey:leser];
+											  forKey:@"leser"];
 								  [tempDic setObject:[NSNumber numberWithInt:0]
-											  forKey:auswahl];
+											  forKey:@"auswahl"];
 								  [tempDic setObject:[NSNumber numberWithInt:1]
-											  forKey:anzleser];
+											  forKey:@"anzleser"];
 								  
 								  //NSLog(@"CleanViewNotifikationAktion: tempDic f웦 neuen Titel: %@",[tempDic description]);
 								  [CleanTitelDicArray insertObject:tempDic 

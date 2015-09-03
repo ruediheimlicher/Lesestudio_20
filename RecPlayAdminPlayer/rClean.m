@@ -19,13 +19,13 @@ enum
 };
 
 
-extern NSString* alle;//=@"alle";
-extern NSString* name;//=@"name";
-extern NSString* titel;//=@"titel";
-extern NSString* anzahl;//=@"anzahl";
-extern NSString* auswahl;//;//=@"auswahl";
-extern NSString* leser;//=@"leser";
-extern NSString* anzleser;//=@"anzleser";
+//extern NSString* alle;//=@"alle";
+//extern NSString* name;//=@"name";
+//extern NSString* titel;//=@"titel";
+//extern NSString* anzahl;//=@"anzahl";
+//extern NSString* auswahl;//;//=@"auswahl";
+//extern NSString* leser;//=@"leser";
+//extern NSString* anzleser;//=@"anzleser";
 
 //extern NSString* Optionen;//=@"Optionen...";
 
@@ -79,7 +79,7 @@ extern NSString* anzleser;//=@"anzleser";
 	[NamenCheck setEnabled:YES];
 	[NamenCheck setAction:@selector(NamenCheckAktion:)];
     [NamenCheck setTarget:self];
-	[[NamenView tableColumnWithIdentifier:name]setDataCell:(NSCell*)NamenCheck];
+	[[NamenView tableColumnWithIdentifier:@"name"]setDataCell:(NSCell*)NamenCheck];
 	[NamenView setDataSource:self];
 	[NamenView setDelegate:self];
 	
@@ -152,17 +152,17 @@ if (dasItem<2)
 	ZeilenNummer=[NSNumber numberWithInt:selZeile];
 	NSMutableDictionary* CleanZeilenDic=[NSMutableDictionary dictionaryWithObject:ZeilenNummer forKey:@"ZeilenNummer"];
 	[CleanZeilenDic setObject:[NSNumber numberWithInt:NamenViewTag] forKey:@"Quelle"];
-	NSString* tempName=[[NamenArray objectAtIndex:selZeile]objectForKey:name];
+	NSString* tempName=[[NamenArray objectAtIndex:selZeile]objectForKey:@"name"];
 	//NSLog(@"Clean NamenCheckAktion: Name: %@",tempName);
 	if (tempName)
 	  {
-		[CleanZeilenDic setObject:tempName forKey:name];//Name in Dic
+		[CleanZeilenDic setObject:tempName forKey:@"name"];//Name in Dic
 		int NamenWeg=0;
 		if (nurTitelZuNamenOption)
 		  {
 			[NamenIndexSet removeAllIndexes];
 			[NamenIndexSet addIndex:selZeile];//Diese Zeile in ClassVar NamenIndexSet vormerken
-			[[NamenArray objectAtIndex:selZeile]setObject:[NSNumber numberWithInt:0] forKey:auswahl];
+			[[NamenArray objectAtIndex:selZeile]setObject:[NSNumber numberWithInt:0] forKey:@"auswahl"];
 		  }
 		else
 		  {
@@ -171,12 +171,12 @@ if (dasItem<2)
 			  {
 				[NamenIndexSet removeIndex:selZeile];//Name schon im Set: lšschen
 				NamenWeg=1;//Lšschen anzeigen
-				[[NamenArray objectAtIndex:selZeile]setObject:[NSNumber numberWithInt:0] forKey:auswahl];
+				[[NamenArray objectAtIndex:selZeile]setObject:[NSNumber numberWithInt:0] forKey:@"auswahl"];
 			  }
 			else
 			  {
 				[NamenIndexSet addIndex:selZeile];//Name noch nicht im Set: vormerken
-				[[NamenArray objectAtIndex:selZeile]setObject:[NSNumber numberWithInt:1] forKey:auswahl];
+				[[NamenArray objectAtIndex:selZeile]setObject:[NSNumber numberWithInt:1] forKey:@"auswahl"];
 				
 			  }
 			//NSLog(@"shouldSelectRow*** NamenIndexSet nach: %@  NamenWeg: %d",[NamenIndexSet description],NamenWeg);
@@ -399,7 +399,7 @@ if (dasItem<2)
 	if ([nurTitelZuNamenCheck state])
 	{
 		int klickIndex=[NamenView selectedRow];
-		[tempArray addObject:[[NamenArray objectAtIndex:klickIndex]objectForKey:name]];
+		[tempArray addObject:[[NamenArray objectAtIndex:klickIndex]objectForKey:@"name"]];
 	}
 	else
 	{
@@ -417,7 +417,7 @@ if (dasItem<2)
 			{
 				if ([[eineZeile objectForKey:auswahl]intValue])
 				{
-					[tempArray addObject:[[eineZeile objectForKey:name]description]];
+					[tempArray addObject:[[eineZeile objectForKey:@"name"]description]];
 				}
 			}
 		}//while
@@ -438,7 +438,7 @@ if (dasItem<2)
 	while (eineZeile=[TitelEnumerator nextObject])
 	{
 		//NSLog(@"eineZeile: %@",[eineZeile description]);
-		if ([[eineZeile objectForKey:auswahl]intValue])
+		if ([[eineZeile objectForKey:@"auswahl"]intValue])
 		{
 			[tempArray addObject:[[eineZeile objectForKey:name]description]];
 		}
@@ -489,7 +489,7 @@ if (dasItem<2)
 		//[self NamenHeaderCheckAktion:nil];
 		NSTextFieldCell* tempCell=[[NSTextFieldCell alloc]init];
 		[tempCell setAction:@selector(NamenCheckAktion:)];
-		[[NamenView tableColumnWithIdentifier:name]setDataCell:(NSCell*)tempCell];
+		[[NamenView tableColumnWithIdentifier:@"name"]setDataCell:(NSCell*)tempCell];
 		//[self enableNamenAuswahl:NO];
 		[alleNamenKlickCheck setEnabled:NO];
 		
@@ -501,7 +501,7 @@ if (dasItem<2)
 		[tempCell setButtonType:NSSwitchButton];
 		[tempCell setAction:@selector(NamenCheckAktion:)];
 		[tempCell setTarget:self];
-		[[NamenView tableColumnWithIdentifier:name]setDataCell:(NSCell*)tempCell];
+		[[NamenView tableColumnWithIdentifier:@"name"]setDataCell:(NSCell*)tempCell];
 		
 		//[NamenView setAllowsMultipleSelection:YES];
 		//[self enableNamenAuswahl:YES];
@@ -516,7 +516,7 @@ if (dasItem<2)
 	id eineZeile;
 	while(eineZeile=[NamenEnumerator nextObject])
 	{
-		[eineZeile setObject:[NSNumber numberWithInt:0]	forKey:auswahl];
+		[eineZeile setObject:[NSNumber numberWithInt:0]	forKey:@"auswahl"];
 	}
 	
 	[NamenView selectRowIndexes:selZeilenSet byExtendingSelection:NO];
@@ -698,7 +698,7 @@ if (dasItem<2)
 
 -(NSDictionary*)selektierteNamenZeile
 {
-	int NamenZeile=[NamenView selectedRow];
+	long NamenZeile=[NamenView selectedRow];
 	if (NamenZeile>=0)
 	{
 	return[NamenArray objectAtIndex:NamenZeile];
@@ -738,7 +738,7 @@ return tempTitelArray;
 	while(eineZeile=[NamenEnumerator nextObject])
 	  {
 		
-		[[[NamenView tableColumnWithIdentifier:auswahl]dataCellForRow:[NamenArray indexOfObject: eineZeile]]setEnabled:derStatus];
+		[[[NamenView tableColumnWithIdentifier:@"auswahl"]dataCellForRow:[NamenArray indexOfObject: eineZeile]]setEnabled:derStatus];
 	  }
 	[NamenView reloadData];
 }
@@ -781,7 +781,7 @@ return tempTitelArray;
 	[NamenIndexSet removeAllIndexes];
 		while(eineZeile=[NamenEnumerator nextObject])
 		  {
-			[eineZeile setObject:[NSNumber numberWithInt:0] forKey:auswahl];
+			[eineZeile setObject:[NSNumber numberWithInt:0] forKey:@"auswahl"];
 		  }//while
 		[self TitelListeLeeren];
 		[self deselectNamenListe];
@@ -1066,7 +1066,7 @@ NSLog(@"reportExportFormat: Format: %@",[sender titleOfSelectedItem]);
 	//NSString* auswahl=@"auswahl";
 
 	//NSLog(@"mouseDownInHeaderOfTableColumn");
-	if ([[tableColumn identifier]isEqualToString:auswahl])
+	if ([[tableColumn identifier]isEqualToString:@"auswahl"])
 	  {
 		//NSLog(@"NamenHeaderCheckAktion:  %d", [sender selectedColumn]);
 		NSNumber* y=[NSNumber numberWithBool:YES];
@@ -1080,7 +1080,7 @@ NSLog(@"reportExportFormat: Format: %@",[sender titleOfSelectedItem]);
 		  {
 			while(eineZeile=[NamenEnumerator nextObject])
 			  {
-				[eineZeile setObject:n forKey:auswahl];
+				[eineZeile setObject:n forKey:@"auswahl"];
 			  }//while
 			//NSLog(@"Check state zu 0: %d",[[ tableColumn headerCell]state]);
 
@@ -1092,7 +1092,7 @@ NSLog(@"reportExportFormat: Format: %@",[sender titleOfSelectedItem]);
 		  {
 			while(eineZeile=[NamenEnumerator nextObject])
 			  {
-				[eineZeile setObject:y forKey:auswahl];
+				[eineZeile setObject:y forKey:@"auswahl"];
 			  }//while
 			//NSLog(@"Check state zu 1: %d",[ [tableColumn headerCell]state]);
 			[[ tableColumn headerCell]setNextState];
@@ -1122,11 +1122,11 @@ NSLog(@"reportExportFormat: Format: %@",[sender titleOfSelectedItem]);
 		  {
 			  break;
 			  [CleanZeilenDic setObject:[NSNumber numberWithInt:NamenViewTag] forKey:@"Quelle"];
-			  NSString* tempName=[[NamenArray objectAtIndex:row]objectForKey:name];
+			  NSString* tempName=[[NamenArray objectAtIndex:row]objectForKey:@"name"];
 			  //NSLog(@"Clean Delegate aTableView  shouldSelectRow: Name: %@",tempName);
 			  if (tempName)
 				{
-				 [CleanZeilenDic setObject:tempName forKey:name];//Name in Dic
+				 [CleanZeilenDic setObject:tempName forKey:@"name"];//Name in Dic
 				  int NamenWeg=0;
 				  if (nurTitelZuNamenOption)
 					{
@@ -1167,12 +1167,12 @@ NSLog(@"reportExportFormat: Format: %@",[sender titleOfSelectedItem]);
 			  [CleanZeilenDic setObject:[NSNumber numberWithInt:TitelViewTag] forKey:@"Quelle"];
 			  if (row<[TitelArray count])
 				{
-				  NSString* tempTitel=[[TitelArray objectAtIndex:row]objectForKey:titel];
+				  NSString* tempTitel=[[TitelArray objectAtIndex:row]objectForKey:@"titel"];
 				  //NSLog(@"Clean Delegate aTableView  shouldSelectRow: Name: %@",tempName);
 				  
 				  if (tempTitel)
 					{
-					  [CleanZeilenDic setObject:tempTitel forKey:titel];
+					  [CleanZeilenDic setObject:tempTitel forKey:@"titel"];
 					}
 				}
 		  }break;//TitelViewTag
@@ -1201,14 +1201,14 @@ NSLog(@"reportExportFormat: Format: %@",[sender titleOfSelectedItem]);
 		//[cell setButtonType:NSToggleButton];
 		if (nurTitelZuNamenOption)
 		{
-			[cell setTitle:[[NamenArray objectAtIndex:row]objectForKey:name]];
+			[cell setTitle:[[NamenArray objectAtIndex:row]objectForKey:@"name"]];
 			//[cell setButtonType:NSMomentaryPushButton];
 			
 			//[[NamenArray objectAtIndex:row]setObject:[NSNumber numberWithInt:1] forKey:auswahl];
 		}
 		else
 		{
-			[cell setTitle:[[NamenArray objectAtIndex:row]objectForKey:name]];
+			[cell setTitle:[[NamenArray objectAtIndex:row]objectForKey:@"name"]];
 			if ([NamenIndexSet containsIndex:row])
 			{
 				[cell setState:YES];
@@ -1236,7 +1236,7 @@ NSLog(@"reportExportFormat: Format: %@",[sender titleOfSelectedItem]);
 - (void)tableView:(NSTableView *)tableView didClickTableColumn:(NSTableColumn *)tableColumn
 {
 	NSLog(@"didClickTableColumn");
-	if ([[tableColumn identifier]isEqualToString:name])
+	if ([[tableColumn identifier]isEqualToString:@"name"])
 	{
 		NSLog(@"didClickTableColumn: row: %d",[tableView clickedRow]);
 	}

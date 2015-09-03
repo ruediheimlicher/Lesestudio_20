@@ -112,12 +112,12 @@ return [KommentarFenster nurMarkierte];
 	  {
 		AuswahlOption=alleVonNameKommentarOption;
 		[KommentarFenster setAuswahlPop:alleVonNameKommentarOption];
-		[KommentarFenster setPopAMenu:AdminProjektNamenArray erstesItem:alle aktuell:AdminAktuellerLeser];
+		[KommentarFenster setPopAMenu:AdminProjektNamenArray erstesItem:@"alle" aktuell:AdminAktuellerLeser];
 		NSArray* TitelArray=[self TitelArrayVon:AdminAktuellerLeser anProjektPfad:AdminProjektPfad];
 		
 		if ([AdminAktuelleAufnahme length])
 		  {
-			[KommentarFenster setPopBMenu:TitelArray erstesItem:alle aktuell:[self AufnahmeTitelVon:AdminAktuelleAufnahme] mitPrompt:@"mit Titel:"];
+			[KommentarFenster setPopBMenu:TitelArray erstesItem:@"alle" aktuell:[self AufnahmeTitelVon:AdminAktuelleAufnahme] mitPrompt:@"mit Titel:"];
 		  }
 	  }
 	else
@@ -159,7 +159,7 @@ return [KommentarFenster nurMarkierte];
 	
 	NSArray* tempKommentarDicArray=[self createDruckKommentarStringDicArrayWithProjektPfadArray:[tempProjektPfadArray valueForKey:@"projektpfad"]];
 	
-	NSLog(@"AdminPlayer KommentarDrucken nach create: Anzahl Dics: %d",[tempKommentarDicArray count]);	
+	NSLog(@"AdminPlayer KommentarDrucken nach create: Anzahl Dics: %lu",(unsigned long)[tempKommentarDicArray count]);
 	
 	[KommentarFenster KommentarDruckenMitProjektDicArray:tempKommentarDicArray];
 	NSLog(@"AdminPlayer KommentarDrucken nach KommentarFenster KommentarDruckenMitProjektDicArray\n");
@@ -217,7 +217,7 @@ NSLog(@"AdminPlayer SaveKommentar");
 	NSString* note=NSLocalizedString(@"Mark:",@"Note:");
 	NSString* tabSeparator=@"\t";
 	NSString* crSeparator=@"\r";
-	NSString* alle=NSLocalizedString(@"All",@"alle");
+	//NSString* alle=NSLocalizedString(@"All",@"alle");
 
 	NSArray* TabellenkopfArray=[NSArray arrayWithObjects:name,titel,datum,bewertung,note,anmerkungen,nil];
 //	NSArray* TabellenkopfArray=[NSArray arrayWithObjects:name,titel,datum,note,anmerkungen,nil];
@@ -252,7 +252,7 @@ NSLog(@"AdminPlayer SaveKommentar");
 				NSString* tempLeser=[KommentarFenster PopAOption];
 				//NSLog(@"alleVonNameKommentarOption tempLeser: %@",[self OptionA]);
 				
-				if ([[self OptionA] isEqualToString:alle])
+				if ([[self OptionA] isEqualToString:@"alle"])
 				{
 					tempKommentarArray=(NSMutableArray*)[self alleKommentareNachNamenAnProjektPfad:einProjektPfad 
 																						 bisAnzahl:AnzahlOption];
@@ -261,7 +261,7 @@ NSLog(@"AdminPlayer SaveKommentar");
 				}
 				else
 				{
-					if ( [[self OptionB] isEqualToString:alle])
+					if ( [[self OptionB] isEqualToString:@"alle"])
 					{
 						NSLog(@"\n++++++ alleVonNameKommentarOption OptionAString: %@       OptionBString= alle ",[self OptionA]);
 						tempKommentarArray=(NSMutableArray*)[self alleKommentareVonLeser :[self OptionA] 
@@ -293,12 +293,12 @@ NSLog(@"AdminPlayer SaveKommentar");
 			{
 				NSLog(@"switch (AuswahlOption): ausAllenProjektenOption");
 				//NSLog(@" OptionAString %@	OptionBString: %@",[self OptionA],[self OptionB]);
-				if ([[self OptionA] isEqualToString:alle])//Alle Titel
+				if ([[self OptionA] isEqualToString:@"alle"])//Alle Titel
 				{
 					tempKommentarArray=(NSMutableArray*)[self alleKommentareNachTitelAnProjektPfad:einProjektPfad
 																						 bisAnzahl:AnzahlOption];
 					//NSLog(@"createKomm.String: OptionAString ist alle  tempKommentarArray: %@",[tempKommentarArray description]);
-					if ([[self OptionB] isEqualToString:alle])//alle Namen Zu Titel
+					if ([[self OptionB] isEqualToString:@"alle"])//alle Namen Zu Titel
 					{
 						// tempKommentarArray=(NSMutableArray*)[self alleKommentareNachTitel:AnzahlOption];
 					}
@@ -313,7 +313,7 @@ NSLog(@"AdminPlayer SaveKommentar");
 				{
 					if ([self OptionB])
                {
-						if ([[self OptionB] isEqualToString:alle])//alle Namen Zu Titel
+						if ([[self OptionB] isEqualToString:@"alle"])//alle Namen Zu Titel
 						{
 							//NSLog(@"OptionBString ist alle: -> alleKommentareZuTitel");
 							tempKommentarArray=(NSMutableArray*)[self alleKommentareZuTitel:[self OptionA] 
@@ -667,7 +667,7 @@ return tempProjektDicArray;
 - (void)KommentarNotificationAktion:(NSNotification*)note 
 {
 	//Aufgerufen nach €nderungen in den Pops des Kommentarfensters
-	//NSString* alle=@"alle";
+	NSString* alle=@"alle";
 	NSLog(@"\n\n********				Beginn KommentarNotificationAktion\n\n ");
 	NSDictionary* OptionDic=[note userInfo];
 	NSLog(@"KommentarNotificationAktion: UserInfo OptionDic: %@",[OptionDic description]);
@@ -712,7 +712,7 @@ return tempProjektDicArray;
 						NSArray* tempNamenArray=[self LeserArrayAnProjektPfad:tempAdminProjektPfad];
 						//NSLog(@"alleVonNameKommentarOption: Nur 1 Projekt tempNamenArray: %@",[tempNamenArray description]);
 						//NSArray* tempNamenArray=[self LeserArrayAnProjektPfad:ProjektPfadOptionString];
-						[KommentarFenster setPopAMenu:tempNamenArray erstesItem:alle aktuell:NULL];
+						[KommentarFenster setPopAMenu:tempNamenArray erstesItem:@"alle" aktuell:NULL];
 						[KommentarFenster resetPopBMenu];
 						
 					}break;
@@ -744,8 +744,8 @@ return tempProjektDicArray;
 						}//while enum
 						//NSLog(@"tempNamenArray: %@",[tempNamenArray description]);
 						
-						[KommentarFenster setPopAMenu:tempNamenArray erstesItem:alle aktuell:alle];
-						[KommentarFenster setPopBMenu:NULL erstesItem:alle aktuell:alle mitPrompt:@"mit Titel:"];
+						[KommentarFenster setPopAMenu:tempNamenArray erstesItem:@"alle" aktuell:@"alle"];
+						[KommentarFenster setPopBMenu:NULL erstesItem:@"alle" aktuell:@"alle" mitPrompt:@"mit Titel:"];
 					}break;
 						
 					case 2://Alle Projekte
@@ -763,7 +763,7 @@ return tempProjektDicArray;
 				NSArray* tempTitelArray= [self TitelArrayVonAllenAnProjektPfad:ProjektPfadOptionString
 															 bisAnzahlProLeser:AnzahlOption ];
 				//NSLog(@"alleVonTitelKommentarOption tempTitelArray: %@",[tempTitelArray description]); 
-				[KommentarFenster setPopAMenu:tempTitelArray erstesItem:alle aktuell:NULL];
+				[KommentarFenster setPopAMenu:tempTitelArray erstesItem:@"alle" aktuell:NULL];
 				[KommentarFenster resetPopBMenu];
 				
 			}break;//alleVonTitelKommentarOption
@@ -823,7 +823,7 @@ return tempProjektDicArray;
 				NSArray* LeserArray=[self LeserArrayAnProjektPfad:ProjektPfadOptionString];
 				//NSLog(@"alleVonTitelKommentarOption LeserArray: %@",[LeserArray description]); 
 				
-				[KommentarFenster setPopAMenu:LeserArray erstesItem:alle aktuell:alle];
+				[KommentarFenster setPopAMenu:LeserArray erstesItem:@"alle" aktuell:@"alle"];
 				[KommentarFenster resetPopBMenu];
 			}break;//alleVonNameKommentarOption
 				
@@ -832,7 +832,7 @@ return tempProjektDicArray;
 				NSArray* tempTitelArray= [self TitelArrayVonAllenAnProjektPfad:ProjektPfadOptionString
 															 bisAnzahlProLeser:AnzahlOption ];
 				//NSLog(@"alleVonTitelKommentarOption tempTitelArray: %@",[tempTitelArray description]); 
-				[KommentarFenster setPopAMenu:tempTitelArray erstesItem:alle aktuell:NULL];
+				[KommentarFenster setPopAMenu:tempTitelArray erstesItem:@"alle" aktuell:NULL];
 				
 				
 				NSArray* LeserArray=[self LeserArrayVonTitel:[self OptionA] anProjektPfad:ProjektPfadOptionString];
@@ -843,7 +843,7 @@ return tempProjektDicArray;
 				}
 				else
 				{
-					[KommentarFenster setPopBMenu:LeserArray erstesItem:alle aktuell:NULL mitPrompt:NSLocalizedString(@"for Reader",@"fŸr Leser:")];
+					[KommentarFenster setPopBMenu:LeserArray erstesItem:@"alle" aktuell:NULL mitPrompt:NSLocalizedString(@"for Reader",@"fŸr Leser:")];
 				}
 				
 				
@@ -887,7 +887,7 @@ return tempProjektDicArray;
 					//NSLog(@"TitelArray: %@	OptionAString: %@  OptionBString. %@",	[TitelArray description],[self OptionA],[self OptionB]);
 					if(ProjektAuswahlOption==0)//nur bei einzelnem Projekt
 					{
-						[KommentarFenster setPopBMenu:TitelArray erstesItem:alle aktuell:alle mitPrompt:NSLocalizedString(@"with title",@"mit Titel:")];
+						[KommentarFenster setPopBMenu:TitelArray erstesItem:@"alle" aktuell:@"alle" mitPrompt:NSLocalizedString(@"with title",@"mit Titel:")];
 					}
 				}
 			}break;//alleVonNameKommentarOption
@@ -896,7 +896,7 @@ return tempProjektDicArray;
 			{
 				//NSLog(@"alleVonTitelKommentarOption: OptionA: %@ ",[self OptionA]);
 				{
-					if ([[self OptionA] isEqualToString:alle])
+					if ([[self OptionA] isEqualToString:@"alle"])
 					{
 						[KommentarFenster resetPopBMenu];
 					}
@@ -920,7 +920,7 @@ return tempProjektDicArray;
 							}
 							else
 							{
-								[KommentarFenster setPopBMenu:LeserArray erstesItem:alle aktuell:NULL mitPrompt:NSLocalizedString(@"for Reader",@"fŸr Leser:")];
+								[KommentarFenster setPopBMenu:LeserArray erstesItem:@"alle" aktuell:NULL mitPrompt:NSLocalizedString(@"for Reader",@"fŸr Leser:")];
 							}
 						}//Count>0
 					}
@@ -996,8 +996,8 @@ return tempProjektDicArray;
 				}//while enum
 				//NSLog(@"tempNamenArray: %@",[tempNamenArray description]);
 				
-				[KommentarFenster setPopAMenu:tempNamenArray erstesItem:alle aktuell:alle];
-				[KommentarFenster setPopBMenu:NULL erstesItem:alle aktuell:alle mitPrompt:@"mit Titel:"];
+				[KommentarFenster setPopAMenu:tempNamenArray erstesItem:@"alle" aktuell:@"alle"];
+				[KommentarFenster setPopBMenu:NULL erstesItem:@"alle" aktuell:@"alle" mitPrompt:@"mit Titel:"];
 			}break;
 				
 			case 2://Alle Projekte
@@ -1036,8 +1036,8 @@ return tempProjektDicArray;
 				}//while enum
 				//NSLog(@"tempNamenArray: %@",[tempNamenArray description]);
 				
-				[KommentarFenster setPopAMenu:tempNamenArray erstesItem:alle aktuell:alle];
-				[KommentarFenster setPopBMenu:NULL erstesItem:alle aktuell:alle mitPrompt:@"mit Titel:"];
+				[KommentarFenster setPopAMenu:tempNamenArray erstesItem:@"alle" aktuell:@"alle"];
+				[KommentarFenster setPopBMenu:NULL erstesItem:@"alle" aktuell:@"alle" mitPrompt:@"mit Titel:"];
 				
 			}break;
 				

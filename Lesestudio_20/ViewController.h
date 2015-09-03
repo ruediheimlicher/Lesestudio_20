@@ -14,7 +14,7 @@
 
 #import "rAbspielanzeige.h"
 #import "rLevelmeter.h"
-#import "rEinstellungen.h"
+//#import "rEinstellungen.h"
 #import "rProjektListe.h"
 
 #import "rUtils.h"
@@ -25,7 +25,6 @@
 #import "rAVPlayer.h"
 
 #import "rAdminPlayer.h"
-#import "rVertikalanzeige.h"
 
 
 
@@ -51,7 +50,6 @@
    
    IBOutlet NSWindow*              RecorderFenster;
    IBOutlet rAbspielanzeige*			Abspielanzeige;
-   IBOutlet   rVertikalanzeige*       Vertikalanzeige;
    rAVPlayer*  AVAbspielplayer;
    NSString*	RPAufnahmenDirIDKey;;
    NSString *	Wert1Key;

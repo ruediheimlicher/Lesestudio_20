@@ -8,7 +8,7 @@
 //#include "rRecorder.h"
 //#include "rPlayer.h"
 #include "rAbspielanzeige.h"
-//#import "rAdminPlayer.h"
+#import "rAdminPlayer.h"
 //#import "rAdminDS.h"
 //#import "rAufnahmenDrawer.h"
 #import "rArchivDS.h"
@@ -25,7 +25,7 @@
 #import "rPasswortListe.h"
 #import "rTitelListe.h"
 #import "rEinzelNamen.h"
-#import "rGrabber.h"
+
 
 @class QTCaptureView;
 @class QTCaptureSession;
@@ -123,7 +123,6 @@
 	
 	rArchivDS*							ArchivDaten;
 	int									ArchivSelektierteZeile;
-	Movie									ArchivPlayerMovie;
 	UInt32								ArchivAbspielzeit;
 	NSString*							ArchivPlayPfad;
 	NSString*							ArchivKommentarPfad;
@@ -174,8 +173,6 @@
 	UInt32								Pause;
 	int									Durchgang;
 
-	Movie								PlayerMovie;
-	Movie								ExportMovie;
 	BOOL								MoviePlayerbusy;
 	BOOL								ArchivPlayerGeladen;
 	
@@ -231,7 +228,6 @@
 	rUtils*								Utils;
 	IBOutlet id TestDrawer;
 	NSTimeInterval						TimeoutDelay;
-	rGrabber*							AufnahmeGrabber;
 	NSData*								GrabberOutputDaten;
 	BOOL								neueSettings;
 	BOOL								istNeueAufnahme;
@@ -306,8 +302,6 @@
 - (NSString*)Initialen:(NSString*)derName;
 - (NSString*)AufnahmeTitelVon:(NSString*) dieAufnahme;
 //- (int)AufnahmeNummerVon:(NSString*) dieAufnahme;
-- (NSString*)DatumVon:(NSString*) derKommentarString;
-- (NSString*)KommentarVon:(NSString*) derKommentarString;
 
 - (BOOL)AdminMarkVon:(NSString*) derKommentarString;
 - (BOOL)UserMarkVon:(NSString*) derKommentarString;
@@ -319,7 +313,6 @@
 - (NSArray*)ProjektNamenArrayVon:(NSString*)derArchivPfad;
 - (void)keyDown:(NSEvent *)theEvent;
 
-- (void)keyDown:(NSEvent *)theEvent;
 - (void)setArchivView;
 - (IBAction)ArchivaufnahmeInPlayer:(id)sender;
 - (IBAction)ArchivZurListe:(id)sender;
@@ -349,7 +342,6 @@
 - (void)BewertungNotifikationAktion:(NSNotification*)note;
 - (void)NotenNotifikationAktion:(NSNotification*)note;
 - (void)resetRecPlay;
-- (void)Testknopf:(id)sender;
 - (BOOL)beenden;
 - (IBAction)terminate:(id)sender;
 - (BOOL)savePList:(NSDictionary*)diePList anPfad:(NSString*)derLeseboxPfad;

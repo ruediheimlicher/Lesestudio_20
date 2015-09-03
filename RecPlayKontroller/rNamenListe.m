@@ -201,7 +201,7 @@
 	BOOL LeerschlagAmAnfang=YES;
 	BOOL LeerschlagAmEnde=YES;
 	int index=[tempString length];
-	while (LeerschlagAmAnfang || LeerschlagAmEnde &&[tempString length]&&index)
+	while ((LeerschlagAmAnfang || LeerschlagAmEnde) &&[tempString length]&&index)
 	{
 		if ([tempString characterAtIndex:0]==' ')
 		{

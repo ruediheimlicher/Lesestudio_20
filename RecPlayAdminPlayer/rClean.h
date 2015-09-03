@@ -45,7 +45,6 @@
 
 - (IBAction)reportClearAnzahl:(id)sender;
 - (IBAction)reportClearBehaltenOption:(id)sender;
-- (IBAction)reportExportOption:(id)sender;
 - (IBAction)reportEntfernenOption:(id)sender;
 - (IBAction)reportNamen:(id)sender;
 - (IBAction)reportTitel:(id)sender;

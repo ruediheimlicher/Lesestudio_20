@@ -41,7 +41,7 @@ enum
 	TitelViewTag=2222
 };
 
-extern NSString*	RPExportdatenKey;
+//extern NSString*	RPExportdatenKey;
 NSString*	RPExportformatKey;
 
 // current export settings
@@ -63,7 +63,7 @@ NSString*	RPExportformatKey;
  	short l=[RPExportdaten length];
 	if(l>0)
 	{
-	[[NSUserDefaults standardUserDefaults]setObject:RPExportdaten forKey:RPExportdatenKey];
+	[[NSUserDefaults standardUserDefaults]setObject:RPExportdaten forKey:@"RPExportdaten"];
 	}
 	[[NSUserDefaults standardUserDefaults]setObject:ExportFormatString forKey:RPExportformatKey];
 	[[NSUserDefaults standardUserDefaults]synchronize];
@@ -346,7 +346,7 @@ NSString*	RPExportformatKey;
 		short l=[RPExportdaten length];
 		if(l>0)
 		{
-			[[NSUserDefaults standardUserDefaults]setObject:RPExportdaten forKey:RPExportdatenKey];
+			[[NSUserDefaults standardUserDefaults]setObject:RPExportdaten forKey: @"RPExportdaten"];
 		}
 		[[NSUserDefaults standardUserDefaults]setObject:ExportFormatString forKey:RPExportformatKey];
 		
@@ -1105,7 +1105,7 @@ NSString*	RPExportformatKey;
 	if ([derAufnahmenArray count]==0)
 	return;
 	
-	RPExportdaten=[[[NSUserDefaults standardUserDefaults]dataForKey:RPExportdatenKey]mutableCopy];
+	RPExportdaten=[[[NSUserDefaults standardUserDefaults]dataForKey:@"RPExportdaten"]mutableCopy];
 
 	ExportOrdnerPfad=[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
 	//NSLog(@"AufnahmenArrayExportieren\n\n");
@@ -1233,6 +1233,7 @@ NSString*	RPExportformatKey;
 
 - (void)Export:(NSDictionary*)derExportDic
 {
+   
 	NSLog(@"Export: derExportDic: %@",[derExportDic description]);
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
 
@@ -1240,7 +1241,7 @@ NSString*	RPExportformatKey;
 	int exportformatvariante=[[derExportDic objectForKey:@"exportformatvariante"]intValue];
 	NSString* exportformatString=[derExportDic objectForKey:@"exportformat"];
 	int anzahlExportieren=[[derExportDic objectForKey:@"exportanzahl"]intValue];
-	if (anzahl<0)
+	if (anzahlExportieren<0)
 	{
 		//NSLog(@"Anzahl nochmals Ÿberlegen");
 		return;
