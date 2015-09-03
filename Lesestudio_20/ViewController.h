@@ -26,7 +26,7 @@
 
 #import "rAdminPlayer.h"
 
-
+#import "rTestfensterController.h"
 
 @protocol ExportProgressWindowControllerDelegate;
 @class AVAssetExportSession;
@@ -42,8 +42,7 @@
    rProjektStart*                   ProjektStartPanel;
    rProjektListe*                   ProjektPanel;
    rProjektNamen*                   ProjektNamenPanel;
-   rEinstellungen*						EinstellungenFenster;
-   rPasswortListe*						PasswortListePanel;
+      rPasswortListe*						PasswortListePanel;
    rTitelListe*                     TitelListePanel;
    rAVRecorder*                     AVRecorder;
    
@@ -78,6 +77,7 @@
 @property (weak)IBOutlet NSMenu*					ProjektMenu;
 
 
+@property (nonatomic, strong)rEinstellungen*						EinstellungenFenster;
 
 
 @property (weak) IBOutlet AVPlayerView       *playerView;
@@ -224,7 +224,7 @@
 
 
 //@property (weak) IBOutlet rAdminPlayer* AdminPlayer;
-@property  	IBOutlet rArchivView*			ArchivView;
+@property  (assign)	IBOutlet rArchivView*			ArchivView;
 @property (weak) IBOutlet NSButton*					ArchivPlayTaste;
 @property (weak) IBOutlet NSButton*					ArchivStopTaste;
 @property (weak) IBOutlet NSButton*					ArchivZumStartTaste;
@@ -249,12 +249,17 @@
 @property UInt32                                ArchivAbspielzeit;
 @property NSString*                             ArchivPlayPfad;
 @property NSString*                             ArchivKommentarPfad;
-@property  IBOutlet NSTextView*          ArchivKommentarView;
+@property  (assign) IBOutlet NSTextView*          ArchivKommentarView;
 @property BOOL                                  ArchivZeilenhit;
 @property int                                   RPDevicedatenlaenge;
 @property int									Wert1, Wert2, Wert3;
 @property int									aktuellAnzAufnahmen;
 
+#pragma mark storyboard
+@property  (nonatomic, strong) rTestfensterController*						   Testfenster;
+@property( strong) NSStoryboard *mainstoryboard;
+@property (weak) IBOutlet NSButton*					zuTestfeldTaste;
+@property (weak) IBOutlet NSTextField*				Testinhalt;
 
 
 - (IBAction)startPlay:(id)sender;
@@ -276,6 +281,9 @@
 - (IBAction)savePListAktion:(id)sender;
 
 - (NSString*)Initialen:(NSString*)derName;
+
+
+- (IBAction)startTestfeld:(id)sender;
 
 @end
 

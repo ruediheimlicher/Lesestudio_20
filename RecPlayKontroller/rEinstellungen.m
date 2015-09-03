@@ -3,16 +3,25 @@
 @implementation rEinstellungen
 - (id) init
 {
-	self=[super initWithWindowNibName:@"RPEinstellungen"];
+	self=[super init];
 	return self;
+}
+
+- (void)viewDidLoad
+{
+   [super viewDidLoad];
+   // Do view setup here.
+   [self.AnzeigeFeld setStringValue:@"start"];
+   NSLog(@"Einstellungenfenster  viewDidLoad");
 }
 
 - (void)awakeFromNib
 {
+   NSLog(@"Einstellungenfenster  awake");
 	NSFont* Tablefont;
 	Tablefont=[NSFont fontWithName:@"Helvetica" size: 14];
 //[TimeoutCombo synchronizeTitleAndSelectedItem];
-	
+   [[self.view window]display];
 }
 
 
@@ -73,19 +82,28 @@ NSLog(@"setTimeoutDelay: derDelay: %f",derDelay);
 	[StatusDic setObject:[NSNumber numberWithInt:TimeoutDelay] forKey:@"timeoutdelay"];
 	NSLog(@"reportClose: StatusDic: %@",[StatusDic description]);
 	[nc postNotificationName:@"StartStatus" object:self userInfo:StatusDic];
-
-    //[NSApp stopModalWithCode:1];
-	[[self window]orderOut:NULL];
+   [self dismissController:NULL];
+   // [NSApp stopModalWithCode:1];
+	//[[self.view window]orderOut:NULL];
 
 }
 - (IBAction)reportCancel:(id)sender
 {
+   [self dismissController:NULL];
+   return;
     [NSApp stopModalWithCode:0];
-	[[self window]orderOut:NULL];
+	[[self.view window]orderOut:NULL];
 }
 - (void)setMitPasswort:(BOOL)mitPW
 {
 [mitUserPasswort setState:mitPW];
+}
+
+- (void)setzeAnzeigeFeld:(NSString *)anzeige
+{
+   NSLog(@"Einstellungenfenster setzeAnzeigeFeld anzeige: %@ startfeld: %@",anzeige);
+   self.AnzeigeFeld.stringValue = anzeige;
+   //[self.AnzeigeFeld setStringValue:@"soso"];
 }
 
 @end

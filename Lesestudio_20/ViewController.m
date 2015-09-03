@@ -71,6 +71,8 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 
 @implementation ViewController
 
+@synthesize Testfenster;
+
 - (void)viewDidLoad
 {
    [super viewDidLoad];
@@ -83,7 +85,6 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    RPStartStatusKey=@"StartStatus";
    
    
-   NSLog(@"setNetworkLeseboxPfad NSOKButton: %d NSModalResponseOK: %d" ,NSOKButton,NSModalResponseOK);
 
    
    //   projekt=@"projekt";
@@ -563,6 +564,17 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
       AVAbspielplayer.PlayerFenster = [self.view window];
    }
    
+   
+   self.mainstoryboard = [NSStoryboard storyboardWithName:@"Main" bundle:nil];
+   NSLog(@"mainstoryboard: %@",[self.mainstoryboard description]);
+//   self.Testfenster = [rTestfensterController new];
+   self.Testfenster = [self.mainstoryboard instantiateControllerWithIdentifier:@"testfenster"];
+   //[[[self.Testfenster view]window] makeKeyAndOrderFront:nil];
+    NSLog(@"Testfenster: %@",[self.Testfenster description]);
+
+   // EinstellungenFenster init
+   self.EinstellungenFenster = [self.mainstoryboard instantiateControllerWithIdentifier:@"einstellungenfenster"];
+
 }
 
 
@@ -572,6 +584,96 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 
    // Update the view, if already loaded.
 }
+
+#pragma mark start segue
+- (IBAction)startTestfeld:(id)sender
+{
+   
+    // [self presentViewController:Testfenster animated:YES completion:nil];
+   // http://beardforhire.com/blog/super-simple-custom-segues/
+   NSLog(@"startTestfeld self.Testfenster: %@",[self.Testfenster description]);
+   NSStoryboardSegue* adminsegue = [[NSStoryboardSegue alloc] initWithIdentifier:@"testfeld" source:self destination:self.Testfenster];
+   [self prepareForSegue:adminsegue sender:sender];
+   //[adminsegue perform];
+  [self performSegueWithIdentifier:@"testfeld" sender:sender];
+  
+   NSStoryboardSegue* anzeigesegue = [[NSStoryboardSegue alloc] initWithIdentifier:@"anzeigefeld" source:self destination:self.Testfenster];
+   [self prepareForSegue:anzeigesegue sender:sender];
+   [self performSegueWithIdentifier:@"anzeigefeld" sender:sender];
+
+   
+
+}
+
+
+
+- (void)prepareForSegue:(NSStoryboardSegue *)segue sender:(id)sender
+{
+   NSLog(@"prepareForSegue %@",[segue description]);
+   if ([[segue identifier] isEqualToString:@"admindata"])
+   {
+      
+      // Get destination view
+      self.Testfenster = [segue destinationController];
+   }
+   
+   if ([[segue identifier] isEqualToString:@"testfeld"])
+   {
+      NSLog(@"prepareForSegue testfeld");
+      // Get destination view
+      self.Testfenster = [segue destinationController];
+      [self.Testfenster setzeAnzeigeFeld:@"First"];
+      
+   }
+ 
+   if ([[segue identifier] isEqualToString:@"anzeigefeld"])
+   {
+      
+      [self.Testfenster setzeAnzeigeFeld:@"Seccond"];
+      
+      // NSLog(@"prepareForSegue erfolg: %d",erfolg);
+   }
+   
+   
+   
+   if ([[segue identifier] isEqualToString:@"einstellungenanzeigefeld"])// zweiter kontakt
+   {
+      NSLog(@"prepareForSegue einstellungenanzeigefeld");
+      
+ //     [self.EinstellungenFenster setzeAnzeigeFeld:@"*Anzeige*"];
+   
+   }
+
+   
+    if ([[segue identifier] isEqualToString:@"einstellungensegue"]) // erster kontakt
+    {
+       NSLog(@"prepareForSegue einstellungensegue");
+       self.EinstellungenFenster = (rEinstellungen*)segue.destinationController ;
+       
+       [self.EinstellungenFenster setBewertung:YES];
+       [self.EinstellungenFenster setNote:YES];
+       [self.EinstellungenFenster setzeAnzeigeFeld:@"Hallo Anzeige"];
+       [self.EinstellungenFenster setTimeoutDelay:120];
+    }
+
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier
+                                  sender:(id)sender
+{
+   NSLog(@"shouldPerformSegueWithIdentifier segue: %@",identifier);
+   
+   
+   if ([identifier isEqualToString:@"einstellungensegue"])
+   {
+      
+   }
+   return YES;
+   
+   
+}
+
+#pragma mark end segue
 
 
 
@@ -4009,25 +4111,47 @@ QTMovie* qtMovie;
    return umschalten;
 }
 
+#pragma mark Einstellungen
 - (IBAction)showEinstellungen:(id)sender
 {
-   if(!EinstellungenFenster)
+    if(!self.EinstellungenFenster)
 	  {
+        NSLog(@"EinstellungenFenster error");
+        /*
         if ((EinstellungenFenster=[[rEinstellungen alloc]init]))
         {
            [EinstellungenFenster awakeFromNib];
         }
+         */
      }
-	  
+
+   //[[[self.Testfenster view]window] makeKeyAndOrderFront:nil];
+   NSLog(@"EinstellungenFenster: %@",[self.EinstellungenFenster description]);
+
+ 
+   // erster Aufruf
+   NSStoryboardSegue* einstellungensegue = [[NSStoryboardSegue alloc] initWithIdentifier:@"einstellungensegue" source:self destination:self.EinstellungenFenster];
+   [self prepareForSegue:einstellungensegue sender:sender];
+   [self performSegueWithIdentifier:@"einstellungensegue" sender:sender];
+
+   
+   //zweiter Aufruf
+   /*
+   NSStoryboardSegue* anzeigesegue = [[NSStoryboardSegue alloc] initWithIdentifier:@"einstellungenanzeigefeld" source:self destination:self.EinstellungenFenster];
+   [self prepareForSegue:anzeigesegue sender:sender];
+   [self performSegueWithIdentifier:@"einstellungenanzeigefeld" sender:sender];
+*/
+   
    [Utils stopTimeout];
    
+   /*
    [EinstellungenFenster showWindow:self];
    [EinstellungenFenster setBewertung:self.BewertungZeigen];
    [EinstellungenFenster setNote:self.NoteZeigen];
    [EinstellungenFenster setMitPasswort:self.mitUserPasswort];
    NSLog(@"showEinstellungen: TimeoutDelay: %d",(int)self.TimeoutDelay);
    [EinstellungenFenster setTimeoutDelay:self.TimeoutDelay];
-   
+   */
    
 }
 
