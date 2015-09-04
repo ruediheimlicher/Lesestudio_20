@@ -668,6 +668,13 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
        [self.EinstellungenFenster setzeAnzeigeFeld:@"Hallo Anzeige"];
        [self.EinstellungenFenster setTimeoutDelay:120];
     }
+   
+   if ([[segue identifier] isEqualToString:@"adminsegue"]) // erster kontakt
+   {
+      NSLog(@"prepareForSegue einstellungensegue");
+      self.AdminPlayer = (rAdminPlayer*)segue.destinationController ;
+
+   }
 
 }
 

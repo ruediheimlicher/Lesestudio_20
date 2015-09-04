@@ -1401,19 +1401,19 @@ enum
    //   [self.window setIsVisible:NO];
    
    
-    if(!AdminPlayer)
+    if(!self.AdminPlayer)
     {
-    AdminPlayer=[[rAdminPlayer alloc]init];
+    self.AdminPlayer=[[rAdminPlayer alloc]init];
     //[AdminPlayer showWindow:self];
     //[AdminPlayer setLeseboxPfad:LeseboxPfad];
     }
    
-   [self.AblaufMenu setDelegate:AdminPlayer];
-   [self.ModusMenu setDelegate:AdminPlayer];
-   [self.RecorderMenu setDelegate:AdminPlayer];
+   [self.AblaufMenu setDelegate:self.AdminPlayer];
+   [self.ModusMenu setDelegate:self.AdminPlayer];
+   [self.RecorderMenu setDelegate:self.AdminPlayer];
 
-   [[self.ModusMenu itemWithTag:kRecPlayTag] setTarget:AdminPlayer];//Recorder
-   [[self.ModusMenu itemWithTag:kAdminTag] setTarget:AdminPlayer];//Admin
+   [[self.ModusMenu itemWithTag:kRecPlayTag] setTarget:self.AdminPlayer];//Recorder
+   [[self.ModusMenu itemWithTag:kAdminTag] setTarget:self.AdminPlayer];//Admin
 
     [Utils stopTimeout];
     //[AdminPlayer showWindow:self];
@@ -1438,14 +1438,14 @@ enum
    
    
   
-    [AdminPlayer setAdminProjektArray:self.ProjektArray];
+    [self.AdminPlayer setAdminProjektArray:self.ProjektArray];
     
-    [AdminPlayer setAdminPlayer:self.LeseboxPfad inProjekt:[self.ProjektPfad lastPathComponent]];
+    [self.AdminPlayer setAdminPlayer:self.LeseboxPfad inProjekt:[self.ProjektPfad lastPathComponent]];
     //NSLog(@"beginAdminPlayer nach setAdminPlayer");
     self.Umgebung=3;
     //NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[ProjektArray description]);
     
-    [AdminPlayer setProjektPopMenu:self.ProjektArray];
+    [self.AdminPlayer setProjektPopMenu:self.ProjektArray];
     
     // }
     //else

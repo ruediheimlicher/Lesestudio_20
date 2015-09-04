@@ -46,7 +46,7 @@
    rTitelListe*                     TitelListePanel;
    rAVRecorder*                     AVRecorder;
    
-   rAdminPlayer*						   AdminPlayer;
+//   rAdminPlayer*						   AdminPlayer;
    
    IBOutlet NSWindow*              RecorderFenster;
    IBOutlet rAbspielanzeige*			Abspielanzeige;
@@ -264,6 +264,8 @@
 @property( strong) NSStoryboard *mainstoryboard;
 @property (weak) IBOutlet NSButton*					zuTestfeldTaste;
 @property (weak) IBOutlet NSTextField*				Testinhalt;
+
+@property  (nonatomic, strong) rAdminPlayer*						   AdminPlayer;
 
 
 - (IBAction)startPlay:(id)sender;
