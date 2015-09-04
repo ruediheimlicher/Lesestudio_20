@@ -84,7 +84,8 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    RPNoteKey=@"RPNote";
    RPStartStatusKey=@"StartStatus";
    
-   
+   self.aktuellAnzAufnahmen=0;
+   self.Aufnahmedauer=0;
 
    
    //   projekt=@"projekt";
@@ -96,6 +97,16 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    //   fix=@"fix";
    //  mituserpw=@"mituserpw";
    
+   RPDevicedaten=[NSMutableData dataWithCapacity:0];
+   SystemDevicedaten=[NSMutableData dataWithCapacity:0];
+   self.LeseboxDa=NO;
+   self.ArchivPlayerGeladen=NO;
+   
+   self.mitAdminPasswort=YES;
+   self.mitUserPasswort=YES;
+   self.AdminZugangOK=NO;
+   
+   [self.view.window setDelegate:self];
    
    NSNotificationCenter * nc;
    nc=[NSNotificationCenter defaultCenter];
@@ -505,6 +516,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    }
    NSLog(@"TimeoutDelay: %f",self.TimeoutDelay);
    self.TimeoutDelay=40.0;
+   self.AdminTimeoutDelay = 40.0;
    //Tooltips
    
    [self.StartRecordKnopf setToolTip:@"Aufnahme beginnen\nEine schon vorhandene ungesicherte Aufnahme wird überschrieben"];
@@ -3207,6 +3219,7 @@ QTMovie* qtMovie;
       NSLog(@"switchAdminPlayer ok");
       [[self.ModusMenu itemWithTag:kRecPlayTag]setEnabled:YES];
       [self beginAdminPlayer:nil];
+      
       [Utils stopTimeout];
    }
    else

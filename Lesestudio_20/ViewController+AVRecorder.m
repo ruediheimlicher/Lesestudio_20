@@ -76,9 +76,9 @@
                                modalDelegate:nil
                               didEndSelector:nil
                                  contextInfo:nil];
-      NSImage* StartRecordImg=[NSImage imageNamed:@"recordicon_n.gif"];
-      self.StartStopKnopf.image=StartRecordImg;
-      
+      NSImage* StartRecordImg=[NSImage imageNamed:@"recordicon_w.gif"];
+      //self.StartStopKnopf.image=StartRecordImg;
+      [self.StartStopKnopf setState:0];
       
       return;
    }
@@ -206,7 +206,7 @@
 - (IBAction)startAVStop:(id)sender
 {
    
-   NSLog(@"startAVStop");
+   NSLog(@"startAVStop state: %d",[sender state]);
    NSImage* StartRecordImg=[NSImage imageNamed:@"recordicon_k.gif"];//
    
    

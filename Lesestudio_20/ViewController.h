@@ -59,7 +59,9 @@
    NSString *	RPNoteKey;
    NSString *	RPStartStatusKey;
    
-   
+   NSMutableData*						RPDevicedaten;
+   NSMutableData*						SystemDevicedaten;
+
    //   NSTimer* AufnahmeTimer;
    NSTimer* WiedergabeTimer;
    int      AufnahmeZeit;
@@ -67,7 +69,8 @@
    NSTimer *AufnahmeTimer;
    int aufnahmetimerstatus;
    double startzeit;
-   
+   NSTimer *AdminTimer;
+
 }
 
 // Menues
@@ -179,6 +182,7 @@
 @property BOOL                         istErsteRunde;
 
 @property NSTimeInterval						TimeoutDelay;
+@property NSTimeInterval						AdminTimeoutDelay;
 @property NSData*								GrabberOutputDaten;
 @property BOOL								neueSettings;
 @property BOOL								istNeueAufnahme;
@@ -268,6 +272,7 @@
 - (IBAction)goStart:(id)sender;
 - (void)setLevel:(int)derLevel;
 - (IBAction)showSettingsDialog:(id)sender;
+- (IBAction)showProjektListe:(id)sender;
 - (IBAction)restoreSettings:(id)sender;
 - (IBAction)saveSettings:(id)sender;
 - (IBAction)setzeLeser:(id)sender;
@@ -281,7 +286,7 @@
 - (IBAction)savePListAktion:(id)sender;
 
 - (NSString*)Initialen:(NSString*)derName;
-
+- (IBAction)switchAdminPlayer:(id)sender;
 
 - (IBAction)startTestfeld:(id)sender;
 
@@ -320,6 +325,8 @@
 - (void)saveSessionForUser:(NSString*)derUser inProjekt:(NSString*)dasProjekt;
 - (BOOL)anderesProjektEinrichtenMit:(NSString*)dasProjekt;
 - (NSArray*)SessionLeserListeVonProjekt:(NSString*)dasProjekt;
+
+- (void)startAdminTimer;
 @end // Lesebox
 
 // Category AVRecorder

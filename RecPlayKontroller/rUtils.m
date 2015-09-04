@@ -656,6 +656,7 @@ return versionOK;
 
 - (BOOL)LeseboxValidAnPfad:(NSString*)derLeseboxPfad aufSystemVolume:(BOOL)istSystemVolume
 {
+   NSLog(@"LeseboxValidAnPfad: derLeseboxPfad: %@",derLeseboxPfad);
   BOOL LeseboxValid=NO;
   BOOL ArchivValid=NO;
   BOOL erfolg;
@@ -664,7 +665,7 @@ return versionOK;
   if ([Filemanager fileExistsAtPath:derLeseboxPfad ])
 	{
 	LeseboxValid=YES;
-	//NSLog(@"LeseboxValidAnPfad Lesebox da: derLeseboxPfad: %@",derLeseboxPfad);
+	NSLog(@"LeseboxValidAnPfad Lesebox da: derLeseboxPfad: %@",derLeseboxPfad);
 	}//exists at LeseboxPfad
   else
   {
@@ -1378,10 +1379,7 @@ return versionOK;
 		NSString* DataPfad=[derLeseboxPfad stringByAppendingPathComponent:@"Data"];
 		//NSLog(@"PList aus Data: tempUserPfad: %@",DataPfad);
 		PListPfad=[DataPfad stringByAppendingPathComponent:PListName];//Pfad der PList auf dem Vol der LB
-		//NSLog(@"PListPfad in Lesebox: %@",PListPfad);
-      
-      
-
+		NSLog(@"PListPfad in Lesebox: %@",PListPfad);
 	}
 	
 	//PList lesen
@@ -1389,6 +1387,7 @@ return versionOK;
 	if ([Filemanager fileExistsAtPath:PListPfad])
 	{
 		tempPListDic=[[NSDictionary dictionaryWithContentsOfFile:PListPfad]mutableCopy];
+      NSLog(@"tempPListDic: %@",tempPListDic);
 		if ([[[tempPListDic objectForKey:@"adminpw"]objectForKey:@"pw"]length]==0)
 		{
 			NSAlert *Warnung = [[NSAlert alloc] init];

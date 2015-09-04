@@ -65,6 +65,13 @@ extern NSString* leseboxpfad;//=@"leseboxpfad";
 //extern NSString* projektarray;//=@"projektarray";
 //extern NSString* OK;//=@"OK";
 
+const int StartmitRecPlay=0;
+const int StartmitAdmin=1;
+const int StartmitDialog=2;
+
+const short kAdminUmgebung=1;
+const short kRecPlayUmgebung=0;
+
 
 
 @implementation rAdminPlayer
@@ -201,14 +208,15 @@ OptionBString=[[NSString alloc]init];
             object:nil];
 
 	
-	NSMutableDictionary * defaultWerte=[[NSMutableDictionary alloc]initWithCapacity:0];
+   NSMutableDictionary * defaultWerte=[[NSMutableDictionary alloc]initWithCapacity:0];
+   
+   [defaultWerte setObject:RPExportdaten  forKey:@"RPExportdaten"];
+   
+   [defaultWerte setObject:ExportFormatString forKey:@"RPExportformat"];
+   
+   [[NSUserDefaults standardUserDefaults] registerDefaults: defaultWerte];
 
-	[defaultWerte setObject:RPExportdaten  forKey:@"RPExportdatenKey"];
-	
-	[defaultWerte setObject:ExportFormatString forKey:@"RPExportformat"];
-	
-	[[NSUserDefaults standardUserDefaults] registerDefaults: defaultWerte];
-	//NSLog(@"INIT: ExportFormatString; %@",ExportFormatString);
+   //NSLog(@"INIT: ExportFormatString; %@",ExportFormatString);
 	selektierteZeile=-1;
 	AdminLeseboxPfad=@"";
 	AuswahlOption=0;
@@ -248,7 +256,7 @@ OptionBString=[[NSString alloc]init];
 	AdminProjektArray=[[NSMutableArray alloc]initWithCapacity:0];
 
 	
-	RPExportdaten=[[NSUserDefaults standardUserDefaults] objectForKey:@"RPExportdatenKey"];
+	RPExportdaten=[[NSUserDefaults standardUserDefaults] objectForKey:@"RPExportdaten"];
 	//NSLog(@"awake: RPExportdaten; %d",[RPExportdaten description]);
 	//NSLog(@"awake: RPExportdaten; %d",[RPExportdaten length]);
 	ExportFormatString=(NSMutableString*)[[NSUserDefaults standardUserDefaults] stringForKey:@"RPExportformat"];

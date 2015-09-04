@@ -57,11 +57,11 @@ enum
    //istSystemVolume=[Utils istSystemVolumeAnPfad:LeseboxPfad];
    //NSLog(@"Leseboxvorbereiten vor LeseboxOK");
    
-   LeseboxOK=[Utils LeseboxValidAnPfad:self.LeseboxPfad aufSystemVolume:self.istSystemVolume];//Lesebox checken, ev einrichten
+   self.LeseboxOK=[Utils LeseboxValidAnPfad:self.LeseboxPfad aufSystemVolume:self.istSystemVolume];//Lesebox checken, ev einrichten
    NSLog(@"Leseboxvorbereiten nach LeseboxOK: LeseboxOK: %d  self.istSystemVolume: %d",self.LeseboxOK,self.istSystemVolume);
    
    
-   if (LeseboxOK)
+   if (self.LeseboxOK)
    {
       //NSLog(@"Leseboxvorbereiten LeseboxOK=1 PListDic lesen");
       self.PListDic=[[Utils PListDicVon:self.LeseboxPfad aufSystemVolume:self.istSystemVolume]mutableCopy];
@@ -183,6 +183,7 @@ enum
       {
          [self.UserPasswortArray setArray:[self.PListDic objectForKey:@"userpasswortarray"]];//Aus PList einsetzen
       }
+      
       NSLog(@"ProjektArray: %@",[self.ProjektArray description]);
       if ([self.PListDic objectForKey:@"projektarray"] && [[self.PListDic objectForKey:@"projektarray"]count])
       {
@@ -1255,7 +1256,7 @@ enum
    NSString* UmgebungString=[[note userInfo] objectForKey:@"umgebunglabel"];
    int UmgebungZahl=[[[note userInfo] objectForKey:@"umgebung"]intValue];
    self.Umgebung=UmgebungZahl;
-   self.mitUserPasswort=NO;
+   //self.mitUserPasswort=NO;
    NSString* MitUserPWString=[[note userInfo] objectForKey:@"mituserpw"];
    if (MitUserPWString)
    {
@@ -1454,8 +1455,35 @@ enum
    
    
 }
+- (void)startAdminTimer
+{
+   if ([AdminTimer isValid])
+   {
+      [AdminTimer invalidate];
+   }
+      
+   {
+   
+      NSMutableDictionary* AdminTimerDic = [[NSMutableDictionary alloc]initWithCapacity:0];
+      [AdminTimerDic setObject:[NSNumber numberWithInt:30] forKey:@"max"];
+      [AdminTimerDic setObject:[NSNumber numberWithInt:30] forKey:@"pos"];
+      
+      AdminTimer=[NSTimer scheduledTimerWithTimeInterval:self.AdminTimeoutDelay
+                                                  target:self
+                                                selector:@selector(AdminTimerFunktion:)
+                                                userInfo:AdminTimerDic
+                                                 repeats:YES];
+   }
 
+}
 
+- (void)AdminTimerFunktion:(NSTimer*)timer
+{
+   
+   NSLog(@"AdminTimerFunktion info: %@",[[timer userInfo]description]);
+   self.AdminZugangOK = NO;
+   [timer invalidate];
+}
 
 - (BOOL)checkAdminPW
 {
@@ -2206,7 +2234,7 @@ enum
    }//if tempPListDic
    
    //
-   return;
+   
    
    
    //	[PListDic setObject: ProjektArray forKey:@"projektarray"];
@@ -2237,7 +2265,7 @@ enum
          const char* adminpw=[[[note userInfo]objectForKey:@"adminpasswort"] UTF8String];
          NSData* AdminPWData=[NSData dataWithBytes:adminpw length:strlen(adminpw)];
          [self.PListDic setObject:AdminPWData forKey:@"adminpasswort"];
-         self.mitAdminPasswort=YES;
+       self.mitAdminPasswort=YES;
       }//if adminpasswort
       
       if ([[note userInfo]objectForKey:@"userpasswortarray"])
@@ -2895,7 +2923,8 @@ enum
 - (BOOL)checkAdminZugang
 {
    BOOL ZugangOK=NO;
-   //NSLog(@"checkAdminZugang: mitAdminPasswort: %d",mitAdminPasswort);
+   self.mitAdminPasswort=YES;
+   NSLog(@"checkAdminZugang: mitAdminPasswort: %d",self.mitAdminPasswort);
    if (self.mitAdminPasswort)
    {
       NSMutableDictionary* tempAdminPWDic=[[NSMutableDictionary alloc]initWithCapacity:0];
@@ -2909,7 +2938,7 @@ enum
       else
       {
          tempAdminPWDic=[self.PListDic objectForKey:@"adminpw"];
-         //NSLog(@"Eintrag da: %@",[tempAdminPWDic description]);
+         NSLog(@"Eintrag da: %@",[tempAdminPWDic description]);
       }
       
       

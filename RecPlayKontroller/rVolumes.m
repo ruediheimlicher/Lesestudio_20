@@ -917,7 +917,7 @@ NSLog(@"\nende reportOpenNetwork: URL: %@\n\n",NetzURL);
 	}//if NameIstNeu
 		
 	
-return LeseboxOK;
+   return LeseboxOK;
 }
 
 #pragma mark -

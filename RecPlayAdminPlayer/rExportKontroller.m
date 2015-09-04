@@ -53,7 +53,7 @@ NSString*	RPExportformatKey;
 
  - (int)ExportPrefsLesen
  {
- 	RPExportdaten=[[NSUserDefaults standardUserDefaults]objectForKey:@"RPExportdatenKey"];
+ 	RPExportdaten=[[NSUserDefaults standardUserDefaults]objectForKey:@"RPExportdaten"];
 	ExportFormatString=[[NSUserDefaults standardUserDefaults]objectForKey:@"RPExportformatKey"];
  return[RPExportdaten length];
  }
@@ -503,7 +503,7 @@ NSString*	RPExportformatKey;
 		short l=[RPExportdaten length];
 		if(l>0)
 		{
-			[[NSUserDefaults standardUserDefaults]setObject:RPExportdaten forKey:RPExportdatenKey];
+			[[NSUserDefaults standardUserDefaults]setObject:RPExportdaten forKey:RPExportdaten];
 		}
 		[[NSUserDefaults standardUserDefaults]setObject:ExportFormatString forKey:RPExportformatKey];
 
@@ -695,7 +695,7 @@ NSString*	RPExportformatKey;
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
 	//ExportFormatString=[[[NSUserDefaults standardUserDefaults]stringForKey:RPExportformatKey]mutableCopy];
 	
-	//RPExportdaten=[[[NSUserDefaults standardUserDefaults]dataForKey:RPExportdatenKey]mutableCopy];
+	//RPExportdaten=[[[NSUserDefaults standardUserDefaults]dataForKey:RPExportdaten]mutableCopy];
 	//NSLog(@"AufnahmeExportierenMitPfad Anfang");
 	//NSLog(@"AufnahmeExportierenMitPfad Anfang: RPExportdaten: %\n%@",[RPExportdaten description]);
 	
