@@ -76,10 +76,165 @@ const short kRecPlayUmgebung=0;
 
 @implementation rAdminPlayer
 
-
-
-- (id) init
+- (void)viewDidLoad
 {
+   [super viewDidLoad];
+   // Do view setup here.
+   
+      NSLog(@"AdminPlayer  viewDidLoad");
+   NSNotificationCenter * nc;
+   nc=[NSNotificationCenter defaultCenter];
+   
+   RPExportdaten=[NSMutableData dataWithCapacity:0];
+   ExportFormatString=[NSMutableString stringWithCapacity:0];
+   [ExportFormatString setString:@"AIFF"];
+   OptionAString=[[NSString alloc]init];
+   OptionBString=[[NSString alloc]init];
+   [nc addObserver:self
+          selector:@selector(AdminKeyNotifikationAktion:)
+              name:@"Pfeiltaste"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(AdminZeilenNotifikationAktion:)
+              name:@"AdminselektierteZeile"
+            object:nil];
+   
+   
+   [nc addObserver:self
+          selector:@selector(AdminTabNotifikationAktion:)
+              name:@"AdminChangeTab"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(AdminEnterKeyNotifikationAktion:)
+              name:@"AdminEnterKey"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(UmgebungAktion:)
+              name:@"Umgebung"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(DidChangeNotificationAktion:)
+              name:@"NSTextDidChangeNotification"
+            object:AdminKommentarView];
+   
+   [nc addObserver:self
+          selector:@selector(KommentarNotificationAktion:)
+              name:@"KommentarOption"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(EntfernenNotificationAktion:)
+              name:@"EntfernenOption"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(CleanOptionNotificationAktion:)
+              name:@"CleanOption"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(CleanViewNotificationAktion:)
+              name:@"CleanView"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(ClearNotificationAktion:)//Taste "Löschen"
+              name:@"Clear"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(ExportNotificationAktion:)//Taste "Exportieren"
+              name:@"Export"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(ExportFormatDialogAktion:)//Taste "Optionen"
+              name:@"ExportFormatDialog"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(MarkierungNotificationAktion:)//Fenster Markierung
+              name:@"MarkierungOption"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(AdminProjektListeAktion:)
+              name:@"ProjektWahl"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(anderesAdminProjektAktion:)
+              name:@"anderesProjekt"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(ProjektArrayNotificationAktion:)
+              name:@"ProjektArray"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(NameIstEntferntAktion:)
+              name:@"NameIstEntfernt"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(NameIstEingesetztAktion:)
+              name:@"NameIstEingesetzt"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(SelectionDidChangeAktion:)
+              name:@"NSTableViewSelectionDidChangeNotification"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(ButtonWillPopUpAktion:)
+              name:@"NSPopUpButtonWillPopUpNotification"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(ComboBoxAktion:)
+              name:@"NSComboBoxSelectionDidChangeNotification"
+            object:nil];
+   
+   
+   [nc addObserver:self
+          selector:@selector(AbspielPosAktion:)
+              name:@"abspielpos"
+            object:nil];
+   
+   
+   NSMutableDictionary * defaultWerte=[[NSMutableDictionary alloc]initWithCapacity:0];
+   
+   [defaultWerte setObject:RPExportdaten  forKey:@"RPExportdaten"];
+   
+   [defaultWerte setObject:ExportFormatString forKey:@"RPExportformat"];
+   
+   [[NSUserDefaults standardUserDefaults] registerDefaults: defaultWerte];
+   
+   //NSLog(@"INIT: ExportFormatString; %@",ExportFormatString);
+   selektierteZeile=-1;
+   AdminLeseboxPfad=@"";
+   AuswahlOption=0;
+   AbsatzOption=0;
+   AnzahlOption=2;
+   ProjektNamenOption=0;
+   ProjektAuswahlOption=0;
+   
+   selektierteAufnahmenTableZeile=-1;
+   Textchanged=NO;
+
+   
+}
+
+
+- (id)init
+{
+   NSLog(@"AdminPlayer init");
    self=[super init] ;//]WithWindowNibName:@"RPAdmin"];
 	//AdminDaten = [[rAdminDS alloc] initWithRowCount: 10];
 	NSNotificationCenter * nc;
@@ -227,6 +382,7 @@ OptionBString=[[NSString alloc]init];
 	
 	selektierteAufnahmenTableZeile=-1;
 	Textchanged=NO;
+   NSLog(@"AdminPlayer end");
 	return self;
 	
 }
@@ -234,7 +390,7 @@ OptionBString=[[NSString alloc]init];
 - (void) awakeFromNib
 {
   
-  //NSLog(@"awake:start");
+   NSLog(@"AdminPlayer awake start");
 	[NamenListe reloadData];
 	NSColor * TitelFarbe=[NSColor whiteColor];
 	NSFont* TitelFont;
@@ -307,6 +463,8 @@ OptionBString=[[NSString alloc]init];
 	//[[[self.NamenListe tableColumnWithIdentifier:@"anz"]headerCell]contentView setToolTip:NSLocalizedString(@"Number of records of the reader",@"Anzahl Aufnahmen des Lesers")];
 	[UserMarkCheckbox setToolTip:@"Vom Leser gesetzte Marke."];
 [AufnahmenTab setDelegate:self];
+   NSLog(@"AdminPlayer awake end");
+
 }
 
 
@@ -371,7 +529,7 @@ OptionBString=[[NSString alloc]init];
 
 - (void) setAdminPlayer:(NSString*)derLeseboxPfad inProjekt:(NSString*)dasProjekt
 {
-	//NSLog(@"setAdminPlayer Projekt: %@",dasProjekt);
+	NSLog(@"setAdminPlayer LeseboxPfad: %@ Projekt: %@",derLeseboxPfad,dasProjekt);
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
 	[ProjektFeld setStringValue:dasProjekt];
 	AdminLeseboxPfad=[NSString stringWithString:derLeseboxPfad];
@@ -385,7 +543,7 @@ OptionBString=[[NSString alloc]init];
 	[NotificationDic setObject:AdminProjektPfad forKey:@"projektpfad"];
 	[nc postNotificationName:@"Utils" object:self userInfo:NotificationDic];
 	
-	
+   NSLog(@"setAdminPlayer AdminProjektPfad: %@",AdminProjektPfad);
 	AdminProjektNamenArray=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:AdminProjektPfad error:NULL]];
 	[AdminProjektNamenArray removeObject:@".DS_Store"];
 	AnzLeser=[AdminProjektNamenArray count];											//Anzahl Leser
@@ -471,7 +629,7 @@ OptionBString=[[NSString alloc]init];
 	NSMutableArray* AufnahmeFilesArray;
 	
 	[LesernamenPop removeAllItems];
-	[LesernamenPop insertItemWithTitle:@"Namen wählen" atIndex:0];
+	[LesernamenPop insertItemWithTitle:@"Namen waehlen" atIndex:0];
 	//NSLog(@"\nAdminProjektNamenArray: %@\n\n",[AdminProjektNamenArray description]);
 	NSArray* SessionNamenArray=[NSArray array];
 	int ProjektIndex=[[AdminProjektArray valueForKey:@"projekt"]indexOfObject:dasProjekt];
@@ -503,14 +661,14 @@ OptionBString=[[NSString alloc]init];
 		
 		//Namen einsetzen, inSessionNumber einsetzen
 		NamenDic=[NSDictionary dictionaryWithObjectsAndKeys:[AdminProjektNamenArray objectAtIndex:i], @"namen",inSessionNumber,@"insession",nil];
-		//NSLog(@"setAdminPlayer    NamenDic: %@",[NamenDic description]);
+		NSLog(@"setAdminPlayer    NamenDic: %@",[NamenDic description]);
 		
 		//Anzahl Aufnahmen für den Namen ausrechnen
 		tempLeserPfad=[AdminProjektPfad stringByAppendingPathComponent:[[AdminProjektNamenArray objectAtIndex:i]description]];
 		//NSLog(@"tempLeserPfad: %@",tempLeserPfad);
 		tempAufnahmenliste=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:tempLeserPfad error:NULL]];
 		
-		
+		NSLog(@"setAdminPlayer    tempAufnahmenliste: %@",[tempAufnahmenliste description]);
 		
 		//Anzahl Aufnahmen:
 		tempAnzAufnahmen=[[Filemanager contentsOfDirectoryAtPath:tempLeserPfad error:NULL]count];
@@ -527,7 +685,7 @@ OptionBString=[[NSString alloc]init];
 		int Kommentarzeile=-1;
 		
 		//Kommentarordner aus Liste entfernen
-		NSString* KommentarString=[NSString stringWithString:@"Anmerkungen"];
+		NSString* KommentarString=@"Anmerkungen";
 		for(k=0;k<tempAnzAufnahmen;k++)
 		{
 			if ([[[tempAufnahmenliste objectAtIndex:k]description]isEqualToString: KommentarString])
@@ -669,7 +827,7 @@ OptionBString=[[NSString alloc]init];
 				
 			}
 		}
-		//NSLog(@"AufnahmeFilesArray nach wenden: %@   index: %d",[AufnahmeFilesArray description],i);
+		NSLog(@"AufnahmeFilesArray nach wenden: %@   index: %d",[AufnahmeFilesArray description],i);
 		//
 		
 		[AdminDaten setAufnahmeFiles:AufnahmeFilesArray forRow:i];
@@ -748,7 +906,9 @@ OptionBString=[[NSString alloc]init];
 
 - (void)setAdminProjektArray:(NSArray*)derProjektArray
 {
-//NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArray);
+NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArray);
+   
+[self.view.window makeKeyAndOrderFront:nil];
 [AdminProjektArray removeAllObjects];
 [AdminProjektArray setArray:derProjektArray];
 //NSLog(@"setAdminProjektArray: AdminProjektArray: %@",[[AdminProjektArray lastObject]description]);
@@ -760,7 +920,7 @@ OptionBString=[[NSString alloc]init];
 - (void)setProjektPopMenu:(NSArray*)derProjektArray
 {
   NSString* tempProjektName=[AdminProjektPfad lastPathComponent];
-  //NSLog(@"setProjektPop  derProjektArray: %@",[derProjektArray description]);
+  NSLog(@"setProjektPop  derProjektArray: %@ ProjektPop: %@",[derProjektArray description],[ProjektPop description] );
   int anz=[ProjektPop numberOfItems];
   int i=0;
   if (anz>1)
@@ -781,7 +941,7 @@ OptionBString=[[NSString alloc]init];
 	
 	while (einProjektDic=[ProjektEnum nextObject])
 	  {
-	  //NSLog(@"*setProjektPopMenu einProjektDic: %@",einProjektDic);
+	  NSLog(@"*setProjektPopMenu einProjektDic: %@",einProjektDic);
 	  NSString* tempTitel=[einProjektDic objectForKey:@"projekt"];
 	  if (tempTitel&&[tempTitel length]&&![tempTitel isEqualToString:tempProjektName])
 		{
@@ -2095,7 +2255,7 @@ OptionBString=[[NSString alloc]init];
 
 - (IBAction)startAVPlay:(id)sender
 {
-   //NSLog(@"startAVPlay hiddenaufna pfad: %@",self.hiddenAufnahmePfad);
+   NSLog(@"startAVPlay");
    // [AVRecorder setPlaying:YES];
    [self.BackKnopf setEnabled:YES];
    [self.StopPlayKnopf setEnabled:YES];
@@ -3293,7 +3453,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 - (void) AdminZeilenNotifikationAktion:(NSNotification*)note
 {
 	BOOL erfolg;
-	//NSLog(@"AdminZeilenNotifikationAktion: note: %@",[[note object]description]);
+	NSLog(@"AdminZeilenNotifikationAktion: note: %@",[[note object]description]);
 	NSDictionary* QuellenDic=[note object];
 
 	[MarkCheckbox setEnabled:NO];
@@ -3337,7 +3497,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
         
 //		[self setLeserFuerZeile:nextZeilenNr];
 		int AnzahlAufnahmenFuerZeile=[self AnzahlAufnahmenFuerZeile:nextZeilenNr];
-		//NSLog(@"AdminZeilenNotifikationAktion: nextZeilenNr: %d AnzahlAufnahmenFuerZeile: %d",nextZeilenNr,AnzahlAufnahmenFuerZeile);
+		NSLog(@"AdminZeilenNotifikationAktion: nextZeilenNr: %d AnzahlAufnahmenFuerZeile: %d",nextZeilenNr,AnzahlAufnahmenFuerZeile);
 		if ((nextZeilenNr>=0)&&AnzahlAufnahmenFuerZeile)
 		  {
 			[self->PlayTaste setEnabled:YES];
@@ -3964,7 +4124,7 @@ if (entfernenOK==0)//allesOK
 - (void)ButtonWillPopUpAktion:(NSNotification*)note
 {
 	NSLog(@"ButtonWillPopUpAktion note: %d",[[note object]tag]);
-	
+   [AdminNamenfeld setStringValue:@"Ein Name soll es sein"];
 	switch([[note object]tag])
 	{
 	case 11:

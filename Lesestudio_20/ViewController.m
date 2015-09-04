@@ -69,7 +69,10 @@ const short KommentarReturn=7;
 NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 
 
+
 @implementation ViewController
+
+@synthesize AdminPlayer;
 
 @synthesize Testfenster;
 
@@ -588,6 +591,9 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    // EinstellungenFenster init
    self.EinstellungenFenster = [self.mainstoryboard instantiateControllerWithIdentifier:@"einstellungenfenster"];
 
+   // Adminplayer init
+   self.AdminPlayer = [self.mainstoryboard instantiateControllerWithIdentifier:@"adminplayerfenster"];
+
 }
 
 
@@ -669,11 +675,27 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
        [self.EinstellungenFenster setTimeoutDelay:120];
     }
    
-   if ([[segue identifier] isEqualToString:@"adminsegue"]) // erster kontakt
+   if ([[segue identifier] isEqualToString:@"adminplayersegue"]) // erster kontakt
    {
-      NSLog(@"prepareForSegue einstellungensegue");
+      NSLog(@"prepareForSegue adminplayersegue");
       self.AdminPlayer = (rAdminPlayer*)segue.destinationController ;
-
+ 
+   }
+   
+   // adminanzeigesegue
+   if ([[segue identifier] isEqualToString:@"adminanzeigesegue"]) // erster kontakt
+   {
+      NSLog(@"prepareForSegue adminanzeigesegue");
+       self.AdminPlayer = (rAdminPlayer*)segue.destinationController ;
+      [self.AdminPlayer setAdminProjektArray:self.ProjektArray];
+      
+      [self.AdminPlayer setAdminPlayer:self.LeseboxPfad inProjekt:[self.ProjektPfad lastPathComponent]];
+      //NSLog(@"beginAdminPlayer nach setAdminPlayer");
+      self.Umgebung=3;
+      //NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[ProjektArray description]);
+      
+      [self.AdminPlayer setProjektPopMenu:self.ProjektArray];
+      
    }
 
 }

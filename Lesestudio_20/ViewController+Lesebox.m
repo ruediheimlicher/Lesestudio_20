@@ -1360,8 +1360,8 @@ enum
 
 - (IBAction)beginAdminPlayer:(id)sender
 {
-   BOOL erfolg;
-   /*
+   
+    /*
     if (MoviePlayerbusy)
     {
     NSAlert *Warnung = [[[NSAlert alloc] init] autorelease];
@@ -1401,6 +1401,9 @@ enum
    //   [self.window setIsVisible:NO];
    
    
+    BOOL erfolg;
+
+   
     if(!self.AdminPlayer)
     {
     self.AdminPlayer=[[rAdminPlayer alloc]init];
@@ -1435,9 +1438,22 @@ enum
       //NSLog(@"beginAdminPlayer: Projektarray neu: %@",[[ProjektArray lastObject]description]);
       
    }
+
+   // erster Aufruf
+   NSStoryboardSegue* admindatasegue = [[NSStoryboardSegue alloc] initWithIdentifier:@"adminplayersegue" source:self destination:self.AdminPlayer];
+   [self prepareForSegue:admindatasegue sender:sender];
+   [self performSegueWithIdentifier:@"adminplayersegue" sender:self];
    
    
-  
+   //zweiter Aufruf
+   
+   NSStoryboardSegue* adminanzeigesegue = [[NSStoryboardSegue alloc] initWithIdentifier:@"adminanzeigesegue" source:self destination:self.AdminPlayer];
+   [self prepareForSegue:adminanzeigesegue sender:sender];
+   [self performSegueWithIdentifier:@"adminanzeigesegue" sender:self];
+
+   
+
+  /*
     [self.AdminPlayer setAdminProjektArray:self.ProjektArray];
     
     [self.AdminPlayer setAdminPlayer:self.LeseboxPfad inProjekt:[self.ProjektPfad lastPathComponent]];
@@ -1446,7 +1462,11 @@ enum
     //NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[ProjektArray description]);
     
     [self.AdminPlayer setProjektPopMenu:self.ProjektArray];
-    
+  
+   */
+   
+   
+   
     // }
     //else
     {
