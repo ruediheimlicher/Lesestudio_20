@@ -1416,7 +1416,7 @@ enum
    [[self.ModusMenu itemWithTag:kAdminTag] setTarget:AdminPlayer];//Admin
 
     [Utils stopTimeout];
-    [AdminPlayer showWindow:self];
+    //[AdminPlayer showWindow:self];
    
 	  //NSLog(@"beginAdminPlayer LeseboxPfad: %@ Projekt: %@",LeseboxPfad,[ProjektPfad lastPathComponent]);
    

@@ -422,7 +422,7 @@ NSLog(@"tempName: %@",tempName);
 			[LesernamenPop selectItemWithTitle:Lesername];
 			[self setAufnahmenVonLeser:Lesername];
 			
-			[[self window]makeFirstResponder:AufnahmenTable];
+			[[self.view window]makeFirstResponder:AufnahmenTable];
 			NSString* KeineAufnahmenString=NSLocalizedString(@"No Records",@"Keine Aufnahmen");
 			
 			//NSNotificationCenter * nc;

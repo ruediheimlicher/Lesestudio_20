@@ -108,6 +108,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    
    [self.view.window setDelegate:self];
    
+   NSLog(@"NSAlertDefaultReturn: %d",NSAlertDefaultReturn);
    NSNotificationCenter * nc;
    nc=[NSNotificationCenter defaultCenter];
    [nc addObserver:self

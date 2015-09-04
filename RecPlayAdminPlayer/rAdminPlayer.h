@@ -37,7 +37,7 @@
 @class rProgressDialog;
 
 
-@interface rAdminPlayer:NSWindowController <NSWindowDelegate, NSTabViewDelegate,NSMenuDelegate>
+@interface rAdminPlayer:NSViewController <NSWindowDelegate, NSTabViewDelegate,NSMenuDelegate>
 	{
 	IBOutlet NSWindow*			AdminFenster;
 	IBOutlet NSTextField*		TitelString;

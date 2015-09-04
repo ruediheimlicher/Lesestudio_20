@@ -80,7 +80,7 @@ const short kRecPlayUmgebung=0;
 
 - (id) init
 {
-	self=[super initWithWindowNibName:@"RPAdmin"];
+   self=[super init] ;//]WithWindowNibName:@"RPAdmin"];
 	//AdminDaten = [[rAdminDS alloc] initWithRowCount: 10];
 	NSNotificationCenter * nc;
 	nc=[NSNotificationCenter defaultCenter];
@@ -279,7 +279,7 @@ OptionBString=[[NSString alloc]init];
    }
    if (AVAbspielplayer)
    {
-      AVAbspielplayer.PlayerFenster = [self window];
+      AVAbspielplayer.PlayerFenster = [self.view window];
    }
 
 
@@ -2070,7 +2070,7 @@ OptionBString=[[NSString alloc]init];
 - (IBAction)reportFensterschliessen:(id)sender
 {
    [self resetAdminPlayer];
-   [[self window]orderOut:nil];
+   [[self.view window]orderOut:nil];
 }
 
 #pragma mark Player
@@ -3140,8 +3140,9 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 		switch (returnCode)
 		  {
 			case  NSAlertDefaultReturn://Papierkorb
+         case NSAlertFirstButtonReturn:
 			  {
-				  //NSLog(@"NSAlertDefaultReturn: Papier %d",returnCode);
+				  NSLog(@"NSAlertDefaultReturn: Papier %d",returnCode);
 				  if ([Filemanager fileExistsAtPath:AdminPlayPfad])
 					{
 					  
