@@ -531,7 +531,7 @@ OptionBString=[[NSString alloc]init];
 {
 	NSLog(@"setAdminPlayer LeseboxPfad: %@ Projekt: %@",derLeseboxPfad,dasProjekt);
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
-	[ProjektFeld setStringValue:dasProjekt];
+	[AdminProjektFeld setStringValue:dasProjekt];
 	AdminLeseboxPfad=[NSString stringWithString:derLeseboxPfad];
 	AdminArchivPfad=[NSString stringWithString:[derLeseboxPfad stringByAppendingPathComponent:@"Archiv"]];
 	
@@ -891,7 +891,7 @@ OptionBString=[[NSString alloc]init];
 
 - (IBAction)setNeuesAdminProjekt:(id)sender
 {
-	//NSLog(@"\n\n*********setNeuesAdminProjekt: %@\nAdminProjektArray: %@",[sender titleOfSelectedItem],AdminProjektArray);
+	NSLog(@"\n\n*********setNeuesAdminProjekt: %@\nAdminProjektArray: %@",[sender titleOfSelectedItem],AdminProjektArray);
 	[self setAdminPlayer:AdminLeseboxPfad inProjekt:[sender titleOfSelectedItem]];
 	[self setProjektPopMenu:AdminProjektArray];
 	NSMutableDictionary* NotificationDic=[[NSMutableDictionary alloc]initWithCapacity:0];
@@ -920,14 +920,14 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 - (void)setProjektPopMenu:(NSArray*)derProjektArray
 {
   NSString* tempProjektName=[AdminProjektPfad lastPathComponent];
-  NSLog(@"setProjektPop  derProjektArray: %@ ProjektPop: %@",[derProjektArray description],[ProjektPop description] );
-  int anz=[ProjektPop numberOfItems];
+  NSLog(@"setProjektPop  derProjektArray: %@ ProjektPop: %@",[derProjektArray description],[AdminProjektPop description] );
+  int anz=[AdminProjektPop numberOfItems];
   int i=0;
   if (anz>1)
 	{
 	while (anz>1)
 	  {
-	  [ProjektPop removeItemAtIndex:1];
+	  [AdminProjektPop removeItemAtIndex:1];
 	  anz--;
 	  }
 	}
@@ -941,22 +941,22 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 	
 	while (einProjektDic=[ProjektEnum nextObject])
 	  {
-	  NSLog(@"*setProjektPopMenu einProjektDic: %@",einProjektDic);
+	  //NSLog(@"*setProjektPopMenu einProjektDic: %@",einProjektDic);
 	  NSString* tempTitel=[einProjektDic objectForKey:@"projekt"];
 	  if (tempTitel&&[tempTitel length]&&![tempTitel isEqualToString:tempProjektName])
 		{
-		[ProjektPop addItemWithTitle:tempTitel];
+		[AdminProjektPop addItemWithTitle:tempTitel];
 		//NSLog(@"*setProjektPopMenu einProjektDic: %@",einProjektDic);
 
 		if ([[einProjektDic objectForKey:@"OK"]boolValue])
 		  {
 		  NSImage* CrossImg=[NSImage imageNamed:@"CrossImg.tif"];
-		  [[ProjektPop itemWithTitle:tempTitel]setImage:CrossImg];
+		  [[AdminProjektPop itemWithTitle:tempTitel]setImage:CrossImg];
 		  }
 		  else
 		  {
 		  NSImage* BoxImg=[NSImage imageNamed:@"BoxImg.tif"];
-		   [[ProjektPop itemWithTitle:tempTitel]setImage:BoxImg];
+		   [[AdminProjektPop itemWithTitle:tempTitel]setImage:BoxImg];
 		  }
 		  
 		}
@@ -1036,6 +1036,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 	//NSLog(@"hitZeile: %d ",hitZeile);
 	if (hitZeile<0)
 		return;
+   [self clearAVPlay];
+   
 	if ([[AdminDaten AufnahmeFilesFuerZeile:hitZeile]count])
 	{
 		int hit=[[[AdminDaten dataForRow:hitZeile]objectForKey:@"aufnahmen"]intValue];
@@ -1967,6 +1969,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
       [self Aufnahmezuruecklegen];
       
    }
+   
    // von setLeser
   
    NSLog(@"Aufnahmebereitstellen AdminAktuellerLeser: %@ AdminAktuelleAufnahme: %@",AdminAktuellerLeser,AdminAktuelleAufnahme);
@@ -2117,16 +2120,9 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 
 - (void)Aufnahmezuruecklegen
 {
-   /*
-    [AdminQTKitPlayer pause :nil];
-    [AdminQTKitPlayer gotoBeginning:nil];
-    [AdminQTKitPlayer setMovie:nil];
-    */
-   NSLog(@"\n\nAufnahmezuruecklegen:");
+   NSLog(@"\n\nAufnahmezuruecklegen start");
    
    [AVAbspielplayer toStartTempAufnahme];
-   
-   [AVAbspielplayer stopTempAufnahme];
    
    [self.BackKnopf setEnabled:NO];
    [self.StopPlayKnopf setEnabled:NO];
@@ -2138,14 +2134,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
    [Abspielanzeige setLevel:0.0];
    [Abspielanzeige setNeedsDisplay:YES];
 
-
-   NSString* EnterKeyQuelle;
-   EnterKeyQuelle=@"MovieView";
-   NSNotificationCenter * nc;
-   nc=[NSNotificationCenter defaultCenter];
- //  [nc postNotificationName:@"AdminEnterKey" object:EnterKeyQuelle];
-   //	[AdminQTKitPlayer setHidden:YES];
-   [self setBackTaste:NO];
+    [self setBackTaste:NO];
    [zurListeTaste setEnabled:NO];
    [PlayTaste setEnabled:[NamenListe numberOfSelectedRows]];
    
@@ -2178,6 +2167,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
    
    [MarkCheckbox setState:NO];
    [MarkCheckbox setEnabled:NO];
+   
+    NSLog(@"\n\nAufnahmezuruecklegen end");
 }
 
 - (void)backZurListe:(id)sender
@@ -2306,6 +2297,13 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
    [self.StopPlayKnopf setEnabled:YES];
 }
 
+- (void)clearAVPlay
+{
+   [AVAbspielplayer toStartTempAufnahme];
+   [Abspielanzeige setLevel:0.0];
+   [Abspielanzeige setNeedsDisplay:YES];
+
+}
 
 - (void)AbspielPosAktion:(NSNotification*)note
 {
@@ -3453,20 +3451,20 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 - (void) AdminZeilenNotifikationAktion:(NSNotification*)note
 {
 	BOOL erfolg;
-	NSLog(@"AdminZeilenNotifikationAktion: note: %@",[[note object]description]);
+//	NSLog(@"AdminZeilenNotifikationAktion: note: %@",[[note object]description]);
 	NSDictionary* QuellenDic=[note object];
 
 	[MarkCheckbox setEnabled:NO];
 	//[MarkCheckbox setEnabled:YES];
 	NSString* Quelle=[QuellenDic objectForKey:@"Quelle"];
-	NSLog(@"AdminZeilenNotifikationAktion: Quelle: %@",Quelle);
+//	NSLog(@"AdminZeilenNotifikationAktion: Quelle: %@",Quelle);
 	
    
    [self Aufnahmezuruecklegen];
    
 	if ([Quelle isEqualToString:@"AdminView"])
 	  {
-		NSLog(@"AdminPlayer AdminZeilenNotifikationAktion:  AdminView  Quelle: %@",Quelle);
+		//NSLog(@"AdminPlayer AdminZeilenNotifikationAktion:  AdminView  Quelle: %@",Quelle);
 	  	
 		int lastZeilenNr=[[QuellenDic objectForKey:@"AdminLastZeilenNummer"] intValue];
 		int nextZeilenNr=[[QuellenDic objectForKey:@"AdminNextZeilenNummer"] intValue];
@@ -3475,11 +3473,11 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 
 		if ((selektierteZeile>=0)&&(selektierteZeile != nextZeilenNr))//selektierte zeile ist nicht -1 wie beim ersten Klick
 		  {
-			//NSLog(@"AdminAktuellerLeser: %@  AdminAktuelleAufnahme: %@",AdminAktuellerLeser,AdminAktuelleAufnahme);
+			NSLog(@"AdminAktuellerLeser: %@  AdminAktuelleAufnahme: %@",AdminAktuellerLeser,AdminAktuelleAufnahme);
 
 			if ([AdminAktuellerLeser length]&&[AdminAktuelleAufnahme length]&&Moviegeladen&&Textchanged)
 			  {
-				NSLog(@"AdminZeilenNotifikationAktion: save in Notification");
+				NSLog(@"AdminZeilenNotifikationAktion: save Kommentar in Notification");
 				BOOL OK=[self saveKommentarFuerLeser: AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
 				Moviegeladen=NO;
 				//Textchanged=NO;
@@ -3489,6 +3487,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 			
 
 		  }
+        
 		  selektierteZeile=nextZeilenNr;
 		  if (lastZeilenNr<0)//erster Klick, ZeilenNr ist -1
 		  {
@@ -3500,7 +3499,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 		NSLog(@"AdminZeilenNotifikationAktion: nextZeilenNr: %d AnzahlAufnahmenFuerZeile: %d",nextZeilenNr,AnzahlAufnahmenFuerZeile);
 		if ((nextZeilenNr>=0)&&AnzahlAufnahmenFuerZeile)
 		  {
-			[self->PlayTaste setEnabled:YES];
+			[PlayTaste setEnabled:YES];
 			//erfolg=[AdminFenster makeFirstResponder:self.PlayTaste];
 			[self->PlayTaste setKeyEquivalent:@"\r"];
 			//[MarkCheckbox setEnabled:YES];
@@ -3518,6 +3517,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 		[ExportierenTaste setEnabled:NO];
 		[LoeschenTaste setEnabled:NO];
 		[zurListeTaste setEnabled:NO];
+        
 		//NSTableColumn* tempKolonne;
 		//tempKolonne=[self.NamenListe tableColumnWithIdentifier:@"neu"];
 		//[[tempKolonne dataCellForRow:selektierteZeile]setTitle:@"Los"];

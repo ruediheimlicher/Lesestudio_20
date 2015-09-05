@@ -462,10 +462,10 @@ return index;
 - (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(long)row
 {
 	
-	NSLog(@"**AdminDS tableView  shouldSelectRow: %d  [tableView clickedRow]:%d" ,row,[tableView clickedRow]);
+	//NSLog(@"**AdminDS tableView  shouldSelectRow: %d  [tableView clickedRow]:%d" ,row,[tableView clickedRow]);
 	
 	long selektierteZeile=[tableView selectedRow];//vorher selektierte Zeile
-   NSLog(@"**AdminDS tableView  shouldSelectRow: %ld  [tableView clickedRow]:%d selectedRow: %d" ,row,[tableView clickedRow],[tableView selectedRow]);
+   NSLog(@"**AdminDS tableView  shouldSelectRow: %ld  clickedRow :%d selectedRow: %d" ,row,[tableView clickedRow],[tableView selectedRow]);
 
 	NSString* tempLastLesernamen=[NSString string];//leer wenn zeilennummer=-1 beim ersten Klick
 	

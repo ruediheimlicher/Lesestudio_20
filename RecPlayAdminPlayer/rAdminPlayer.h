@@ -63,7 +63,7 @@
 	IBOutlet NSButton*			UserMarkCheckbox;
    IBOutlet NSButton*			SchliessenTaste;
       
-	IBOutlet NSTextField*		ProjektFeld;
+//	IBOutlet NSTextField*		ProjektFeld;
 	IBOutlet NSTextView*       AdminKommentarView;
 	IBOutlet NSTextField*		AdminTitelfeld;
 	IBOutlet NSTextField*		AdminDatumfeld;
@@ -156,6 +156,8 @@
 @property (weak)  IBOutlet NSButton*					RewindKnopf;
 @property (weak)  IBOutlet NSButton*					ForewardKnopf;
 
+@property (weak) NSPopUpButton*                    ProjektPop;
+
 - (void)setLeseboxPfad:(NSString*)derPfad inProjekt: (NSString*)dasProjekt;
 - (NSString*)AdminLeseboxPfad;
 - (BOOL)setNetworkAdminLeseboxPfad:(id)sender;
@@ -244,7 +246,7 @@
 - (IBAction)saveRecord:(id)sender;
 - (IBAction)rewindAVPlay:(id)sender;
 - (IBAction)forewardAVPlay:(id)sender;
-
+- (void)clearAVPlay;
 @end
 
 
