@@ -127,7 +127,7 @@ return [KommentarFenster nurMarkierte];
 	  }
 	nurMarkierteOption=0;
 	ProjektPfadOptionString=AdminProjektPfad;
-	//NSLog(@"AdminProjektArray: %@",[AdminProjektArray description]);
+	NSLog(@"AdminProjektArray: %@",[AdminProjektArray description]);
 	NSArray* StartProjektArray=[AdminProjektArray valueForKey:@"projekt"];
 	NSLog(@"StartProjektArray: %@",[StartProjektArray description]);
 

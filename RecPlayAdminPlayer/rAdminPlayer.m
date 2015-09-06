@@ -891,6 +891,7 @@ OptionBString=[[NSString alloc]init];
 
 - (IBAction)setNeuesAdminProjekt:(id)sender
 {
+  
 	NSLog(@"\n\n*********setNeuesAdminProjekt: %@\nAdminProjektArray: %@",[sender titleOfSelectedItem],AdminProjektArray);
 	[self setAdminPlayer:AdminLeseboxPfad inProjekt:[sender titleOfSelectedItem]];
 	[self setProjektPopMenu:AdminProjektArray];
@@ -2221,7 +2222,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 - (IBAction)reportFensterschliessen:(id)sender
 {
    [self resetAdminPlayer];
-   [[self.view window]orderOut:nil];
+      [self dismissController:NULL];
+  // [[self.view window]orderOut:nil];
 }
 
 #pragma mark Player

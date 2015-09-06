@@ -158,6 +158,9 @@
 
 @property (weak) NSPopUpButton*                    ProjektPop;
 
+@property (weak)  IBOutlet NSButton*					KommentarfensterKnopf;
+
+
 - (void)setLeseboxPfad:(NSString*)derPfad inProjekt: (NSString*)dasProjekt;
 - (NSString*)AdminLeseboxPfad;
 - (BOOL)setNetworkAdminLeseboxPfad:(id)sender;
@@ -179,6 +182,7 @@
 - (BOOL)saveMarksFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme 
 			  mitAdminMark:(int)dieAdminMark
 			   mitUserMark:(int)dieUserMark;
+
 
 
 - (IBAction)startAdminPlayer:(id)sender;

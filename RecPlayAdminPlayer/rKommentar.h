@@ -15,6 +15,7 @@
 	IBOutlet	NSPopUpButton*		PopBMenu;
 	IBOutlet	NSPopUpButton*		AnzahlPop;
 	IBOutlet	NSPopUpButton*		ProjektPopMenu;
+   IBOutlet	NSPopUpButton*		ZusatzPop;
 	IBOutlet	id					PopAPrompt;
 	IBOutlet	id					PopBPrompt;
 	IBOutlet	id					ProjektPopPrompt;
@@ -26,14 +27,44 @@
 	int								AbsatzOption;
 	int								AnzahlOption;
 	int								ProjektOption;
+
+   // aus AdminPlayer
+   int							ProjektNamenOption;
+   int							ProjektAuswahlOption;
+   int							nurMarkierteOption;
+   NSString*					ProjektPfadOptionString;
+
+    // end aus AdminPlayer
+   //
+   NSString*						TitelString;
 	NSString*						OptionAString;
 	NSString*						OptionBString;
 	NSString*						NamenOptionString;
 	NSString*						TitelOptionString;
+
 	NSString*						KommentarString;
 	
 	NSMutableArray*					NamenArray;
 	NSMutableArray*					TitelArray;
+   
+   
+   // aus AdminPlayer
+   NSString*					AdminLeseboxPfad;
+   NSString*					AdminArchivPfad;
+   NSString*					AdminProjektPfad;
+   NSPopUpButton*				ProjektPop;
+   
+   NSString*					AdminAktuellesProjekt;
+   
+   NSString*					AdminAktuellerLeser;
+   NSString*					AdminAktuelleAufnahme;
+   
+   
+   NSString*					AdminPlayPfad;
+   NSMutableArray *			AdminProjektNamenArray;
+   NSMutableArray *			AdminProjektArray;
+   BOOL                    AdminProjektAktiviert;
+   // end aus AdminPlayer
 	
 }
 - (IBAction)toggleDrawer:(id)sender;
@@ -66,4 +97,8 @@
 	   mitKommentarDicArray:(NSArray*)derKommentarDicArray;
 - (void)KommentarDruckenMitProjektDicArray:(NSArray*)derProjektDicArray;
 - (void)KommentarSichernMitProjektDicArray:(NSArray*)derProjektDicArray;
+
+// aus Kommentarkontroller
+
+- (void)setKommentarMitProjektArray:(NSArray*)derProjektArray mitLeser:(NSString*)aktuellerLeser anPfad:(NSString*)aktuellerProjektPfad;
 @end

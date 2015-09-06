@@ -1238,6 +1238,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 
 - (IBAction)showSettingsDialog:(id)sender
 {
+   [self restartAdminTimer];
    [Utils stopTimeout];
    //[Utils startTimeout:self.TimeoutDelay];
 }
@@ -3242,9 +3243,14 @@ QTMovie* qtMovie;
 
 - (IBAction)switchAdminPlayer:(id)sender
 {
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
    NSLog(@"switchAdminPlayer start");
    [Utils stopTimeout];
-   if ([self checkAdminZugang])
+   if (self.AdminZugangOK || [self checkAdminZugang])
    {
       NSLog(@"switchAdminPlayer ok");
       [[self.ModusMenu itemWithTag:kRecPlayTag]setEnabled:YES];
@@ -3264,6 +3270,11 @@ QTMovie* qtMovie;
 
 - (IBAction)beginRecPlay:(id)sender
 {
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
    if(self.Umgebung==0)
       return;
    if (![self istAktiviert:[self.ProjektPfad lastPathComponent]])
@@ -4157,6 +4168,12 @@ QTMovie* qtMovie;
 #pragma mark Einstellungen
 - (IBAction)showEinstellungen:(id)sender
 {
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
+   
     if(!self.EinstellungenFenster)
 	  {
         NSLog(@"EinstellungenFenster error");
@@ -4265,12 +4282,29 @@ QTMovie* qtMovie;
 
 - (IBAction)showKommentar:(id)sender
 {
-   // [AdminPlayer showKommentar:sender ];
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+if (!self.KommentarFenster)
+{
+   self.KommentarFenster = [[rKommentar alloc]init];
+   [self.KommentarFenster showWindow:self];
+}
+   
+    [self.KommentarFenster setKommentarMitProjektArray:self.ProjektArray mitLeser:self.Leser anPfad:self.ProjektPfad];
+
+
 }
 
 
 - (IBAction)showClean:(id)sender
 {
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
    //NSLog(@"RecPlayController	showClean: sender tag: %d",[sender tag]);
    // [AdminPlayer showCleanFenster:1];
    // [AdminPlayer setCleanTask:0];
@@ -4278,6 +4312,10 @@ QTMovie* qtMovie;
 
 - (IBAction)showExport:(id)sender
 {
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
    //NSLog(@"RecPlayController	showExport: sender tag: %d",[sender tag]);
    // [AdminPlayer showCleanFenster:2];
    // [AdminPlayer setCleanTask:1];

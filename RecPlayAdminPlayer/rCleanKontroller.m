@@ -695,9 +695,9 @@ enum
 						  {
 							[tempAufnahmenArray removeObjectAtIndex:0];
 						  }
-						if ([tempAufnahmenArray containsObject:NSLocalizedString(@"Comments",@"Anmerkungen")]) // Ordner Kommentar entfernen
+						if ([tempAufnahmenArray containsObject:@"Anmerkungen"]) // Ordner Kommentar entfernen
 						  {
-							[tempAufnahmenArray removeObject:NSLocalizedString(@"Comments",@"Anmerkungen")];
+							[tempAufnahmenArray removeObject:@"Anmerkungen"];
 						  }
 						//NSLog(@"Clean*** tempAufnahmenArray: %@",[tempAufnahmenArray description]);
 						//tempAufnahmenArray=(NSMutableArray*)[self sortNachNummer:tempAufnahmenArray];

@@ -70,6 +70,7 @@
    int aufnahmetimerstatus;
    double startzeit;
    NSTimer *AdminTimer;
+   int AdminTimerCounter;
 
 }
 
@@ -267,6 +268,10 @@
 
 @property  (nonatomic, strong) rAdminPlayer*						   AdminPlayer;
 
+// aus AdminPlayer
+@property  (nonatomic, strong)rKommentar*                KommentarFenster;
+@property  (nonatomic, strong)rClean*                    CleanFenster;
+
 
 - (IBAction)startPlay:(id)sender;
 
@@ -289,7 +294,7 @@
 
 - (NSString*)Initialen:(NSString*)derName;
 - (IBAction)switchAdminPlayer:(id)sender;
-
+- (void)restartAdminTimer;
 - (IBAction)startTestfeld:(id)sender;
 
 @end

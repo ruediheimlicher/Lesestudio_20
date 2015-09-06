@@ -465,6 +465,12 @@ enum
 
 - (IBAction)showProjektListe:(id)sender
 {
+   
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+   
    if (!ProjektPanel)
 	  {
         ProjektPanel=[[rProjektListe alloc]init];
@@ -504,6 +510,7 @@ enum
 
 - (void)showProjektListeVomStart
 {
+   [self restartAdminTimer];
    NSLog(@"showProjektListeVomStart:  Start mit neuem Projekt");
    //NSLog(@"\n\nshowProjektListe start");
    if (!ProjektPanel)
@@ -1175,7 +1182,7 @@ enum
 
 - (IBAction)showProjektStart:(id)sender
 {
-   
+   [self restartAdminTimer];
    if (!ProjektStartPanel)
    {
       ProjektStartPanel=[[rProjektStart alloc]init];
@@ -1475,7 +1482,7 @@ enum
    
    
 }
-- (void)startAdminTimer
+- (void)startAdminTimer // Ablaufzeit fuer AdminpasswortOK
 {
    if ([AdminTimer isValid])
    {
@@ -1485,10 +1492,12 @@ enum
    {
    
       NSMutableDictionary* AdminTimerDic = [[NSMutableDictionary alloc]initWithCapacity:0];
-      [AdminTimerDic setObject:[NSNumber numberWithInt:30] forKey:@"max"];
-      [AdminTimerDic setObject:[NSNumber numberWithInt:30] forKey:@"pos"];
+      [AdminTimerDic setObject:[NSNumber numberWithInt:self.AdminTimeoutDelay] forKey:@"max"];
+      [AdminTimerDic setObject:[NSNumber numberWithInt:self.AdminTimeoutDelay] forKey:@"pos"];
+      [AdminTimerDic setObject:[NSNumber numberWithInt:self.AdminTimeoutDelay] forKey:@"counter"];
       
-      AdminTimer=[NSTimer scheduledTimerWithTimeInterval:self.AdminTimeoutDelay
+      AdminTimerCounter = self.AdminTimeoutDelay;
+      AdminTimer=[NSTimer scheduledTimerWithTimeInterval:1.0
                                                   target:self
                                                 selector:@selector(AdminTimerFunktion:)
                                                 userInfo:AdminTimerDic
@@ -1500,9 +1509,21 @@ enum
 - (void)AdminTimerFunktion:(NSTimer*)timer
 {
    
-   NSLog(@"AdminTimerFunktion info: %@",[[timer userInfo]description]);
-   self.AdminZugangOK = NO;
-   [timer invalidate];
+   NSLog(@"AdminTimerFunktion counter: %d info: %@",AdminTimerCounter,[[timer userInfo]description]);
+   if (AdminTimerCounter)
+   {
+      AdminTimerCounter--;
+      if (AdminTimerCounter == 0) // timer abgelaufen, PW wird ungueltig
+      {
+         self.AdminZugangOK = NO;
+         AdminTimerCounter = -1;
+         [timer invalidate];
+      }
+   }
+}
+- (void)restartAdminTimer
+{
+   AdminTimerCounter = self.AdminTimeoutDelay;
 }
 
 - (BOOL)checkAdminPW
@@ -1862,6 +1883,7 @@ enum
 
 - (void)SessionListeAktualisieren
 {
+   AdminTimerCounter = self.AdminTimeoutDelay;
    NSLog(@"SessionListeAktualisieren  PListDic lesen");
    NSDictionary* tempAktuellePListDic=[Utils PListDicVon:self.LeseboxPfad aufSystemVolume:NO];
    if ([tempAktuellePListDic objectForKey:@"projektarray"])
@@ -2127,11 +2149,22 @@ enum
 
 - (IBAction)showEinzelNamen:(id)sender
 {
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
+  
    [Utils showEinzelNamen:NULL];
    
 }
 - (IBAction)showNamenListe:(id)sender
 {
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
    if (self.Umgebung==1)
    {
       [Utils showNamenListe:sender];
@@ -2140,6 +2173,11 @@ enum
 
 - (IBAction)showEinzelNamen
 {
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
    //if (Umgebung==kAdminUmgebung)
    {
       [Utils showEinzelNamen:NULL];
@@ -2942,7 +2980,13 @@ enum
 
 - (BOOL)checkAdminZugang
 {
+   if (self.AdminZugangOK)
+   {
+      [self restartAdminTimer];
+      return YES;
+   }
    BOOL ZugangOK=NO;
+   
    self.mitAdminPasswort=YES;
    NSLog(@"checkAdminZugang: mitAdminPasswort: %d",self.mitAdminPasswort);
    if (self.mitAdminPasswort)
@@ -3007,7 +3051,7 @@ enum
                NSLog(@"neue PList geholt");
             }
             
-            NSLog(@"checkAdminZugang: tempPListDic: %@",[tempPListDic description]);
+            //NSLog(@"checkAdminZugang: tempPListDic: %@",[tempPListDic description]);
             
             if (tempPListDic)
             {
@@ -3074,12 +3118,21 @@ enum
    {
       ZugangOK=YES;
    }
-   
+   if (ZugangOK)
+   {
+      [self startAdminTimer];
+   }
+   self.AdminZugangOK = ZugangOK;
    return ZugangOK;
 }
 
 - (void)showChangePasswort:(id)sender
 {
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
    switch (self.Umgebung)
    {
       case 0:
@@ -3158,7 +3211,11 @@ enum
 
 - (IBAction)showChangeAdminPasswort:(id)sender
 {
-   
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
    //NSDictionary* neuesPWDic=[Utils changePasswort:AdminPasswortDic];
    NSDictionary* neuesPWDic=[Utils changePasswort:[[self.PListDic objectForKey:@"adminpw"]copy]];
    NSLog(@"neues admin PWDic: %@",[neuesPWDic description]);
@@ -3174,6 +3231,12 @@ enum
 
 - (IBAction)showPasswortListe:(id)sender
 {
+   
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
    //NSLog(@"showPasswortListe");
    if (!PasswortListePanel)
 	  {
@@ -3203,6 +3266,11 @@ enum
 
 - (IBAction)showTitelListe:(id)sender
 {
+   if (![self checkAdminZugang])
+   {
+      return;
+   }
+
    //NSLog(@"\n\n\n										showTitelListe\n");
    if (!TitelListePanel)
    {

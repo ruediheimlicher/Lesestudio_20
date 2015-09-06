@@ -71,13 +71,13 @@ NSLog(@"tempName: %@",tempName);
 	if (tempAufnahmenArray)
 	{
 		[tempAufnahmenArray removeObject:@".DS_Store"];
-		[tempAufnahmenArray removeObject:NSLocalizedString(@"Comments",@"Anmerkungen")];
+		[tempAufnahmenArray removeObject:@"Anmerkungen"];
 	}
 	
 	//NSLog(@"tempAufnahmenArray: %@",[tempAufnahmenArray description]);
 	
 	
-	NSString* tempLeserKommentarPfad=[tempLeserPfad stringByAppendingPathComponent:NSLocalizedString(@"Comments",@"Anmerkungen")];
+	NSString* tempLeserKommentarPfad=[tempLeserPfad stringByAppendingPathComponent:@"Anmerkungen"];
 	//NSLog(@"tempLeserKommentarPfad: %@",tempLeserKommentarPfad);
 	NSMutableArray* tempKommentarArray=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:tempLeserKommentarPfad error:NULL]];
 	if (tempKommentarArray)
