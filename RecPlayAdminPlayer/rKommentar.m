@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, A)
    OptionBString=[[NSString alloc]init];
    
    AdminLeseboxPfad=@"";
-   AuswahlOption=0;
+   AuswahlPopOption=0;
    AbsatzOption=0;
    AnzahlOption=2;
    ProjektNamenOption=0;
@@ -1259,11 +1259,11 @@ typedef NS_ENUM(NSInteger, A)
 {
    NSLog(@"\n\n*********\n			                                     Beginn createKommentarStringArrayWithProjektPfadArray\n\n");
    NSLog(@"\nderProjektPfadArray: %@",[derProjektPfadArray description]);
-   NSLog(@"AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,OptionAString,OptionBString);
+   NSLog(@"AuswahlPopOption: %d  OptionAString: %@  OptionBString: %@",AuswahlPopOption,OptionAString,OptionBString);
    NSLog(@"   [self OptionA]: %@  [self PopBOption]: %@  AnzahlDics: %lu",[self PopAOption],[self PopBOption],(unsigned long)[derProjektPfadArray count]);
    //OptionAString=[[self PopAOption]retain];
    //OptionBString=[[self PopBOption]retain];
-   //NSLog(@"AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,OptionAString,OptionBString);
+   //NSLog(@"AuswahlPopOption: %d  OptionAString: %@  OptionBString: %@",AuswahlPopOption,OptionAString,OptionBString);
    NSArray* tempProjektPfadArray=[NSArray arrayWithArray:derProjektPfadArray];
    
    /*
@@ -1304,19 +1304,20 @@ typedef NS_ENUM(NSInteger, A)
       //tempKommentarArray enthŠlt die Kommentare entsprechend den Einstellungen im Kommentarfenster
       //Er wird nachher zusammen mit dem Kopfstring zu KommentarString zusammengesetzt
       NSMutableArray* tempKommentarArray=[[NSMutableArray alloc]initWithCapacity:0];
-      NSLog(@"createKommentarStringArrayWithProjekt AuswahlOption: %d ProjektPfad: %@",AuswahlOption,einProjektPfad);
-      
-      switch (AuswahlOption) // AusProjekt ( ), aus allen aktiven Projekten, aus allen Projekten
+      ProjektOption = [[ProjektMatrix selectedCell]tag];
+
+      NSLog(@"createKommentarStringArrayWithProjekt AuswahlPopOption: %d ProjektPfad: %@",AuswahlPopOption,einProjektPfad);
+      switch (ProjektOption) // AusProjekt ( ), aus allen aktiven Projekten, aus allen Projekten
       {
          case ausEinemProjektOption:
          {
-            NSLog(@"switch (AuswahlOption): ausEinemProjektOption: einProjektPfad: %@",einProjektPfad);
+            NSLog(@"switch (ProjektOption): ausEinemProjektOption: einProjektPfad: %@",einProjektPfad);
             tempKommentarArray=(NSMutableArray*)[self lastKommentarVonAllenAnProjektPfad:einProjektPfad]; // OK
          }break;
             
          case ausAktivenProjektenOption:
          {
-            NSLog(@"switch (AuswahlOption): ausAktivenProjektenOption");
+            NSLog(@"switch (ProjektOption): ausAktivenProjektenOption");
             NSString* tempLeser=[self PopAOption];
             NSLog(@"alleVonNameKommentarOption tempLeser: %@ optionB: %@",[self PopAOption],[self PopBOption]);
             
@@ -1359,7 +1360,7 @@ typedef NS_ENUM(NSInteger, A)
             
          case ausAllenProjektenOption:
          {
-            NSLog(@"switch (AuswahlOption): ausAllenProjektenOption");
+            NSLog(@"switch (ProjektOption): ausAllenProjektenOption");
             //NSLog(@" OptionAOption %@	OptionBOption: %@",[self PopAOption],[self PopBOption]);
             if ([[self PopAOption] isEqualToString:@"alle"])//Alle Titel
             {
@@ -1666,7 +1667,7 @@ typedef NS_ENUM(NSInteger, A)
    [self setAnzahlPopMenu:AnzahlOption];
    if ([AdminAktuellerLeser length])
 	  {
-        AuswahlOption=alleVonNameKommentarOption; // 1
+        AuswahlPopOption=alleVonNameKommentarOption; // 1
         [self setAuswahlPop:alleVonNameKommentarOption];
         
         [self setPopAMenu:AdminProjektNamenArray erstesItem:@"alle" aktuell:AdminAktuellerLeser];
@@ -1687,7 +1688,7 @@ typedef NS_ENUM(NSInteger, A)
      }
    else
 	  {
-        AuswahlOption=lastKommentarOption;
+        AuswahlPopOption=lastKommentarOption;
         [self setAuswahlPop:lastKommentarOption];
      }
    nurMarkierteOption=0;
@@ -1720,7 +1721,7 @@ typedef NS_ENUM(NSInteger, A)
 - (void)setAuswahlPop:(int)dieAuswahlOption
 {
    [AuswahlPopMenu selectItemAtIndex:dieAuswahlOption];
-   AuswahlOption=dieAuswahlOption;
+   AuswahlPopOption=dieAuswahlOption;
 }
 
 
@@ -1926,9 +1927,9 @@ typedef NS_ENUM(NSInteger, A)
         NSLog(@"last Char ist n");
      }
    
-   AuswahlOption=[[AuswahlPopMenu selectedCell]tag];
+   AuswahlPopOption=[[AuswahlPopMenu selectedCell]tag];
    
-   //NSLog(@"*KommentarFenster  setKommentar textString: %@  AuswahlOption: %d",TextString, AuswahlOption);
+   //NSLog(@"*KommentarFenster  setKommentar textString: %@  AuswahlPopOption: %d",TextString, AuswahlPopOption);
    
    switch ([[AbsatzMatrix selectedCell]tag])
    
@@ -2355,9 +2356,9 @@ typedef NS_ENUM(NSInteger, A)
          NSLog(@"last Char ist n");
       }
       
-      AuswahlOption=[[AuswahlPopMenu selectedCell]tag];
+      AuswahlPopOption=[[AuswahlPopMenu selectedCell]tag];
       
-      //NSLog(@"*KommentarFenster  setKommentar textString: %@  AuswahlOption: %d",TextString, AuswahlOption);
+      //NSLog(@"*KommentarFenster  setKommentar textString: %@  AuswahlPopOption: %d",TextString, AuswahlPopOption);
       
       switch ([[AbsatzMatrix selectedCell]tag])
       
@@ -2503,7 +2504,7 @@ typedef NS_ENUM(NSInteger, A)
             
             
          }break;//alsAbsatzFormatOption
-      }//Auswahloption
+      }//AuswahlPopOption
       
       //NSLog(@"Ende setKommentar: TitelStil retainCount: %d",[TitelStil retainCount]);
       //NSLog(@"Ende setKommentar: attrTitelString retainCount: %d",[attrTitelString retainCount]);
@@ -2626,9 +2627,9 @@ typedef NS_ENUM(NSInteger, A)
    NSNumber* AuswahlNummer=[OptionDic objectForKey:@"auswahl"];
    if (AuswahlNummer) // index von AuswahlPop
    {
-      AuswahlOption=(int)[AuswahlNummer intValue];
-      NSLog(@"KommentarSuchenMitDic AuswahlOption: %d",[AuswahlNummer intValue]);
-      switch (AuswahlOption)
+      AuswahlPopOption=(int)[AuswahlNummer intValue];
+      NSLog(@"KommentarSuchenMitDic AuswahlPopOption: %d",[AuswahlNummer intValue]);
+      switch (AuswahlPopOption)
       {
          case lastKommentarOption:
          {
@@ -2710,10 +2711,10 @@ typedef NS_ENUM(NSInteger, A)
          }break;//alleVonTitelKommentarOption
       }//switch AuswahlOption
       
-      //NSLog(@"Notifik: AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,[self PopAOption],[self PopBOption]);
+      //NSLog(@"Notifik: AuswahlPopOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,[self PopAOption],[self PopBOption]);
       //OptionAString=[[KommentarFenster PopAOption]retain];
       //OptionBString=[[KommentarFenster PopBOption]retain];
-      NSLog(@"AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,[self PopAOption],[self PopBOption]);
+      NSLog(@"AuswahlPopOption: %d  OptionAString: %@  OptionBString: %@",AuswahlPopOption,[self PopAOption],[self PopBOption]);
       
       
    }//if (AuswahlNummer)
@@ -2750,7 +2751,7 @@ typedef NS_ENUM(NSInteger, A)
       ProjektPfadOptionString=[[AdminProjektArray objectAtIndex:ProjektNamenOption]objectForKey:@"projektpfad"];
       //NSLog(@"KommentarNotificationAktion   tempProjektNamenOptionNumber: %@ ProjektNamenOption: %d",[tempProjektNamenOptionNumber description],ProjektNamenOption);
       //NSLog(@"KommentarNotificationAktion  AuswahlOption: %d",AuswahlOption);
-      switch (AuswahlOption)
+      switch (AuswahlPopOption)
       {
          case lastKommentarOption:
          {
@@ -2801,7 +2802,7 @@ typedef NS_ENUM(NSInteger, A)
    {
       //NSLog(@"KommentarNotificationAktion   tempAString: %@   LŠnge: %d" ,tempAString, [tempAString length]);
       OptionAString=[tempAString copy];
-      switch (AuswahlOption)
+      switch (AuswahlPopOption)
       {
          case lastKommentarOption:
          {
@@ -2902,7 +2903,7 @@ typedef NS_ENUM(NSInteger, A)
          {
             //NSLog(@"tempProjektAuswahlOptionNumber Nur aktive Projeke");
             [self setAuswahlPop:alleVonNameKommentarOption];
-            AuswahlOption=alleVonNameKommentarOption;
+            AuswahlPopOption=alleVonNameKommentarOption;
             
             //[KommentarFenster setPopAMenu:NULL erstesItem:alle aktuell:alle];
             NSMutableArray* tempNamenArray=[[NSMutableArray alloc]initWithCapacity:0];
@@ -2945,7 +2946,7 @@ typedef NS_ENUM(NSInteger, A)
          {
             //NSLog(@"tempProjektAuswahlOptionNumberNur alle Projekte");
             [self setAuswahlPop:alleVonNameKommentarOption];
-            AuswahlOption=alleVonNameKommentarOption;
+            AuswahlPopOption=alleVonNameKommentarOption;
             
             //[KommentarFenster setPopAMenu:NULL erstesItem:alle aktuell:alle];
             NSMutableArray* tempNamenArray=[[NSMutableArray alloc]initWithCapacity:0];
@@ -3077,9 +3078,9 @@ typedef NS_ENUM(NSInteger, A)
 - (IBAction)reportAuswahl:(id)sender
 {
    NSLog(@"setAuswahl: %d",[[sender selectedCell]tag]);
-   AuswahlOption=[[sender selectedCell]tag];
-   [AnzahlPop setEnabled:AuswahlOption>0];
-   NSNumber* AuswahlOptionNumber =[NSNumber numberWithInt:AuswahlOption];
+   AuswahlPopOption=[[sender selectedCell]tag];
+   [AnzahlPop setEnabled:AuswahlPopOption>0];
+   NSNumber* AuswahlOptionNumber =[NSNumber numberWithInt:AuswahlPopOption];
    
    NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:AuswahlOptionNumber forKey:@"auswahl"];
    

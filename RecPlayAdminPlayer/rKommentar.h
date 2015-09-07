@@ -23,7 +23,7 @@
 	IBOutlet	NSMatrix*			AbsatzMatrix;
 	IBOutlet	NSMatrix*			AuswahlMatrix;
 	IBOutlet	NSMatrix*			ProjektMatrix;
-	int								AuswahlOption;
+	int								AuswahlPopOption;
 	int								AbsatzOption;
 	int								AnzahlOption;
 	int								ProjektOption;
