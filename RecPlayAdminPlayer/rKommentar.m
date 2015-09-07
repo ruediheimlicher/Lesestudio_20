@@ -967,9 +967,9 @@ typedef NS_ENUM(NSInteger, A)
 - (BOOL)mitMarkierungAufnehmenOptionAnPfad:(NSString*)derAufnahmePfad
 {
    BOOL AufnehmenOK=YES;
-   BOOL nurMarkierteAufnehmenOK=nurMarkierteOption;
+ //  BOOL nurMarkierteAufnehmenOK=nurMarkierteOption;
    BOOL AufnahmeIstMarkiertOK=[self AufnahmeIstMarkiertAnPfad:derAufnahmePfad];
-   if (nurMarkierteAufnehmenOK &&!AufnahmeIstMarkiertOK)
+   if ([nurMarkierteCheck state] &&!AufnahmeIstMarkiertOK)
    {
       AufnehmenOK=NO;
    }
@@ -1687,7 +1687,7 @@ typedef NS_ENUM(NSInteger, A)
         AuswahlOption=lastKommentarOption;
         [self setAuswahlPop:lastKommentarOption];
      }
-   nurMarkierteOption=0;
+  // nurMarkierteOption=[nurMarkierteCheck state];
    ProjektPfadOptionString=AdminProjektPfad;
    //NSLog(@"AdminProjektArray: %@",[AdminProjektArray description]);
    NSArray* StartProjektArray=[AdminProjektArray valueForKey:@"projekt"];
@@ -2575,7 +2575,7 @@ typedef NS_ENUM(NSInteger, A)
 - (IBAction)nurMarkierteOption:(id)sender
 {
    //NSLog(@"setAuswahl: %d",[[sender selectedCell]tag]);
-   int nurMarkierteOK=[sender state];
+   int nurMarkierteOK=[nurMarkierteCheck state];
    NSNumber* nurMarkierteNumber =[NSNumber numberWithInt:nurMarkierteOK];
    
    NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:nurMarkierteNumber forKey:@"nurmarkierte"];
@@ -2590,6 +2590,7 @@ typedef NS_ENUM(NSInteger, A)
    [self KommentarSuchenMitDic:KommentarOptionDic];
 }
 
+/*
 - (NSString*)PopAOption
 {
    return [PopAMenu  titleOfSelectedItem];
@@ -2600,7 +2601,7 @@ typedef NS_ENUM(NSInteger, A)
 {
    return [PopBMenu  titleOfSelectedItem];
 }
-
+*/
 
 - (void)KommentarSuchenMitDic:(NSDictionary*)OptionDic
 {
@@ -2735,8 +2736,8 @@ typedef NS_ENUM(NSInteger, A)
    NSNumber* nurMarkierteNummer=[OptionDic objectForKey:@"nurmarkierte"];
    if (nurMarkierteNummer)
    {
-      nurMarkierteOption=(int)[nurMarkierteNummer intValue];
-      //NSLog(@"KommentarNotificationAktion nurMarkierteOption: %d",[nurMarkierteNummer intValue]);
+      //nurMarkierteOption=[nurMarkierteCheck state];
+      //NSLog(@"KommentarNotificationAktion nurMarkierteOption: %d",[nurMarkierteCheck state]);
    }
    
    NSNumber* tempProjektNamenOptionNumber=[OptionDic objectForKey:@"projektnamenoption"];
@@ -3123,7 +3124,7 @@ typedef NS_ENUM(NSInteger, A)
    
    double nurmarkierteindex = [nurMarkierteCheck state]; // Option von nurMarkierteCheck
    [KommentarOptionDic setObject:[NSNumber numberWithBool:nurmarkierteindex]forKey:@"nurmarkierte"];
-   nurMarkierteOption = nurmarkierteindex;
+   //nurMarkierteOption = [nurMarkierteCheck state];
    
    [KommentarOptionDic setObject:[NSNumber numberWithDouble:[ProjektMatrix selectedRow]]forKey:@"projektauswahloption"];
    //ProjektAuswahlOption =

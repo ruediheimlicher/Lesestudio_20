@@ -31,7 +31,7 @@
    // aus AdminPlayer
    int							ProjektNamenOption;
    int							ProjektAuswahlOption;
-   int							nurMarkierteOption;
+  // int							nurMarkierteOption;
    NSString*					ProjektPfadOptionString;
 
     // end aus AdminPlayer
