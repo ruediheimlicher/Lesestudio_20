@@ -37,7 +37,7 @@
     // end aus AdminPlayer
    //
    NSString*						TitelString;
-	NSString*						OptionAString;
+//	NSString*						OptionAString;
 	NSString*						OptionBString;
 	NSString*						NamenOptionString;
 	NSString*						TitelOptionString;

@@ -38,8 +38,6 @@ typedef NS_ENUM(NSInteger, A)
 - (id) init
 {
    self=[super initWithWindowNibName:@"RPKommentar"];
-   OptionAString=[[NSString alloc]init];
-   OptionBString=[[NSString alloc]init];
    
    AdminLeseboxPfad=@"";
    AuswahlOption=0;
@@ -1259,10 +1257,9 @@ typedef NS_ENUM(NSInteger, A)
 {
    NSLog(@"\n\n*********\n			                                     Beginn createKommentarStringArrayWithProjektPfadArray\n\n");
    NSLog(@"\nderProjektPfadArray: %@",[derProjektPfadArray description]);
-   NSLog(@"AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,OptionAString,OptionBString);
-   NSLog(@"   [self OptionA]: %@  [self PopBOption]: %@  AnzahlDics: %lu",[self PopAOption],[self PopBOption],(unsigned long)[derProjektPfadArray count]);
-   //OptionAString=[[self PopAOption]retain];
-   //OptionBString=[[self PopBOption]retain];
+  // NSLog(@"AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,OptionAString,OptionBString);
+   NSLog(@"   [self OptionA]: %@  [self PopBOption]: %@  AnzahlDics: %lu",[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem],(unsigned long)[derProjektPfadArray count]);
+
    //NSLog(@"AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,OptionAString,OptionBString);
    NSArray* tempProjektPfadArray=[NSArray arrayWithArray:derProjektPfadArray];
    
@@ -1318,7 +1315,7 @@ typedef NS_ENUM(NSInteger, A)
          {
             NSLog(@"switch (AuswahlOption): ausAktivenProjektenOption");
             NSString* tempLeser=[PopAMenu  titleOfSelectedItem];
-            NSLog(@"alleVonNameKommentarOption tempLeser: %@ optionB: %@",[PopAMenu  titleOfSelectedItem],[self PopBOption]);
+            NSLog(@"alleVonNameKommentarOption tempLeser: %@ optionB: %@",[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]);
             
             if ([[PopAMenu  titleOfSelectedItem] isEqualToString:@"alle"]) // alle Namen
             {
@@ -1329,9 +1326,9 @@ typedef NS_ENUM(NSInteger, A)
             }
             else
             {
-               if ( [[self PopBOption] isEqualToString:@"alle"])
+               if ( [[PopBMenu  titleOfSelectedItem] isEqualToString:@"alle"])
                {
-                  NSLog(@"\n++++++ alleVonNameKommentarOption PopAOption %@       PopBOption: %@",[PopAMenu  titleOfSelectedItem],[self PopBOption]);
+                  NSLog(@"\n++++++ alleVonNameKommentarOption PopAOption %@       PopBOption: %@",[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]);
                   tempKommentarArray=(NSMutableArray*)[self alleKommentareVonLeser :[PopAMenu  titleOfSelectedItem]
                                                                       anProjektPfad:einProjektPfad
                                                                           bisAnzahl:AnzahlOption];
@@ -1340,10 +1337,10 @@ typedef NS_ENUM(NSInteger, A)
                }
                else //Titel ausgewählt
                {
-                  NSLog(@"alleVonNameKommentarOption OptionAString: %@ OptionBString:%@ ",[PopAMenu  titleOfSelectedItem],[self PopBOption]); // OK
+                  NSLog(@"alleVonNameKommentarOption OptionAString: %@ OptionBString:%@ ",[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]); // OK
                   //NSLog(@"tempKommentarArray: Anz: %d %@",[tempKommentarArray count],[tempKommentarArray description]);
                   tempKommentarArray=[[self KommentareVonLeser:[PopAMenu  titleOfSelectedItem]
-                                                      mitTitel:[self PopBOption]
+                                                      mitTitel:[PopBMenu  titleOfSelectedItem]
                                                        maximal:AnzahlOption
                                                  anProjektPfad:einProjektPfad]mutableCopy];
                   
@@ -1360,28 +1357,28 @@ typedef NS_ENUM(NSInteger, A)
          case ausAllenProjektenOption:
          {
             NSLog(@"switch (AuswahlOption): ausAllenProjektenOption");
-            //NSLog(@" OptionAOption %@	OptionBOption: %@",[PopAMenu  titleOfSelectedItem],[self PopBOption]);
+            //NSLog(@" OptionAOption %@	OptionBOption: %@",[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]);
             if ([[PopAMenu  titleOfSelectedItem] isEqualToString:@"alle"])//Alle Titel
             {
                tempKommentarArray=(NSMutableArray*)[self alleKommentareNachTitelAnProjektPfad:einProjektPfad
                                                                                     bisAnzahl:AnzahlOption];
                //NSLog(@"createKomm.String: OptionAString ist alle  tempKommentarArray: %@",[tempKommentarArray description]);
-               if ([[self PopBOption] isEqualToString:@"alle"])//alle Namen Zu Titel
+               if ([[PopBMenu  titleOfSelectedItem] isEqualToString:@"alle"])//alle Namen Zu Titel
                {
                   // tempKommentarArray=(NSMutableArray*)[self alleKommentareNachTitel:AnzahlOption];
                }
                else
                {
-                  //tempKommentarArray=(NSMutableArray*)[self alleKommentareVonLeser :[self PopBOption]
+                  //tempKommentarArray=(NSMutableArray*)[self alleKommentareVonLeser :[PopBMenu  titleOfSelectedItem]
                   //												  maximal:AnzahlOption];
                }
                
             }
             else
             {
-               if ([self PopBOption])
+               if ([PopBMenu  titleOfSelectedItem])
                {
-                  if ([[self PopBOption] isEqualToString:@"alle"])//alle Namen Zu Titel
+                  if ([[PopBMenu  titleOfSelectedItem] isEqualToString:@"alle"])//alle Namen Zu Titel
                   {
                      //NSLog(@"OptionBString ist alle: -> alleKommentareZuTitel");
                      tempKommentarArray=(NSMutableArray*)[self alleKommentareZuTitel:[PopAMenu  titleOfSelectedItem]
@@ -1391,7 +1388,7 @@ typedef NS_ENUM(NSInteger, A)
                   else
                   {
                      tempKommentarArray=(NSMutableArray*)[self KommentareMitTitel:[PopAMenu  titleOfSelectedItem]
-                                                                         vonLeser:[self PopBOption]
+                                                                         vonLeser:[PopBMenu  titleOfSelectedItem]
                                                                     anProjektPfad:einProjektPfad
                                                                           maximal:AnzahlOption];
                   }
@@ -2711,8 +2708,8 @@ typedef NS_ENUM(NSInteger, A)
          }break;//alleVonTitelKommentarOption
       }//switch AuswahlOption
       
-      //NSLog(@"Notifik: AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,[PopAMenu  titleOfSelectedItem],[self PopBOption]);
-      NSLog(@"AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,[PopAMenu  titleOfSelectedItem],[self PopBOption]);
+      //NSLog(@"Notifik: AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]);
+      NSLog(@"AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]);
       
       
    }//if (AuswahlNummer)
@@ -2776,7 +2773,7 @@ typedef NS_ENUM(NSInteger, A)
             
             
             NSArray* LeserArray=[self LeserArrayVonTitel:[PopAMenu  titleOfSelectedItem] anProjektPfad:ProjektPfadOptionString];
-            //NSLog(@"Komm.Not.Aktion LeserArray: %@	OptionAString: %@  OptionBString. %@",	[LeserArray description],[PopAMenu  titleOfSelectedItem],[self PopBOption]);
+            //NSLog(@"Komm.Not.Aktion LeserArray: %@	OptionAString: %@  OptionBString. %@",	[LeserArray description],[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]);
             if ([LeserArray count]==1)//Nur ein Leser für diesen Titel
             {
                [self setPopBMenu:LeserArray erstesItem:NULL aktuell:NULL mitPrompt:NSLocalizedString(@"for Reader",@"für Leser:")];
@@ -2799,7 +2796,7 @@ typedef NS_ENUM(NSInteger, A)
    if (tempAString )//&& [tempAString length])
    {
       //NSLog(@"KommentarNotificationAktion   tempAString: %@   Länge: %d" ,tempAString, [tempAString length]);
-      OptionAString=[tempAString copy];
+     // OptionAString=[tempAString copy];
       switch (AuswahlOption)
       {
          case lastKommentarOption:
@@ -2824,7 +2821,7 @@ typedef NS_ENUM(NSInteger, A)
                
                
                //NSLog(@"KommentarNotifilkation alleVonNameKommentarOption: \nProjektPfadOptionString: %@   \nTitelArray: %@",ProjektPfadOptionString,[TitelArray description]);
-               //NSLog(@"TitelArray: %@	OptionAString: %@  OptionBString. %@",	[TitelArray description],[PopAMenu  titleOfSelectedItem],[self PopBOption]);
+               //NSLog(@"TitelArray: %@	OptionAString: %@  OptionBString. %@",	[TitelArray description],[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]);
                if(ProjektAuswahlOption==0)//nur bei einzelnem Projekt
                {
                   [self setPopBMenu:TitelArray erstesItem:alle aktuell:alle mitPrompt:NSLocalizedString(@"with title",@"mit Titel:")];
@@ -2843,7 +2840,7 @@ typedef NS_ENUM(NSInteger, A)
                else
                {
                   NSMutableArray* LeserArray=[[self LeserArrayVonTitel:[PopAMenu  titleOfSelectedItem] anProjektPfad:ProjektPfadOptionString]mutableCopy];
-                  //NSLog(@"alleVonTitelKommentarOption vor .DS: LeserArray: %@	[PopAMenu  titleOfSelectedItem]: %@  OptionBString. %@",	[LeserArray description],[PopAMenu  titleOfSelectedItem],[self PopBOption]);
+                  //NSLog(@"alleVonTitelKommentarOption vor .DS: LeserArray: %@	[PopAMenu  titleOfSelectedItem]: %@  OptionBString. %@",	[LeserArray description],[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]);
                   if ([LeserArray count]>0)//ES HAT LESER MIT KOMMENTAR FÜR DIESENJ TITEL
                   {
                      
@@ -2853,7 +2850,7 @@ typedef NS_ENUM(NSInteger, A)
                         [LeserArray removeObjectAtIndex:0];
                      }
                      
-                     //NSLog(@"alleVonTitelKommentarOption: LeserArray: %@	[PopAMenu  titleOfSelectedItem]: %@  OptionBString. %@",	[LeserArray description],[PopAMenu  titleOfSelectedItem],[self PopBOption]);
+                     //NSLog(@"alleVonTitelKommentarOption: LeserArray: %@	[PopAMenu  titleOfSelectedItem]: %@  OptionBString. %@",	[LeserArray description],[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]);
                      if ([LeserArray count]==1)//Nur ein Leser für diesen Titel
                      {
                         [self setPopBMenu:LeserArray erstesItem:NULL aktuell:NULL mitPrompt:NSLocalizedString(@"for Reader",@"für Leser:")];
