@@ -4289,9 +4289,9 @@ QTMovie* qtMovie;
 if (!self.KommentarFenster)
 {
    self.KommentarFenster = [[rKommentar alloc]init];
-   [self.KommentarFenster showWindow:self];
-}
    
+}
+   [self.KommentarFenster showWindow:self];
     [self.KommentarFenster setKommentarMitProjektArray:self.ProjektArray mitLeser:self.Leser anPfad:self.ProjektPfad];
 
 

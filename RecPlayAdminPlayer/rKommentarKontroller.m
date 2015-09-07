@@ -383,7 +383,7 @@ NSLog(@"AdminPlayer SaveKommentar");
 								//Kommentar als Array von Zeilen
 								NSMutableArray* tempKomponentenArray=(NSMutableArray*)[tempKommentarString componentsSeparatedByString:crSeparator];
 								int zeile;
-								NSLog(@"++	tempKomponentenArray count: %d   TabellenkopfArray count: %d",[tempKomponentenArray count],[TabellenkopfArray count]);
+								//NSLog(@"++	tempKomponentenArray count: %d   TabellenkopfArray count: %d",[tempKomponentenArray count],[TabellenkopfArray count]);
 								if ([tempKomponentenArray count]>[TabellenkopfArray count]+1)
 								{
 									NSLog(@"Anz Zeilen > als Elemente der Kopfzeile: tempKomponentenArray: %@",[tempKomponentenArray description]);

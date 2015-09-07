@@ -267,14 +267,12 @@
 					  mitTitel:(NSString*)derTitel 
 					   maximal:(int)dieAnzahl 
 				 anProjektPfad:(NSString*)derProjektPfad;
-//- (NSArray*)KommentareMitTitel:(NSString*)derTitel vonLeser:(NSString*)derLeser maximal:(int)dieAnzahl;
-- (NSArray*)KommentareMitTitel:(NSString*)derTitel 
+- (NSArray*)KommentareMitTitel:(NSString*)derTitel
 					  vonLeser:(NSString*)derLeser 
 				 anProjektPfad:(NSString*)derProjektPfad
 					   maximal:(int)dieAnzahl;
 
-//- (NSArray*)alleKommentareZuTitel:(NSString*)derTitel maximal:(int)dieAnzahl;
-- (NSArray*)alleKommentareZuTitel:(NSString*)derTitel 
+- (NSArray*)alleKommentareZuTitel:(NSString*)derTitel
 					anProjektPfad:(NSString*)derProjektPfad
 						  maximal:(int)dieAnzahl;
 - (NSString*)KommentarZuAufnahme:(NSString*)dieAufnahme 
@@ -286,45 +284,34 @@
 - (void)KommentarDrucken;
 - (void)SaveKommentarVonProjekt:(NSString*)dasProjekt;
 - (void)KommentarSichern;
-//- (NSArray*)alleKommentareNachTitel:(int)dieAnzahl;
 - (NSArray*)alleKommentareNachTitelAnProjektPfad:(NSString*)derProjektPfad bisAnzahl:(int)dieAnzahl;
 - (IBAction)showKommentar:(id)sender;
-//- (NSString*)createKommentarStringInProjekt:(NSString*)derProjektPfad;
 - (NSArray*)createKommentarStringArrayWithProjektPfadArray:(NSArray*)derProjektPfadArray;
 - (NSArray*)createDruckKommentarStringDicArrayWithProjektPfadArray:(NSArray*)derProjektPfadArray;
 
 - (void)KommentarNotificationAktion:(NSNotification*)note;
 
 
-//- (NSString*)lastKommentarVonLeser:(NSString*)derLeser;
 - (NSString*)lastKommentarVonLeser:(NSString*)derLeser anProjektPfad:(NSString*)derProjektPfad;
-//- (NSArray*)lastKommentarVonAllen;
 - (NSArray*)lastKommentarVonAllenAnProjektPfad:(NSString*)derProjektPfad;
 
 - (NSString*)lastKommentarVonLeser:(NSString*)derLeser mitTitel:(NSString*)derTitel;
 - (NSString*)heutigeKommentareVon:(NSString*)derLeser;
-//- (NSArray*)alleKommentareVonLeser:(NSString*)derLeser  maximal:(int)dieAnzahl;
-- (NSArray*)alleKommentareVonLeser:(NSString*)derLeser 
+- (NSArray*)alleKommentareVonLeser:(NSString*)derLeser
 					  anProjektPfad:(NSString*)derProjektPfad 
 						  bisAnzahl:(int)dieAnzahl;
 
-//- (NSArray*)alleKommentareNachNamen:(int)dieAnzahl;
 - (NSArray*)alleKommentareNachNamenAnProjektPfad:(NSString*)derProjektPfad bisAnzahl:(int)dieAnzahl;
-//- (NSArray*)TitelArrayVon:(NSString*)derLeser;
 - (NSArray*)TitelArrayVon:(NSString*)derLeser anProjektPfad:(NSString*)derProjektPfad;
 - (NSArray*)TitelMitKommentarArrayVon:(NSString*)derLeser anProjektPfad:(NSString*)derProjektPfad;
-//- (NSArray*)TitelArrayVonAllenBisAnzahlProLeser:(int)dieAnzahl;
-- (NSArray*)TitelArrayVonAllenAnProjektPfad:(NSString*)derProjektPfad 
+- (NSArray*)TitelArrayVonAllenAnProjektPfad:(NSString*)derProjektPfad
 						  bisAnzahlProLeser:(int)dieAnzahl;
 - (NSArray*)LeserArrayAnProjektPfad:(NSString*)derProjektPfad;
-//- (NSArray*)LeserArrayVonTitel:(NSString*)derTitel;
 - (NSArray*)LeserArrayVonTitel:(NSString*)derTitel anProjektPfad:(NSString*)derProjektPfad;
 - (NSArray*)TitelMitAnzahlArrayVon:(NSString*)derLeser;
 - (NSArray*)TitelMitAnzahlArrayVon:(NSString*)derLeser anProjektPfad:(NSString*)derProjektPfad;
-
 - (NSArray*)sortNachNummer:(NSArray*)derArray;
 - (NSArray*)sortNachABC:(NSArray*)derArray;
-
 - (NSString*)AufnahmeTitelVon:(NSString*) dieAufnahme;
 - (NSString*)KommentarVon:(NSString*) derKommentarString;
 - (NSString*)DatumVon:(NSString*) derKommentarString;
@@ -334,7 +321,6 @@
 - (int)UserMarkVon:(NSString*)derKommentarString;
 - (int)AufnahmeNummerVon:(NSString*) dieAufnahme;
 - (NSString*)InitialenVon:(NSString*)derName;
-//- (void)MarkierungEntfernenFuerLeser:(NSString*)derName;
 - (void)Markierungenreset;
 @end
 
