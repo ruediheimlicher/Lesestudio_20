@@ -30,6 +30,7 @@
 	[AufnahmenTable reloadData];
 }
 
+
 - (IBAction)reportDelete:(id)sender
 {
 NSString* tempName=[LesernamenPop titleOfSelectedItem];

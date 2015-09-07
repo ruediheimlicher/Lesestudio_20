@@ -97,7 +97,6 @@
 
 	NSString*					AdminAktuellesProjekt;
 
-	NSString*					AdminAktuellerLeser;
 	NSString*					AdminAktuelleAufnahme;
 
 	
@@ -160,6 +159,9 @@
 
 @property (weak)  IBOutlet NSButton*					KommentarfensterKnopf;
 
+@property (assign) NSString*                         AdminAktuellerLeser;
+
+
 
 - (void)setLeseboxPfad:(NSString*)derPfad inProjekt: (NSString*)dasProjekt;
 - (NSString*)AdminLeseboxPfad;
@@ -209,8 +211,8 @@
 - (void)MarkierungenEntfernen;
 - (void)AlleMarkierungenEntfernen;
 - (IBAction)reportAktualisieren:(id)sender;
-- (void)reportUserMark:(id)sender;
-- (void)reportAdminMark:(id)sender;
+- (IBAction)reportUserMark:(id)sender;
+- (IBAction)reportAdminMark:(id)sender;
 - (IBAction)reportFensterschliessen:(id)sender;
 - (NSString*)neuerNameVonAufnahme:(NSString*)dieAufnahme mitNummer:(int)dieNummer;
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;

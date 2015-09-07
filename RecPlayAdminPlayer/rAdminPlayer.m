@@ -992,8 +992,17 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 	if ([AdminAktuellerLeser length]&&[AdminAktuelleAufnahme length]&&Textchanged)
 	  {
 		BOOL OK=[self saveKommentarFuerLeser: AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
-		AdminAktuellerLeser=@"";
-		AdminAktuelleAufnahme=@"";
+     
+        /*
+        OK = [self saveAdminMarkFuerLeser:AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme
+                           mitAdminMark:(int)[MarkCheckbox state]];
+         */
+        OK = [self saveMarksFuerLeser:AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: (int)[MarkCheckbox state] mitUserMark:(int)[UserMarkCheckbox state]];
+
+  
+        
+      //  AdminAktuellerLeser=@"";
+		//AdminAktuelleAufnahme=@"";
 	  }
 	[self clearKommentarfelder];	
 	[AdminKommentarView setEditable:NO];
@@ -1141,6 +1150,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 		int hit=[[[AdminDaten dataForRow:hitZeile]objectForKey:@"aufnahmen"]intValue];
 		NSString* Leser=[[AdminProjektNamenArray objectAtIndex:hitZeile]description];
 		AdminAktuellerLeser=[[AdminProjektNamenArray objectAtIndex:hitZeile]description];
+      NSLog(@"setLeserFuerZeile AdminAktuellerLeser: %@",AdminAktuellerLeser);
+
 		//NSLog(@"setLeserFuerZeile    Leser Zeile: %d",hitZeile);
 		//NSLog(@"Leser: %@",[[AdminProjektNamenArray objectAtIndex:[sender selectedRow]]description]);
 		//NSLog(@"Zeile: %d   hit:%d ",hitZeile,hit);
@@ -1259,7 +1270,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 	NSString* KommentarOrdnerString=@"Anmerkungen";
 	NSString* KommentarString;
 	tempKommentarPfad=[tempKommentarPfad stringByAppendingPathComponent:Leser];
-   
+   AdminAktuellerLeser = derLeser;
 	[AdminKommentarView setString:@""];
 
 	[AdminKommentarView setEditable:YES];
@@ -2013,6 +2024,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 			// 8.12.08
 			if ( [NamenListe numberOfSelectedRows] && [self AnzahlAufnahmen])
 			{
+            NSLog(@"case 1 Aufnahmebereitstellen AdminAktuellerLeser: %@ AdminAktuelleAufnahme: %@",AdminAktuellerLeser,AdminAktuelleAufnahme);
+
                [AVAbspielplayer prepareAdminAufnahmeAnURL:[NSURL fileURLWithPath:AdminPlayPfad]];
             
             NSLog(@"Aufnahmebereitstellen AVAbspielplayer url: %@",[[AVAbspielplayer AufnahmeURL]path]);
@@ -2669,6 +2682,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 
 - (void)reportUserMark:(id)sender
 {
+    NSLog(@"reportUserMark state: %d",[sender state]);
+   Textchanged = YES;
 	switch ([[[AufnahmenTab selectedTabViewItem]identifier]intValue])
 	{
 		case 2:// Aufnahmen nach Namen
@@ -2681,6 +2696,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 
 - (void)reportAdminMark:(id)sender
 {
+   NSLog(@"reportAdminMark state: %d",[sender state]);
+   Textchanged = YES;
 	switch ([[[AufnahmenTab selectedTabViewItem]identifier]intValue])
 	{
 		case 2:// Aufnahmen nach Namen
@@ -3276,7 +3293,11 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 				  [[alert window]orderOut:NULL];
 				  if ([self saveKommentarFuerLeser: AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme])
 					  {
-						  [self AdminBeenden];
+                    if (  [self saveMarksFuerLeser:AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: (int)[MarkCheckbox state] mitUserMark:(int)[UserMarkCheckbox state]])
+                    {
+
+                       [self AdminBeenden];
+                    }
 					  }
 					  
 			  }break;

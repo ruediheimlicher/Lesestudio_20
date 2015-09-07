@@ -245,12 +245,12 @@ return index;
 	[[MarkArray objectAtIndex:dieZeile]replaceObjectAtIndex:dasItem withObject:statusNumber];
 }
 
-- (NSArray*)MarkArrayForRow:(int)dieZeile
+- (NSArray*)MarkArrayForRow:(long)dieZeile
 {
 	return [MarkArray objectAtIndex:dieZeile];
 }
 
-- (BOOL)MarkForRow:(int)dieZeile forItem:(int)dasItem
+- (BOOL)MarkForRow:(long)dieZeile forItem:(long)dasItem
 {
 	
 	return [[[MarkArray objectAtIndex:dieZeile]objectAtIndex:dasItem]boolValue];
