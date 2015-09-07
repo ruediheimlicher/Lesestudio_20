@@ -2534,7 +2534,7 @@ typedef NS_ENUM(NSInteger, A)
    [AuswahlPopMenu synchronizeTitleAndSelectedItem];
    NSNumber* AuswahlOptionTag;
    AuswahlOptionTag=[NSNumber numberWithDouble:[[AuswahlPopMenu selectedCell]tag]];
-   //NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:AuswahlOptionTag forKey:@"Auswahl"];
+   //NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:AuswahlOptionTag forKey:@"auswahl"];
    
    NSNumber* AbsatzOptionTag;
    AbsatzOption=[[AbsatzMatrix selectedCell]tag];
@@ -2544,7 +2544,7 @@ typedef NS_ENUM(NSInteger, A)
    
    //	NamenOptionString=[[PopAMenu selectedItem]description];
    NamenOptionString=[PopAMenu titleOfSelectedItem];
-   [KommentarOptionDic setObject:NamenOptionString forKey:@"PopA"];
+   [KommentarOptionDic setObject:NamenOptionString forKey:@"popa"];
    //NSLog(@"reportKommentarOption:A");
    NSNumber* AnzahlOptionTag;
    AnzahlOption=[[AnzahlPop selectedCell]tag];
@@ -2580,7 +2580,7 @@ typedef NS_ENUM(NSInteger, A)
    int nurMarkierteOK=[sender state];
    NSNumber* nurMarkierteNumber =[NSNumber numberWithInt:nurMarkierteOK];
    
-   NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:nurMarkierteNumber forKey:@"nurMarkierte"];
+   NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:nurMarkierteNumber forKey:@"nurmarkierte"];
    if (NamenOptionString)
    {
    }
@@ -2623,7 +2623,7 @@ typedef NS_ENUM(NSInteger, A)
    //Grundeinstellung ist: lastKommentarOption. Die neuesten Kommentare werden angezeigt
    
    
-   NSNumber* AuswahlNummer=[OptionDic objectForKey:@"Auswahl"];
+   NSNumber* AuswahlNummer=[OptionDic objectForKey:@"auswahl"];
    if (AuswahlNummer) // index von AuswahlPop
    {
       AuswahlOption=(int)[AuswahlNummer intValue];
@@ -2736,7 +2736,7 @@ typedef NS_ENUM(NSInteger, A)
       NSLog(@"KommentarNotificationAktion AnzahlOption: %d",[AnzahlNummer intValue]);
    }
    
-   NSNumber* nurMarkierteNummer=[OptionDic objectForKey:@"nurMarkierte"];
+   NSNumber* nurMarkierteNummer=[OptionDic objectForKey:@"nurmarkierte"];
    if (nurMarkierteNummer)
    {
       nurMarkierteOption=(int)[nurMarkierteNummer intValue];
@@ -2796,7 +2796,7 @@ typedef NS_ENUM(NSInteger, A)
    }
    
    
-   NSString* tempAString=[OptionDic objectForKey:@"PopA"];
+   NSString* tempAString=[OptionDic objectForKey:@"popa"];
    if (tempAString )//&& [tempAString length])
    {
       //NSLog(@"KommentarNotificationAktion   tempAString: %@   LŠnge: %d" ,tempAString, [tempAString length]);
@@ -2873,7 +2873,7 @@ typedef NS_ENUM(NSInteger, A)
       
    }
    
-   NSString* tempBString=[OptionDic objectForKey:@"PopB"];
+   NSString* tempBString=[OptionDic objectForKey:@"popb"];
    if (tempBString )//&& [tempBString length])
    {
       //NSLog(@"\nKommentarNotificationAktion   tempBString: %@\n",tempBString);
@@ -3081,18 +3081,60 @@ typedef NS_ENUM(NSInteger, A)
    [AnzahlPop setEnabled:AuswahlOption>0];
    NSNumber* AuswahlOptionNumber =[NSNumber numberWithInt:AuswahlOption];
    
-   NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:AuswahlOptionNumber forKey:@"Auswahl"];
-   if (NamenOptionString)
+   NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:AuswahlOptionNumber forKey:@"auswahl"];
+   
+   if (NamenOptionString) // aus PopAMenu
    {
       
    }
    
    [KommentarOptionDic setObject:[ProjektPopMenu titleOfSelectedItem]forKey:@"projektname"];
-   //NSNotificationCenter * nc;
-   //nc=[NSNotificationCenter defaultCenter];
-   //[nc postNotificationName:@"KommentarOption" object: self userInfo:KommentarOptionDic];
+   double projektpopindex = [ProjektPopMenu indexOfSelectedItem]; // Option von ProjektMatrix
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:projektpopindex]forKey:@"projektnamenoption"];
+   double popaindex = [PopAMenu indexOfSelectedItem]; // Option von PopA
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:popaindex]forKey:@"popa"];
+   double popbindex = [PopBMenu indexOfSelectedItem]; // Option von PopB
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:popbindex]forKey:@"popb"];
+
+   double nurmarkierteindex = [nurMarkierteCheck state]; // Option von nurMarkierteCheck
+   [KommentarOptionDic setObject:[NSNumber numberWithBool:nurmarkierteindex]forKey:@"nurmarkierte"];
+
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:[ProjektMatrix selectedRow]]forKey:@"projektauswahloption"];
+   
+  
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:[[AnzahlPop selectedCell]tag]]forKey:@"anzahloption"];
+  
+ 
    [self KommentarSuchenMitDic:KommentarOptionDic];
+  
    NSLog(@"Ende setAuswahl");
+}
+
+- (NSDictionary*)aktuellerOptionDic
+{
+   NSMutableDictionary* KommentarOptionDic=[[NSMutableDictionary alloc]initWithCapacity:0];
+   double auswahloption = [[AuswahlPopMenu selectedCell]tag];
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:auswahloption]forKey:@"auswahl"];
+   AuswahlOption = auswahloption;
+   
+   [KommentarOptionDic setObject:[ProjektPopMenu titleOfSelectedItem]forKey:@"projektname"];
+   
+   double projektpopindex = [ProjektPopMenu indexOfSelectedItem]; // Option von ProjektMatrix
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:projektpopindex]forKey:@"projektnamenoption"];
+   double popaindex = [PopAMenu indexOfSelectedItem]; // Option von PopA
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:popaindex]forKey:@"popa"];
+   
+   double popbindex = [PopBMenu indexOfSelectedItem]; // Option von PopB
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:popbindex]forKey:@"popb"];
+   
+   double nurmarkierteindex = [nurMarkierteCheck state]; // Option von nurMarkierteCheck
+   [KommentarOptionDic setObject:[NSNumber numberWithBool:nurmarkierteindex]forKey:@"nurmarkierte"];
+   nurMarkierteOption = nurmarkierteindex;
+   
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:[ProjektMatrix selectedRow]]forKey:@"projektauswahloption"];
+   //ProjektAuswahlOption =
+   [KommentarOptionDic setObject:[NSNumber numberWithDouble:[[AnzahlPop selectedCell]tag]]forKey:@"anzahloption"];
+   return KommentarOptionDic;
 }
 
 - (IBAction)reportAnzahl:(id)sender
@@ -3118,7 +3160,7 @@ typedef NS_ENUM(NSInteger, A)
    NSLog(@"reportPopA: %@",[sender titleOfSelectedItem]);
    NamenOptionString=[sender titleOfSelectedItem];
    
-   NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:NamenOptionString forKey:@"PopA"];
+   NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:NamenOptionString forKey:@"popa"];
    
    [KommentarOptionDic setObject:[NSNumber numberWithInt:[ProjektPopMenu tag]]forKey:@"tag"];
    [KommentarOptionDic setObject:[ProjektPopMenu titleOfSelectedItem]forKey:@"projektname"];
@@ -3136,7 +3178,7 @@ typedef NS_ENUM(NSInteger, A)
    NSLog(@"reportPopB: %@",[sender titleOfSelectedItem]);
    TitelOptionString=[sender titleOfSelectedItem];
    
-   NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:TitelOptionString forKey:@"PopB"];
+   NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:TitelOptionString forKey:@"popb"];
    [KommentarOptionDic setObject:[ProjektPopMenu titleOfSelectedItem]forKey:@"projektname"];
    
    //	NSNotificationCenter * nc;
