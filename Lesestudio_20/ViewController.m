@@ -3460,7 +3460,7 @@ QTMovie* qtMovie;
 - (NSString*)KommentarVon:(NSString*) derKommentarString
 {
    NSArray* tempMarkArray=[derKommentarString componentsSeparatedByString:@"\r"];
-   NSLog(@"UserMarkVon: anz Components: %d",[tempMarkArray count]);
+   NSLog(@"KommentarVon: anz Components: %d",[tempMarkArray count]);
    if ([tempMarkArray count]==6)//noch keine Zeile für Mark
    {
       NSString* tempKommentarString=[tempMarkArray objectAtIndex:5];
@@ -3614,7 +3614,7 @@ QTMovie* qtMovie;
 {
    BOOL MarkSet=NO;
    NSArray* tempMarkArray=[derKommentarString componentsSeparatedByString:@"\r"];
-   //NSLog(@"UserMarkVon: anz Components: %d",[tempMarkArray count]);
+   //NSLog(@"AdminMarkVon: anz Components: %d",[tempMarkArray count]);
    if ([tempMarkArray count]==8)//Zeile für Mark ist da
    {
       if ([[tempMarkArray objectAtIndex:6]isEqualToString:@"1"])

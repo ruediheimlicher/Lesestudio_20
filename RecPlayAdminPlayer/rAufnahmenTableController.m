@@ -43,6 +43,7 @@ NSLog(@"tempName: %@",tempName);
 
 - (void)setUserMark:(BOOL)derStatus fuerZeile:(int)dieZeile
 {
+   NSLog(@"setUserMark zeile: %d",dieZeile);
 	NSNumber* StatusNumber=[NSNumber numberWithBool:derStatus];
 	[[AufnahmenDicArray objectAtIndex:dieZeile]setObject:[StatusNumber stringValue] forKey:@"usermark"];
 	[AufnahmenTable reloadData];
@@ -63,7 +64,7 @@ NSLog(@"tempName: %@",tempName);
 {
 	
 	[AufnahmenDicArray removeAllObjects];
-	AdminAktuellerLeser=[derLeser copy];
+	self.AdminAktuellerLeser=[derLeser copy];
 	NSString* tempLeserPfad=[AdminProjektPfad stringByAppendingPathComponent:derLeser];
 	//NSLog(@"tempLeserPfad: %@",tempLeserPfad);
 	
@@ -104,8 +105,8 @@ NSLog(@"tempName: %@",tempName);
 		
 		NSString* tempAufnahmePfad=[tempLeserPfad stringByAppendingPathComponent:eineAufnahme];
 		BOOL AdminMarkOK=[self AufnahmeIstMarkiertAnPfad:tempAufnahmePfad];
-//		[MarkCheckbox setEnabled:YES];
-		[MarkCheckbox setState:AdminMarkOK];
+		[AdminMarkCheckbox setEnabled:YES];
+		[AdminMarkCheckbox setState:AdminMarkOK];
 		
 		if (([MarkAuswahlOption selectedRow]==1)&&AdminMarkOK)
 		{
@@ -115,7 +116,7 @@ NSLog(@"tempName: %@",tempName);
 		[tempAufnahmenDic setObject:[NSNumber numberWithBool:AdminMarkOK] forKey:@"adminmark"];
 		
 		NSString* tempKommentarString=[self KommentarZuAufnahme:eineAufnahme 
-													   vonLeser:AdminAktuellerLeser 
+													   vonLeser:self.AdminAktuellerLeser
 												  anProjektPfad:AdminProjektPfad];
 		BOOL UserMarkOK=[self UserMarkVon:tempKommentarString];
 		
@@ -150,7 +151,7 @@ NSLog(@"tempName: %@",tempName);
 	NSLog(@"keine Aufnahmen für diese Einstellungen");
 	NSMutableDictionary* tempAufnahmenDic=[[NSMutableDictionary alloc]initWithCapacity:0];
 		
-	[tempAufnahmenDic setObject:NSLocalizedString(@"No Records",@"Keine Aufnahmen") forKey:@"aufnahme"];
+	[tempAufnahmenDic setObject:@"Keine Aufnahmen" forKey:@"aufnahme"];
 	[tempAufnahmenDicArray addObject:tempAufnahmenDic];
 	}
 
@@ -189,7 +190,7 @@ NSLog(@"tempName: %@",tempName);
 #pragma mark -
 #pragma mark TestTable Data Source:
 
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (long)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     return [AufnahmenDicArray count];
 }
@@ -236,7 +237,7 @@ NSLog(@"tempName: %@",tempName);
 		[einAufnahmenDic setObject:anObject forKey:[aTableColumn identifier]];
 		NSLog(@"einAufnahmenDic nach: %@",[einAufnahmenDic description]);
 		NSString* tempAufnahme=[einAufnahmenDic objectForKey:@"aufnahme"];
-		[self saveMarksFuerLeser:AdminAktuellerLeser FuerAufnahme:tempAufnahme 
+		[self saveMarksFuerLeser:self.AdminAktuellerLeser FuerAufnahme:tempAufnahme 
 			  mitAdminMark:[[einAufnahmenDic objectForKey:@"adminmark"]intValue]
 			   mitUserMark:[[einAufnahmenDic objectForKey:@"usermark"]intValue]];
 		
@@ -286,7 +287,7 @@ NSLog(@"tempName: %@",tempName);
 - (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(int)row
 {
 	//NSLog(@"ProjektListe willDisplayCell Zeile: %d, numberOfSelectedRows:%d", row ,[tableView numberOfSelectedRows]);
-	NSString* tempTestNamenString=[[AufnahmenDicArray objectAtIndex:row]objectForKey:@"aufnahme"];
+//	NSString* tempTestNamenString=[[AufnahmenDicArray objectAtIndex:row]objectForKey:@"aufnahme"];
 	if([[[AufnahmenDicArray objectAtIndex:row]objectForKey:@"usermark"]intValue])//user hat markiert
 	{
 	//[cell setTextColor:[NSColor redColor]];
@@ -360,11 +361,11 @@ NSLog(@"tempName: %@",tempName);
 		
 		NSLog(@"nach Namen vor : AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
 
-		int Zeile=[AufnahmenTable selectedRow];
+		long Zeile=[AufnahmenTable selectedRow];
 		AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:Zeile]objectForKey:@"aufnahme"];
-		NSLog(@"Tab nach Namen: Zeile: %d AdminAktuelleAufnahme: %@",Zeile,AdminAktuelleAufnahme);
+		NSLog(@"Tab nach Namen: Zeile: %ld AdminAktuelleAufnahme: %@",Zeile,AdminAktuelleAufnahme);
 
-		NSNumber* ZeilenNummer=[NSNumber numberWithInt:Zeile];
+		NSNumber* ZeilenNummer=[NSNumber numberWithDouble:Zeile];
 		NSMutableDictionary* tempZeilenDic=[NSMutableDictionary dictionaryWithObject:ZeilenNummer forKey:@"AufnahmenZeilenNummer"];
 		[tempZeilenDic setObject:@"AufnahmenTable" forKey:@"Quelle"];
 		NSNotificationCenter * nc;
@@ -399,7 +400,7 @@ NSLog(@"tempName: %@",tempName);
 		{
 			
 			int  Zeile;
-			Zeile=[NamenListe selectedRow];//selektierte Zeile in der self.NamenListe
+		//	Zeile=[NamenListe selectedRow];//selektierte Zeile in der self.NamenListe
 			//NSLog(@"nach Namen: Zeile: %d AdminAktuelleAufnahme: %@",Zeile,AdminAktuelleAufnahme);
 			
 			
@@ -424,7 +425,7 @@ NSLog(@"tempName: %@",tempName);
 			[self setAufnahmenVonLeser:Lesername];
 			
 			[[self.view window]makeFirstResponder:AufnahmenTable];
-			NSString* KeineAufnahmenString=NSLocalizedString(@"No Records",@"Keine Aufnahmen");
+		//	NSString* KeineAufnahmenString=NSLocalizedString(@"No Records",@"Keine Aufnahmen");
 			
 			//NSNotificationCenter * nc;
 			//nc=[NSNotificationCenter defaultCenter];

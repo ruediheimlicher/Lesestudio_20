@@ -108,12 +108,12 @@ return [KommentarFenster nurMarkierte];
 	  }
 	[KommentarFenster showWindow:self];
 	[KommentarFenster setAnzahlPopMenu:AnzahlOption];
-	if ([AdminAktuellerLeser length])
+	if ([self.AdminAktuellerLeser length])
 	  {
 		AuswahlOption=alleVonNameKommentarOption;
 		[KommentarFenster setAuswahlPop:alleVonNameKommentarOption];
-		[KommentarFenster setPopAMenu:AdminProjektNamenArray erstesItem:@"alle" aktuell:AdminAktuellerLeser];
-		NSArray* TitelArray=[self TitelArrayVon:AdminAktuellerLeser anProjektPfad:AdminProjektPfad];
+		[KommentarFenster setPopAMenu:AdminProjektNamenArray erstesItem:@"alle" aktuell:self.AdminAktuellerLeser];
+		NSArray* TitelArray=[self TitelArrayVon:self.AdminAktuellerLeser anProjektPfad:AdminProjektPfad];
 		
 		if ([AdminAktuelleAufnahme length])
 		  {
@@ -2845,7 +2845,7 @@ return tempTitelDicArray;
 {
 	BOOL MarkSet=NO;
 	NSArray* tempMarkArray=[derKommentarString componentsSeparatedByString:@"\r"];
-	//NSLog(@"UserMarkVon: anz Components: %d",[tempMarkArray count]);
+	//NSLog(@"AdminMarkVon: anz Components: %d",[tempMarkArray count]);
 	if ([tempMarkArray count]==8)//Zeile für Mark ist da
 	{
 		if ([[tempMarkArray objectAtIndex:6]isEqualToString:@"1"])

@@ -119,6 +119,7 @@ return rowData;
 long index=[[rowData valueForKey:@"namen"]indexOfObject:derLeser];
 return index;
 }
+
 - (void)setAufnahmeFiles:(NSArray*)derArray forRow: (int)dieZeile
 {
 	NSArray* tempArray=[derArray copy];
@@ -238,7 +239,7 @@ return index;
 	[MarkArray replaceObjectAtIndex:dieZeile withObject:derArray];
 }
 
-- (void)setMark:(BOOL)derStatus forRow:(int)dieZeile forItem:(int)dasItem
+- (void)setMark:(BOOL)derStatus forRow:(long)dieZeile forItem:(long)dasItem
 {
 	NSNumber* statusNumber=[NSNumber numberWithBool:derStatus];
 	

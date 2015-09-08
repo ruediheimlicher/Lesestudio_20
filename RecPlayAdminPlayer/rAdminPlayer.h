@@ -59,8 +59,10 @@
 	IBOutlet NSButton*			zurListeTaste;
 	IBOutlet NSButton*			ExportierenTaste;
 	IBOutlet NSButton*			LoeschenTaste;
-	IBOutlet NSButton*			MarkCheckbox;
-	IBOutlet NSButton*			UserMarkCheckbox;
+      
+   IBOutlet NSButton*         UserMarkCheckbox;
+   IBOutlet NSButton*         AdminMarkCheckbox;
+      
    IBOutlet NSButton*			SchliessenTaste;
       
 //	IBOutlet NSTextField*		ProjektFeld;
@@ -84,8 +86,8 @@
 	BOOL                       AufnahmeDa;
 	int                        selektierteAufnahmenTableZeile;
 	
-      rAVPlayer*						   AVAbspielplayer;
-      IBOutlet rAbspielanzeige*			Abspielanzeige;
+   rAVPlayer*						   AVAbspielplayer;
+   IBOutlet rAbspielanzeige*			Abspielanzeige;
       
 
 //	Movie							AdminPlayerMovie;
@@ -105,8 +107,8 @@
 	NSMutableArray *			AdminProjektArray;
 	BOOL                    AdminProjektAktiviert;
 	
-	int							AnzLeser;
-	int							selektierteZeile;
+	double							AnzLeser;
+	double							selektierteZeile;
 	NSComboBoxCell *			comboBox;
 	NSPopUpButtonCell*		AufnahmenPop;
 	rAdminDS*					AdminDaten;
@@ -159,8 +161,9 @@
 
 @property (weak)  IBOutlet NSButton*					KommentarfensterKnopf;
 
-@property (assign) NSString*                         AdminAktuellerLeser;
+@property (strong) NSString*                         AdminAktuellerLeser;
 
+//@property (assign) IBOutlet NSButton*              MarkCheckbox;
 
 
 - (void)setLeseboxPfad:(NSString*)derPfad inProjekt: (NSString*)dasProjekt;
@@ -188,7 +191,7 @@
 
 
 - (IBAction)startAdminPlayer:(id)sender;
-- (int)selektierteZeile;
+- (double)selektierteZeile;
 
 - (void)backZurListe:(id)sender;
 - (void)Aufnahmezuruecklegen;
@@ -239,10 +242,8 @@
 
 
 
-- (IBAction)setAufnahmenVonPopLeser:(id)sender;
+
 - (IBAction)AufnahmeExportieren:(id)sender;
-- (IBAction)reportAuswahlOption:(id)sender;
-- (IBAction)reportDelete:(id)sender;
 
 
 // Player
@@ -290,7 +291,7 @@
 - (IBAction)showKommentar:(id)sender;
 - (NSArray*)createKommentarStringArrayWithProjektPfadArray:(NSArray*)derProjektPfadArray;
 - (NSArray*)createDruckKommentarStringDicArrayWithProjektPfadArray:(NSArray*)derProjektPfadArray;
-
+- (IBAction)setAufnahmenVonPopLeser:(id)sender;
 - (void)KommentarNotificationAktion:(NSNotification*)note;
 
 
@@ -332,7 +333,6 @@
 - (IBAction)reportDelete:(id)sender;
 - (void)setAdminMark:(BOOL)derStatus fuerZeile:(int)dieZeile;
 - (void)setUserMark:(BOOL)derStatus fuerZeile:(int)dieZeile;
-- (IBAction)setAufnahmenVonPoLeser:(id)sender;
 - (void)setAufnahmenVonLeser:(NSString*)derLeser;
 - (void)setAufnahmenTable:(NSArray*)derAufnahmenArray fuerLeser:(NSString*)derLeser;
 
