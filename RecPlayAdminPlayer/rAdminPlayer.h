@@ -62,6 +62,7 @@
       
    IBOutlet NSButton*         UserMarkCheckbox;
    IBOutlet NSButton*         AdminMarkCheckbox;
+   IBOutlet NSButton*         TestMarkCheckbox;
       
    IBOutlet NSButton*			SchliessenTaste;
       

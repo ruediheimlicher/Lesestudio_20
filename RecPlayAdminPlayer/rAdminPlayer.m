@@ -1084,7 +1084,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 			  if (Moviegeladen)
 				{
 				  NSLog(@"save alten Kommentar, Movie geladen");
-				  [self backZurListe:nil];//Aufnahme zurŸcklegen
+				  [self Aufnahmezuruecklegen];//Aufnahme zurŸcklegen
 				}
 		  }
 		//NSLog(@"setLeser   Leser: %@  zeile: %d  hit: %d   File:  %@",Leser, hitZeile, hit, tempAufnahmePfad);
@@ -1109,7 +1109,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 		  }
 		else
 		  {
-			[AdminMarkCheckbox setState:NO];
+		//	[AdminMarkCheckbox setState:NO];
 
 		  }
       [AdminMarkCheckbox setEnabled:YES];
@@ -1334,9 +1334,9 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
                            int tempmark = [self AdminMarkVon:KommentarString];
                            NSLog(@"tempmark: %d",tempmark);
                            
-                           [AdminMarkCheckbox setState:tempmark];
-                           [UserMarkCheckbox setState:tempmark];
-                           
+                           //[AdminMarkCheckbox setState:tempmark];
+                           //[UserMarkCheckbox setState:tempmark];
+                           [TestMarkCheckbox setState:tempmark];
                            NSLog(@"AdminMarkCheckbox neuer state: %ld",[AdminMarkCheckbox state]);
                            NSLog(@"UserMarkCheckbox  neuer state: %ld",[UserMarkCheckbox  state]);
                           
@@ -1958,7 +1958,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
          else
          {
             NSBeep;
-            [self backZurListe:nil];
+            [self Aufnahmezuruecklegen];
             [PlayTaste setEnabled:NO];
          }
       }break;
@@ -1998,7 +1998,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
          else
          {
             NSBeep;
-            [self backZurListe:nil];
+            [self Aufnahmezuruecklegen];
             [PlayTaste setEnabled:NO];
             self.AdminAktuellerLeser=@"";
             AdminAktuelleAufnahme=@"";
@@ -2121,7 +2121,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 			else
 			{
 				NSBeep;
-				[self backZurListe:nil];
+				[self Aufnahmezuruecklegen];
 				[PlayTaste setEnabled:NO];
 			}
 		}break;
@@ -2161,7 +2161,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 			else
 			{
 				NSBeep;
-				[self backZurListe:nil];
+				[self Aufnahmezuruecklegen];
 				[PlayTaste setEnabled:NO];
             self.AdminAktuellerLeser=@"";
 				AdminAktuelleAufnahme=@"";
@@ -2224,7 +2224,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
    [LoeschenTaste setEnabled:NO];
    Textchanged=NO;
    
-   [AdminMarkCheckbox setState:NO];
+   //[AdminMarkCheckbox setState:NO];
    //[self.MarkCheckbox setEnabled:NO];
    
     NSLog(@"\n\nAufnahmezuruecklegen end");
@@ -2274,7 +2274,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 	[LoeschenTaste setEnabled:NO];
 	Textchanged=NO;
 	
-	[AdminMarkCheckbox setState:NO];
+	//[AdminMarkCheckbox setState:NO];
 //	[AdminMarkCheckbox setEnabled:NO];
 }
 - (IBAction)reportFensterschliessen:(id)sender
@@ -3954,7 +3954,7 @@ NSNumber* UmgebungNumber=[[note userInfo]objectForKey:@"Umgebung"];
 	[AdminTitelfeld setStringValue: @""];
 //	[AdminBewertungfeld setStringValue: @""];
 	[AdminNotenfeld setStringValue: @""];
-	[AdminMarkCheckbox setState:NO];
+	//[AdminMarkCheckbox setState:NO];
 	
 }
 
@@ -4212,7 +4212,7 @@ if (entfernenOK==0)//allesOK
 	else
 	{
 		//NSLog(@"rAdminPlayer: SelectionDidChangeAktion textchanged YES");
-		[self backZurListe:NULL];
+		[self Aufnahmezuruecklegen];
 		[self->PlayTaste setEnabled:NO];
 		Textchanged=YES;
       Kommentarsaved=NO;

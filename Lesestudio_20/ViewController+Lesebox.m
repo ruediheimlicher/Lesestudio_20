@@ -1509,7 +1509,8 @@ enum
 - (void)AdminTimerFunktion:(NSTimer*)timer
 {
    
-   NSLog(@"AdminTimerFunktion counter: %d info: %@",AdminTimerCounter,[[timer userInfo]description]);
+   //NSLog(@"AdminTimerFunktion counter: %d info: %@",AdminTimerCounter,[[timer userInfo]description]);
+   NSLog(@"AdminTimerFunktion counter: %d ",AdminTimerCounter);
    if (AdminTimerCounter)
    {
       AdminTimerCounter--;
