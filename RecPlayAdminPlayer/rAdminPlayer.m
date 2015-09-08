@@ -1603,7 +1603,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
             
            // NSLog(@"tempKommentarViewString: substring bis 2: %@  substring ab 2: %@",[tempKommentarViewString substringToIndex:2],[tempKommentarViewString substringFromIndex:2]);
            
-				if ([[tempKommentarViewString substringToIndex:1] isEqualToString:@"--"])//entfernen
+				if ([tempKommentarViewString length] && ([[tempKommentarViewString substringToIndex:1] isEqualToString:@"--"]))//entfernen
 				{
                
 					tempKommentarViewString=[tempKommentarViewString substringFromIndex:2];
