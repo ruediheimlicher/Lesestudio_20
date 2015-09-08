@@ -1014,7 +1014,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
         OK = [self saveAdminMarkFuerLeser:AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme
                            mitAdminMark:(int)[AdminMarkCheckbox state]];
          */
-        OK = [self saveMarksFuerLeser:self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: (int)[AdminMarkCheckbox state] mitUserMark:(int)[UserMarkCheckbox state]];
+        OK = [self saveMarksFuerLeser:self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: (int)[LehrerMarkCheckbox state] mitUserMark:(int)[UserMarkCheckbox state]];
 
   
         
@@ -2211,7 +2211,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
         
         AdminAktuelleAufnahme=@"";
         NSLog(@"backZurListe AdminMark: %ld UserMark: %ld",(long)[AdminMarkCheckbox state],(long)[UserMarkCheckbox state]);
-        [self saveMarksFuerLeser:self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: [AdminMarkCheckbox state] mitUserMark:[UserMarkCheckbox state]];
+        [self saveMarksFuerLeser:self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: [LehrerMarkCheckbox state] mitUserMark:[UserMarkCheckbox state]];
         
      }
    [self clearKommentarfelder];
