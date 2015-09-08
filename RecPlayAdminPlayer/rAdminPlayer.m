@@ -1336,7 +1336,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
                            
                            //[AdminMarkCheckbox setState:tempmark];
                            //[UserMarkCheckbox setState:tempmark];
-                           [TestMarkCheckbox setState:tempmark];
+                           [LehrerMarkCheckbox setState:tempmark];
                            NSLog(@"AdminMarkCheckbox neuer state: %ld",[AdminMarkCheckbox state]);
                            NSLog(@"UserMarkCheckbox  neuer state: %ld",[UserMarkCheckbox  state]);
                           
@@ -1546,7 +1546,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 			tempKopfString=[tempKopfString stringByAppendingString:@"\r"];
 			
 			// AdminMark
-			NSNumber* AdminMarkNumber=[NSNumber numberWithBool:[AdminMarkCheckbox state]];
+			NSNumber* AdminMarkNumber=[NSNumber numberWithBool:[LehrerMarkCheckbox state]];
 			//NSLog(@"saveKommentar	xx BewertungString: %@",BewertungString);
 			NSString* AdminMarkString;
 			if ([AdminMarkNumber boolValue]==0)
@@ -1601,7 +1601,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
                NSLog(@"tempKommentarViewString: substring: %@",tempKommentarViewString);
             }
             
-            NSLog(@"tempKommentarViewString: substring bis 2: %@  substring ab 2: %@",[tempKommentarViewString substringToIndex:2],[tempKommentarViewString substringFromIndex:2]);
+           // NSLog(@"tempKommentarViewString: substring bis 2: %@  substring ab 2: %@",[tempKommentarViewString substringToIndex:2],[tempKommentarViewString substringFromIndex:2]);
            
 				if ([[tempKommentarViewString substringToIndex:1] isEqualToString:@"--"])//entfernen
 				{
