@@ -844,7 +844,7 @@ OptionBString=[[NSString alloc]init];
 				
 			}
 		}
-		NSLog(@"AufnahmeFilesArray nach wenden: %@   index: %d",[AufnahmeFilesArray description],i);
+		//NSLog(@"AufnahmeFilesArray nach wenden: %@   index: %d",[AufnahmeFilesArray description],i);
 		//
 		
 		[AdminDaten setAufnahmeFiles:AufnahmeFilesArray forRow:i];
@@ -1058,7 +1058,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 }
 - (IBAction)setLeser:(id)sender
 {
-//	*********************************** wird von AdminListeaufgerufen: Lšst Aktion des PopMenues aus !!!
+//	*********************************** wird von AdminListe aufgerufen: Lšst Aktion des PopMenues aus !!!
 	double hitZeile=[sender selectedRow];
 	//NSLog(@"hitZeile: %d ",hitZeile);
 	if (hitZeile<0)
@@ -1082,7 +1082,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 		if (![AdminAktuelleAufnahme isEqualToString:[[[AdminDaten AufnahmeFilesFuerZeile:hitZeile]objectAtIndex:hit]description]])//andere Aufnahme gewŠhlt
 		  {
 			  //NSLog(@"andere Aufnahme");
-			  if (Moviegeladen)
+			 // if (Moviegeladen)
 				{
 				  NSLog(@"save alten Kommentar, Movie geladen");
 				  [self Aufnahmezuruecklegen];//Aufnahme zurŸcklegen
@@ -1104,16 +1104,19 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 		NSString* tempAufnahmePfad=[AdminProjektPfad stringByAppendingPathComponent:self.AdminAktuellerLeser];
 		tempAufnahmePfad=[tempAufnahmePfad stringByAppendingPathComponent:AdminAktuelleAufnahme];
        AdminPlayPfad =tempAufnahmePfad ;
+      /*
 		if ([AdminDaten MarkForRow:hitZeile forItem:hit])
 		  {
 			[AdminMarkCheckbox setState:YES];
-		  }
+         [LehrerMarkCheckbox setState:YES];
+        }
 		else
 		  {
-		//	[AdminMarkCheckbox setState:NO];
+			[AdminMarkCheckbox setState:NO];
+         [LehrerMarkCheckbox setState:NO];
 
 		  }
-      [AdminMarkCheckbox setEnabled:YES];
+       */
       [self Aufnahmebereitstellen];
 		
 	}
@@ -1125,6 +1128,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 		[ExportierenTaste setEnabled:NO];
 		[LoeschenTaste setEnabled:NO];
 		[AdminMarkCheckbox setState:NO];
+      [LehrerMarkCheckbox setState:NO];
 		[self clearKommentarfelder];
 		
 	}
@@ -1197,6 +1201,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 
 		//NSFileManager *Filemanager=[NSFileManager defaultManager];
 		//if ([Filemanager fileExistsAtPath
+      /*
 		if ([AdminDaten MarkForRow:hitZeile forItem:hit])
 		  {
 			[AdminMarkCheckbox setState:YES];
@@ -1206,7 +1211,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 			[AdminMarkCheckbox setState:NO];
 			
 		  }
-		
+		*/
 		[PlayTaste setEnabled:YES];
 		[AdminMarkCheckbox setEnabled:YES];
       
@@ -1224,6 +1229,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 		[zurListeTaste setEnabled:NO];
 		[zurListeTaste setKeyEquivalent:@""];
 		[AdminMarkCheckbox setState:NO];
+      [LehrerMarkCheckbox setState:NO];
+
 	//	[AdminMarkCheckbox setEnabled:NO];
 	}
 }
@@ -1974,8 +1981,10 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
             int AufnahmenIndex=[AufnahmenTable selectedRow];
             AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:AufnahmenIndex]objectForKey:@"aufnahme"];
             self.AdminAktuellerLeser=[LesernamenPop titleOfSelectedItem];
-            BOOL AufnahmeOK=[self setPfadFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
-            BOOL OK=[self setKommentarFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
+            [self setPfadFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
+            [self setKommentarFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
+            
+            /*
             if ([[[AufnahmenDicArray objectAtIndex:AufnahmenIndex]objectForKey:@"adminmark"]intValue])
             {
                [AdminMarkCheckbox setState:YES];
@@ -1985,6 +1994,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
                [AdminMarkCheckbox setState:NO];
                
             }
+             */
             //				[AdminQTKitPlayer setHidden:NO];
             [self startAdminPlayer:nil];
             //				[AdminQTKitPlayer play:nil];
@@ -2007,6 +2017,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
             [zurListeTaste setEnabled:NO];
             [zurListeTaste setKeyEquivalent:@""];
             [AdminMarkCheckbox setState:NO];
+            [LehrerMarkCheckbox setState:NO];
+
             [AdminBewertungfeld setEnabled:NO];
             
             
@@ -2066,11 +2078,11 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 			// 8.12.08
 			if ( [NamenListe numberOfSelectedRows] && [self AnzahlAufnahmen])
 			{
-            NSLog(@"case 1 Aufnahmebereitstellen AdminAktuellerLeser: %@ AdminAktuelleAufnahme: %@",self.AdminAktuellerLeser,AdminAktuelleAufnahme);
+           // NSLog(@"case 1 Aufnahmebereitstellen AdminAktuellerLeser: %@ AdminAktuelleAufnahme: %@",self.AdminAktuellerLeser,AdminAktuelleAufnahme);
 
                [AVAbspielplayer prepareAdminAufnahmeAnURL:[NSURL fileURLWithPath:AdminPlayPfad]];
             
-            NSLog(@"Aufnahmebereitstellen AVAbspielplayer url: %@",[[AVAbspielplayer AufnahmeURL]path]);
+         //   NSLog(@"Aufnahmebereitstellen AVAbspielplayer url: %@",[[AVAbspielplayer AufnahmeURL]path]);
             
          
             
@@ -2137,9 +2149,10 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 				int AufnahmenIndex=[AufnahmenTable selectedRow];
 				AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:AufnahmenIndex]objectForKey:@"aufnahme"];
 				self.AdminAktuellerLeser=[LesernamenPop titleOfSelectedItem];
-				BOOL AufnahmeOK=[self setPfadFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
-				BOOL OK=[self setKommentarFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
-				if ([[[AufnahmenDicArray objectAtIndex:AufnahmenIndex]objectForKey:@"adminmark"]intValue])
+				[self setPfadFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
+				[self setKommentarFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
+				/* // ist in setKommentar
+            if ([[[AufnahmenDicArray objectAtIndex:AufnahmenIndex]objectForKey:@"adminmark"]intValue])
 				{
 					[AdminMarkCheckbox setState:YES];
 				}
@@ -2148,6 +2161,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 					[AdminMarkCheckbox setState:NO];
 					
 				}
+             */
 //				[AdminQTKitPlayer setHidden:NO];
 				[self startAdminPlayer:nil];
 //				[AdminQTKitPlayer play:nil];
