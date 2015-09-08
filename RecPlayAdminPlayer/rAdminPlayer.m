@@ -13,7 +13,7 @@ typedef NS_ENUM(NSInteger, A)
 Datum = 2,
 Bewertung,
 Noten,
-UserMark,
+kUserMark,
 kAdminMark,
 Kommentar
 };
@@ -479,6 +479,11 @@ OptionBString=[[NSString alloc]init];
               name:@"markcheckbox"
             object:nil];
    
+  // [AufnahmenTable setDoubleAction:DoppelSelektor];
+   NSLog(@"setAdminplayer AufnahmenDicArray: %@",[AufnahmenDicArray description]);
+
+   [AufnahmenTable setDelegate:self];
+   [AufnahmenTable setDataSource:self];
 
 }
 
@@ -543,7 +548,7 @@ OptionBString=[[NSString alloc]init];
 
 - (void) setAdminPlayer:(NSString*)derLeseboxPfad inProjekt:(NSString*)dasProjekt
 {
-	NSLog(@"setAdminPlayer LeseboxPfad: %@ Projekt: %@",derLeseboxPfad,dasProjekt);
+	//NSLog(@"setAdminPlayer LeseboxPfad: %@ Projekt: %@",derLeseboxPfad,dasProjekt);
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
 	[AdminProjektFeld setStringValue:dasProjekt];
 	AdminLeseboxPfad=[NSString stringWithString:derLeseboxPfad];
@@ -557,7 +562,7 @@ OptionBString=[[NSString alloc]init];
 	[NotificationDic setObject:AdminProjektPfad forKey:@"projektpfad"];
 	[nc postNotificationName:@"Utils" object:self userInfo:NotificationDic];
 	
-   NSLog(@"setAdminPlayer AdminProjektPfad: %@",AdminProjektPfad);
+   //NSLog(@"setAdminPlayer AdminProjektPfad: %@",AdminProjektPfad);
 	AdminProjektNamenArray=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:AdminProjektPfad error:NULL]];
 	[AdminProjektNamenArray removeObject:@".DS_Store"];
 	AnzLeser=[AdminProjektNamenArray count];											//Anzahl Leser
@@ -678,14 +683,14 @@ OptionBString=[[NSString alloc]init];
 		
 		//Namen einsetzen, inSessionNumber einsetzen
 		NamenDic=[NSDictionary dictionaryWithObjectsAndKeys:[AdminProjektNamenArray objectAtIndex:i], @"namen",inSessionNumber,@"insession",nil];
-		NSLog(@"setAdminPlayer    NamenDic: %@",[NamenDic description]);
+		//NSLog(@"setAdminPlayer    NamenDic: %@",[NamenDic description]);
 		
 		//Anzahl Aufnahmen fŸr den Namen ausrechnen
 		tempLeserPfad=[AdminProjektPfad stringByAppendingPathComponent:[[AdminProjektNamenArray objectAtIndex:i]description]];
 		//NSLog(@"tempLeserPfad: %@",tempLeserPfad);
 		tempAufnahmenliste=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:tempLeserPfad error:NULL]];
 		
-		NSLog(@"setAdminPlayer    tempAufnahmenliste: %@",[tempAufnahmenliste description]);
+		//NSLog(@"setAdminPlayer    tempAufnahmenliste: %@",[tempAufnahmenliste description]);
 		
 		//Anzahl Aufnahmen:
 		tempAnzAufnahmen=[[Filemanager contentsOfDirectoryAtPath:tempLeserPfad error:NULL]count];
@@ -844,7 +849,7 @@ OptionBString=[[NSString alloc]init];
 				
 			}
 		}
-		//NSLog(@"AufnahmeFilesArray nach wenden: %@   index: %d",[AufnahmeFilesArray description],i);
+		NSLog(@"AufnahmeFilesArray nach wenden: %@   index: %d",[AufnahmeFilesArray description],i);
 		//
 		
 		[AdminDaten setAufnahmeFiles:AufnahmeFilesArray forRow:i];
@@ -893,11 +898,14 @@ OptionBString=[[NSString alloc]init];
 	n1=[NSFont fontWithName:@"Helvetica" size:10];
 	[AbspieldauerFeld setFont:n1];
 	//[self.NamenListe setRowHeight: 24];
-	//NSLog(@"setAdminplayer fertig");
+	NSLog(@"setAdminplayer fertig");
 	Moviegeladen=NO;
 	[AufnahmenTab setDelegate:self];
 	
 	[AufnahmenTable setDoubleAction:DoppelSelektor];
+   //[AufnahmenTable setDelegate:AdminDaten];
+   //[AufnahmenTable setDataSource:AdminDaten];
+   NSLog(@"setAdminplayer AdminDaten: %@",[AdminDaten description]);
 }
 
 - (IBAction)AufnahmeSetzen:(id)sender
@@ -924,7 +932,7 @@ OptionBString=[[NSString alloc]init];
 
 - (void)setAdminProjektArray:(NSArray*)derProjektArray
 {
-NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArray);
+//NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArray);
    
 [self.view.window makeKeyAndOrderFront:nil];
 [AdminProjektArray removeAllObjects];
@@ -938,7 +946,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 - (void)setProjektPopMenu:(NSArray*)derProjektArray
 {
   NSString* tempProjektName=[AdminProjektPfad lastPathComponent];
-  NSLog(@"setProjektPop  derProjektArray: %@ ProjektPop: %@",[derProjektArray description],[AdminProjektPop description] );
+  //NSLog(@"setProjektPop  derProjektArray: %@ ProjektPop: %@",[derProjektArray description],[AdminProjektPop description] );
   double anz=[AdminProjektPop numberOfItems];
  
   if (anz>1)
@@ -1768,7 +1776,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 
 						NSNumber* UserMarkNumber=[NSNumber numberWithInt:dieUserMark];
 						NSLog(@"saveMark		replaceObjectAtIndex1");
-						[tempKommentarArrary replaceObjectAtIndex:UserMark withObject:[UserMarkNumber stringValue]];
+						[tempKommentarArrary replaceObjectAtIndex:kUserMark withObject:[UserMarkNumber stringValue]];
 						NSLog(@"tempKommentarArrary nach: %@ UserMark:%@",[tempKommentarArrary description],[UserMarkNumber stringValue]);
 
 					}
@@ -1801,68 +1809,13 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 		//NSLog(@"Sender: %@",[sender description]);
 		//NSLog(@"Noch kein Movie da");
 		
-		NSURL *movieUrl = [NSURL fileURLWithPath:AdminPlayPfad];
-		NSError* loadError=0;
-      /*
-		QTMovie* tempQTKitMovie= [[QTMovie alloc]initWithURL:movieUrl error:&loadError];
-		if (loadError)
-		{
-			NSAlert *theAlert = [NSAlert alertWithError:loadError];
-			[theAlert runModal]; // Ignore return value.
-		}
-		AdminPlayerMovie =[tempQTKitMovie quickTimeMovie];
-      */
-		//Fixed n=GetMovieRate(PlayerMovie);
-		//NSLog(@"MovieRate: %d", n);
-		
-		
-		//AdminAbspielzeit=GetMovieDuration(AdminPlayerMovie)/60;
-		//AdminAbspielzeit=GetMovieDuration(AdminPlayerMovie)/60;
-		
-//		AdminAbspielzeit=[tempQTKitMovie duration].timeValue/[tempQTKitMovie duration].timeScale;
       
       
 		[AbspieldauerFeld setStringValue:[self Zeitformatieren:AdminAbspielzeit]];
 		[AbspieldauerFeld setNeedsDisplay:YES];
 		
-		//Abspieldauer=GesamtAbspielzeit;
-		//[Levelbalken setMaxValue: GesamtAbspielzeit];
-		//[Levelbalken setDoubleValue: 0];
-		
-		//NSLog(@"MovieDuration: %d", AdminAbspielzeit);
-		/*
-		[AdminQTPlayer showController:YES adjustingSize:NO];
-		[AdminQTPlayer setNeedsDisplay:YES];
-		
-		[AdminQTPlayer setMovie:tempMovie];
-		//[AdminQTPlayer gotoBeginning:sender];
-		[AdminQTPlayer gotoBeginning:nil];
-		SetMovieActive(AdminPlayerMovie,true);
-		//[tempMovie release];
-		*/
-      
-      /*
-		[AdminQTKitPlayer setMovie:tempQTKitMovie];
-		[AdminQTKitPlayer gotoBeginning:NULL];
-		[AdminQTKitPlayer play:NULL];
-       */
-		
 		
 	}
-	/*
-	else
-	{
-		//NSLog(@"Schon ein Movie da");
-		if (AdminPlayerMovie)
-		{
-			//SetMovieActive(AdminPlayerMovie,true);
-			//NSLog(@"err nach setmovieactive: %d",GetMoviesError());
-			[AdminQTKitPlayer gotoBeginning:NULL];
-			[AdminQTKitPlayer play:NULL];
-		}
-		
-	}
-	*/
 	[AdminKommentarView setEditable:YES];
 	//	[AdminBewertungfeld setEditable:YES];
 	[AdminNotenfeld setEnabled:YES];
@@ -2532,7 +2485,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
 	NSString* AnmerkungenPfad=[[derAufnahmePfad stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Anmerkungen"];
 	
-	AnmerkungenPfad=[AnmerkungenPfad stringByAppendingPathComponent:[derAufnahmePfad lastPathComponent]];
+   NSString* tempPfad =[[[derAufnahmePfad lastPathComponent]stringByDeletingPathExtension]stringByAppendingPathExtension:@"txt"];
+	AnmerkungenPfad=[AnmerkungenPfad stringByAppendingPathComponent:tempPfad];
 	
 	if ([Filemanager fileExistsAtPath:AnmerkungenPfad])
 	{
@@ -2553,6 +2507,38 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",derProjektArra
 	}//file exists
 	return istMarkiert;
 }
+
+- (BOOL)AufnahmeIstVomUserMarkiertAnPfad:(NSString*)derAufnahmePfad
+{
+   BOOL istMarkiert=NO;
+   
+   NSFileManager *Filemanager=[NSFileManager defaultManager];
+   NSString* AnmerkungenPfad=[[derAufnahmePfad stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Anmerkungen"];
+   
+   NSString* tempPfad =[[[derAufnahmePfad lastPathComponent]stringByDeletingPathExtension]stringByAppendingPathExtension:@"txt"];
+   AnmerkungenPfad=[AnmerkungenPfad stringByAppendingPathComponent:tempPfad];
+   
+   if ([Filemanager fileExistsAtPath:AnmerkungenPfad])
+   {
+      //NSLog(@"File exists an Pfad: %@",derAufnahmePfad);
+      NSString* tempKommentarString=[NSString stringWithContentsOfFile:AnmerkungenPfad encoding:NSMacOSRomanStringEncoding error:NULL];
+      NSMutableArray* tempKommentarArrary=(NSMutableArray *)[tempKommentarString componentsSeparatedByString:@"\r"];
+      //NSLog(@"tempKommentarArrary vor: %@",[tempKommentarArrary description]);
+      if (tempKommentarArrary &&[tempKommentarArrary count])
+      {
+         NSNumber* UserMarkNumber=[tempKommentarArrary objectAtIndex:kUserMark];
+         //NSLog(@"istMarkiert		AdminMarkNumber: %d",[AdminMarkNumber intValue]);
+         
+         istMarkiert=[UserMarkNumber intValue];
+         
+      }
+      
+      
+   }//file exists
+   return istMarkiert;
+}
+
+
 
 - (BOOL)AufnahmeIstMarkiertAnAnmerkungPfad:(NSString*)derAnmerkungPfad
 {
@@ -3637,6 +3623,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 	  
 	if ([Quelle isEqualToString:@"AufnahmenTable"])
 	{
+      NSDictionary* QuellenDic=[note object];
 		//NSLog(@"\n\nAdminZeilenNotifikationAktion:  AufnahmenTable  Quelle: %@",Quelle);
 		NSNumber* ZeilenNummer=[QuellenDic objectForKey:@"zeilennummer"];
 	  	

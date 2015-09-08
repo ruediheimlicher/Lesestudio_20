@@ -1368,41 +1368,7 @@ enum
 - (IBAction)beginAdminPlayer:(id)sender
 {
    
-    /*
-    if (MoviePlayerbusy)
-    {
-    NSAlert *Warnung = [[[NSAlert alloc] init] autorelease];
-    [Warnung addButtonWithTitle:@"OK"];
-    //[Warnung addButtonWithTitle:@"Cancel"];
-    [Warnung setMessageText:NSLocalizedString(@"Still Playing",@"Wiedergabe läuft")];
-    [Warnung setInformativeText:NSLocalizedString(@"No switching is possible while playing",@"Kein Umschalten während Play")];
-    [Warnung setAlertStyle:NSWarningAlertStyle];
-    [Warnung beginSheetModalForWindow:RecPlayFenster
-    modalDelegate:nil
-    didEndSelector:nil
-    contextInfo:nil];
-    
-    //int Antwort=NSRunAlertPanel(@"", @"",@"OK", NULL,NULL);
-    return;
-    }
-    if ([AufnahmeGrabber isRecording])
-    {
-    NSAlert *Warnung = [[[NSAlert alloc] init] autorelease];
-    [Warnung addButtonWithTitle:@"OK"];
-    //[Warnung addButtonWithTitle:@"Cancel"];
-    [Warnung setMessageText:NSLocalizedString(@"Still Recording",@"Aufnahme läuft")];
-    [Warnung setInformativeText:NSLocalizedString(@"No switching is possible while recording",@"Kein Umschalten während Aufnahme")];
-    [Warnung setAlertStyle:NSWarningAlertStyle];
-    [Warnung beginSheetModalForWindow:RecPlayFenster
-    modalDelegate:nil
-    didEndSelector:nil
-    contextInfo:nil];
-    
-    //int Antwort=NSRunAlertPanel(@"Aufnahme läuft", @"Während dieser Zeit kann nicht umgeschaltet werden",@"OK", NULL,NULL);
-    return;
-    }
-    */
-   [self ArchivZurListe:nil];
+    [self ArchivZurListe:nil];
    [self resetRecPlay];
    [self.RecPlayTab selectTabViewItemAtIndex:0];
    //   [self.window setIsVisible:NO];
@@ -1460,17 +1426,6 @@ enum
 
    
 
-  /*
-    [self.AdminPlayer setAdminProjektArray:self.ProjektArray];
-    
-    [self.AdminPlayer setAdminPlayer:self.LeseboxPfad inProjekt:[self.ProjektPfad lastPathComponent]];
-    //NSLog(@"beginAdminPlayer nach setAdminPlayer");
-    self.Umgebung=3;
-    //NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[ProjektArray description]);
-    
-    [self.AdminPlayer setProjektPopMenu:self.ProjektArray];
-  
-   */
    
    
    

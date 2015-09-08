@@ -209,6 +209,7 @@
 - (void)insMagazinMitPfad:(NSString*)derAufnahmePfad;
 - (void)AufnahmeMarkieren:(id)sender;
 - (BOOL)AufnahmeIstMarkiertAnPfad:(NSString*)derAufnahmePfad;
+- (BOOL)AufnahmeIstVomUserMarkiertAnPfad:(NSString*)derAufnahmePfad;
 - (BOOL)AufnahmeIstMarkiertAnAnmerkungPfad:(NSString*)derAnmerkungPfad;
 - (void)setMark:(BOOL)derStatus;
 - (void)MarkierungEntfernenFuerZeile:(int)dieZeile;
