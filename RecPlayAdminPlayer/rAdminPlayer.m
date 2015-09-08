@@ -3711,27 +3711,31 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 	BOOL erfolg;
 	//NSLog(@"AdminTabNotifikationAktion: note: %@",[note object]);
 	NSDictionary* QuellenDic=[note object];
-	[AdminMarkCheckbox setEnabled:YES];
+   NSLog(@"QuellenDic :%@",[QuellenDic description]);
+	//[AdminMarkCheckbox setEnabled:YES];
 	NSString* Quelle=[QuellenDic objectForKey:@"Quelle"];
 	
-	if ([Quelle isEqualToString:@"AdminView"])
+	if ([Quelle isEqualToString:@"AdminView"]) // von 'Alle Aufnahmen' zu 'nach Namen'
 	  {
-		//NSLog(@"AdminTabNotifikationAktion:  AdminView  Quelle: %@",Quelle);
+		NSLog(@"AdminTabNotifikationAktion:  AdminView  Quelle: %@",Quelle);
 		NSNumber* ZeilenNummer=[QuellenDic objectForKey:@"zeilennnummer"];
 	  	
-		int zeilenNr=(int)[ZeilenNummer floatValue];
+		//int zeilenNr=(int)[ZeilenNummer floatValue];
 
 		  {
-			[zurListeTaste setEnabled:NO];
+           
+			//[zurListeTaste setEnabled:NO];
 			[AdminMarkCheckbox setState:NO];
+         [LehrerMarkCheckbox setState:NO];
 			//[AdminNotenfeld setEnabled:NO];
 			//NSLog(@"AdminAktuellerLeser: %@  AdminAktuelleAufnahme: %@",AdminAktuellerLeser,AdminAktuelleAufnahme);
 
-			if ([self.AdminAktuellerLeser length]&&[AdminAktuelleAufnahme length]&&Moviegeladen&&Textchanged)
+			if ([self.AdminAktuellerLeser length]&&[AdminAktuelleAufnahme length]&&Textchanged)
 			  {
+              [self Aufnahmezuruecklegen];
 				//NSLog(@"save in Notification");
-				BOOL OK=[self saveKommentarFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
-				Moviegeladen=NO;
+				//BOOL OK=[self saveKommentarFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
+				//Moviegeladen=NO;
 				//Textchanged=NO;
 			  }
 			
@@ -3748,10 +3752,10 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 		Textchanged=NO;
 	  }
 	  
-	if ([Quelle isEqualToString:@"AufnahmenTable"])
+	if ([Quelle isEqualToString:@"AufnahmenTable"]) // nach Namen
 	{
-		//NSLog(@"AdminTabNotifikationAktion:  AufnahmenTable  Quelle: %@",Quelle);
-		//NSLog(@"QuellenDic :%@",[QuellenDic description]);
+		NSLog(@"AdminTabNotifikationAktion:  AufnahmenTable  Quelle: %@",Quelle);
+		
 		NSNumber* ZeilenNummer=[QuellenDic objectForKey:@"zeilennummer"];
 	  	
 		int zeilenNr=[ZeilenNummer intValue];

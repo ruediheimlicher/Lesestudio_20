@@ -4081,7 +4081,8 @@ QTMovie* qtMovie;
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
    BOOL umschalten=YES;
-   //NSLog(@"vor shouldSelectTabViewItem: UserMarkCheckbox: %d",[UserMarkCheckbox state]);
+   //NSLog(@"vor shouldSelectTabViewItem");
+   //NSLog(@"vor shouldSelectTabViewItem: UserMarkCheckbox: %d",[self.UserMarkCheckbox state]);
    if ([[tabViewItem label]isEqualToString:@"Archiv"])
 	  {
         if ([self.ArchivnamenPop indexOfSelectedItem]==0)

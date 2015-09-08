@@ -348,11 +348,11 @@ NSLog(@"tempName: %@",tempName);
 
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
-	//NSLog(@"tabView shouldSelectTabViewItem: %@",[[tabViewItem identifier]description]);
+	NSLog(@"tabView shouldSelectTabViewItem: %@",[[tabViewItem identifier]description]);
 	//NSLog(@"shouldSelectTabViewItem: rowData: %@",[[AdminDaten rowData] description]);	
 	
 		//[self.PlayTaste setEnabled:YES];
-		[zurListeTaste setEnabled:NO];
+		//[zurListeTaste setEnabled:NO];
 		
 	if ([[tabViewItem identifier]intValue]==1)//zurück zu 'alle Aufnahmen'
 	{
@@ -362,6 +362,8 @@ NSLog(@"tempName: %@",tempName);
 		NSLog(@"nach Namen vor : AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
 
 		long Zeile=[AufnahmenTable selectedRow];
+      if (Zeile>=0)
+      {
 		AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:Zeile]objectForKey:@"aufnahme"];
 		NSLog(@"Tab nach Namen: Zeile: %ld AdminAktuelleAufnahme: %@",Zeile,AdminAktuelleAufnahme);
 
@@ -371,7 +373,7 @@ NSLog(@"tempName: %@",tempName);
 		NSNotificationCenter * nc;
 		nc=[NSNotificationCenter defaultCenter];
 		[nc postNotificationName:@"AdminChangeTab" object:tempZeilenDic];
-
+      }
 		[self clearKommentarfelder];
 
 		if ([LesernamenPop indexOfSelectedItem])
@@ -395,15 +397,16 @@ NSLog(@"tempName: %@",tempName);
 	
 	if ([[tabViewItem identifier]intValue]==2)//zu 'Nach Namen'
 	{
-		//NSLog(@"Tab zu 'nach Namen'");
+		NSLog(@"Tab zu 'nach Namen'");
 		if ([NamenListe numberOfSelectedRows])//es ist eine zeile in der self.NamenListe selektiert
 		{
 			
 			int  Zeile;
-		//	Zeile=[NamenListe selectedRow];//selektierte Zeile in der self.NamenListe
+         Zeile=[NamenListe selectedRow];//selektierte Zeile in der self.NamenListe
 			//NSLog(@"nach Namen: Zeile: %d AdminAktuelleAufnahme: %@",Zeile,AdminAktuelleAufnahme);
 			
-			
+			if (Zeile >=0)
+         {
 			NSNumber* ZeilenNumber=[NSNumber numberWithInt:Zeile];
 			
 			NSMutableDictionary* AdminZeilenDic=[NSMutableDictionary dictionaryWithObject:ZeilenNumber forKey:@"zeilennummer"];
@@ -417,13 +420,13 @@ NSLog(@"tempName: %@",tempName);
 			NSNotificationCenter * nc;
 			nc=[NSNotificationCenter defaultCenter];
 			[nc postNotificationName:@"AdminChangeTab" object:AdminZeilenDic];
-			
+         
 			[PlayTaste setEnabled:AufnahmeDa];
 			
 			
 			[LesernamenPop selectItemWithTitle:Lesername];
 			[self setAufnahmenVonLeser:Lesername];
-			
+			}
 			[[self.view window]makeFirstResponder:AufnahmenTable];
 		//	NSString* KeineAufnahmenString=NSLocalizedString(@"No Records",@"Keine Aufnahmen");
 			
@@ -438,7 +441,7 @@ NSLog(@"tempName: %@",tempName);
 			[LesernamenPop selectItemAtIndex:0];
 			[PlayTaste setEnabled:NO];
 			[self clearKommentarfelder];
-			return 0; // nicht umschalten
+			return NO; // nicht umschalten
 		}
 	}
 	
