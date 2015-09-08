@@ -448,7 +448,8 @@ OptionBString=[[NSString alloc]init];
    [NamenListe setToolTip:@"Liste der Leser im aktuellen Projekt.\nKann im Menü 'Admin->self.NamenListe bearbeiten' verändert werden."];
    [ExportierenTaste setToolTip:@"Exportieren der aktuellen Aufnahme in verschiedenen Formaten."];
    [LoeschenTaste setToolTip:@"Aktuelle Aufnahme mit verschiedenen Optionen entfernen."];
-   [AdminMarkCheckbox setToolTip:@"Aktuelle Aufnahme markieren"];
+   //[AdminMarkCheckbox setToolTip:@"Aktuelle Aufnahme markieren"];
+   [LehrerMarkCheckbox setToolTip:@"Aktuelle Aufnahme markieren"];
    [UserMarkCheckbox setToolTip:@"Zeigt, ob der Leser die aktuelle Aufnahme markiert hat."];
    [AdminKommentarView setToolTip:@"Anmerkungen für den Leser schreiben"];
    [AdminTitelfeld setToolTip:@"Titel der aktuellen Aufnahme"];
@@ -470,8 +471,8 @@ OptionBString=[[NSString alloc]init];
    [UserMarkCheckbox setToolTip:@"Vom Leser gesetzte Marke."];
    [AufnahmenTab setDelegate:self];
    // [[self view]addSubview:self.MarkCheckbox ];
-   [AdminMarkCheckbox setEnabled:YES];
-   NSLog(@"AdminPlayer awake end \nAdminMarkCheckbox: %@ \nUserMarkCheckbox: %@\nsubviews: %@", [AdminMarkCheckbox description],[UserMarkCheckbox description], [[[self view]subviews]description]);
+   [LehrerMarkCheckbox setEnabled:YES];
+   NSLog(@"AdminPlayer awake end \nAdminMarkCheckbox: %@ \nUserMarkCheckbox: %@\nsubviews: %@", [LehrerMarkCheckbox description],[UserMarkCheckbox description], [[[self view]subviews]description]);
    
    [[NSNotificationCenter defaultCenter] addObserver:self
           selector:@selector(MarkCheckboxAktion:)
