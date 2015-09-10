@@ -111,7 +111,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    
    [self.view.window setDelegate:self];
    
-   NSLog(@"NSAlertDefaultReturn: %d",NSAlertDefaultReturn);
+   //NSLog(@"NSAlertDefaultReturn: %d",NSAlertDefaultReturn);
    NSNotificationCenter * nc;
    nc=[NSNotificationCenter defaultCenter];
    [nc addObserver:self
@@ -310,6 +310,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    [[self.ModusMenu itemWithTag:kAdminTag] setTarget:self];//Admin
    [[self.ModusMenu itemWithTag:kKommentarTag] setTarget:self];//Kommentar
    [[self.ModusMenu itemWithTag:kEinstellungenTag] setTarget:self];//Kommentar
+   
    //NSLog(@"Menu: %@ setAutoenablesItems: %d",[[ModusMenu itemWithTag:30002] title],[ModusMenu autoenablesItems]);
    //[AblaufMenu setDelegate:self];
    [[self.AblaufMenu itemWithTag:kAndereLeseboxTag] setTarget:self];//neue Lesebox
@@ -582,11 +583,11 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    
    
    self.mainstoryboard = [NSStoryboard storyboardWithName:@"Main" bundle:nil];
-   NSLog(@"mainstoryboard: %@",[self.mainstoryboard description]);
+   //NSLog(@"mainstoryboard: %@",[self.mainstoryboard description]);
 //   self.Testfenster = [rTestfensterController new];
    self.Testfenster = [self.mainstoryboard instantiateControllerWithIdentifier:@"testfenster"];
    //[[[self.Testfenster view]window] makeKeyAndOrderFront:nil];
-    NSLog(@"Testfenster: %@",[self.Testfenster description]);
+    //NSLog(@"Testfenster: %@",[self.Testfenster description]);
 
    // EinstellungenFenster init
    self.EinstellungenFenster = [self.mainstoryboard instantiateControllerWithIdentifier:@"einstellungenfenster"];
@@ -610,7 +611,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    
     // [self presentViewController:Testfenster animated:YES completion:nil];
    // http://beardforhire.com/blog/super-simple-custom-segues/
-   NSLog(@"startTestfeld self.Testfenster: %@",[self.Testfenster description]);
+   //NSLog(@"startTestfeld self.Testfenster: %@",[self.Testfenster description]);
    NSStoryboardSegue* adminsegue = [[NSStoryboardSegue alloc] initWithIdentifier:@"testfeld" source:self destination:self.Testfenster];
    [self prepareForSegue:adminsegue sender:sender];
    //[adminsegue perform];
@@ -628,7 +629,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 
 - (void)prepareForSegue:(NSStoryboardSegue *)segue sender:(id)sender
 {
-   NSLog(@"prepareForSegue %@",[segue description]);
+   //NSLog(@"prepareForSegue %@",[segue description]);
    if ([[segue identifier] isEqualToString:@"admindata"])
    {
       
@@ -638,7 +639,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    
    if ([[segue identifier] isEqualToString:@"testfeld"])
    {
-      NSLog(@"prepareForSegue testfeld");
+      //NSLog(@"prepareForSegue testfeld");
       // Get destination view
       self.Testfenster = [segue destinationController];
       [self.Testfenster setzeAnzeigeFeld:@"First"];
@@ -657,7 +658,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    
    if ([[segue identifier] isEqualToString:@"einstellungenanzeigefeld"])// zweiter kontakt
    {
-      NSLog(@"prepareForSegue einstellungenanzeigefeld");
+      //NSLog(@"prepareForSegue einstellungenanzeigefeld");
       
  //     [self.EinstellungenFenster setzeAnzeigeFeld:@"*Anzeige*"];
    
@@ -666,7 +667,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    
     if ([[segue identifier] isEqualToString:@"einstellungensegue"]) // erster kontakt
     {
-       NSLog(@"prepareForSegue einstellungensegue");
+       //NSLog(@"prepareForSegue einstellungensegue");
        self.EinstellungenFenster = (rEinstellungen*)segue.destinationController ;
        
        [self.EinstellungenFenster setBewertung:YES];
@@ -677,7 +678,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    
    if ([[segue identifier] isEqualToString:@"adminplayersegue"]) // erster kontakt
    {
-      NSLog(@"prepareForSegue adminplayersegue");
+      //NSLog(@"prepareForSegue adminplayersegue");
       self.AdminPlayer = (rAdminPlayer*)segue.destinationController ;
  
    }
@@ -685,7 +686,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    // adminanzeigesegue
    if ([[segue identifier] isEqualToString:@"adminanzeigesegue"]) // erster kontakt
    {
-      NSLog(@"prepareForSegue adminanzeigesegue");
+      //NSLog(@"prepareForSegue adminanzeigesegue");
        self.AdminPlayer = (rAdminPlayer*)segue.destinationController ;
       [self.AdminPlayer setAdminProjektArray:self.ProjektArray];
       
@@ -703,7 +704,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier
                                   sender:(id)sender
 {
-   NSLog(@"shouldPerformSegueWithIdentifier segue: %@",identifier);
+   //NSLog(@"shouldPerformSegueWithIdentifier segue: %@",identifier);
    
    
    if ([identifier isEqualToString:@"einstellungensegue"])
@@ -1809,7 +1810,7 @@ QTMovie* qtMovie;
    // * [RecPlayFenster makeFirstResponder:RecPlayFenster];
    [self.KommentarView setString:@""];
    [self.KommentarView setEditable:NO];
-   
+   [self.Zeitfeld setStringValue:@""];
    
    self.QTKitGesamtAufnahmezeit=0;
    
@@ -3247,8 +3248,22 @@ QTMovie* qtMovie;
    {
       return;
    }
+   [self.StartRecordKnopf setEnabled:YES];
+   [self.StartPlayKnopf setEnabled:NO];
+   [self.StopPlayKnopf setEnabled:NO];
+   [self.ForewardKnopf setEnabled:NO];
+   [self.RewindKnopf setEnabled:NO];
+   [self.BackKnopf setEnabled:NO];
+   [self.SichernKnopf setEnabled:NO];
+   [self.WeitereAufnahmeKnopf setEnabled:NO];
+   [self.LogoutKnopf setEnabled:NO];
+   [self.RewindKnopf setEnabled:NO];
+   [self.ForewardKnopf setEnabled:NO];
+   [self.KommentarView setString:@""];
+   [self.KommentarView setEditable:NO];
 
-   NSLog(@"switchAdminPlayer start");
+
+   //NSLog(@"switchAdminPlayer start");
    [Utils stopTimeout];
    if (self.AdminZugangOK || [self checkAdminZugang])
    {
@@ -3460,7 +3475,7 @@ QTMovie* qtMovie;
 - (NSString*)KommentarVon:(NSString*) derKommentarString
 {
    NSArray* tempMarkArray=[derKommentarString componentsSeparatedByString:@"\r"];
-   NSLog(@"KommentarVon: anz Components: %d",[tempMarkArray count]);
+   //NSLog(@"KommentarVon: anz Components: %d",[tempMarkArray count]);
    if ([tempMarkArray count]==6)//noch keine Zeile für Mark
    {
       NSString* tempKommentarString=[tempMarkArray objectAtIndex:5];
@@ -3479,7 +3494,7 @@ QTMovie* qtMovie;
          pos++;
       }//while
       tempKommentarString=[tempKommentarString substringFromIndex:pos];
-      NSLog(@" *** 6 el ***  tempKommentarString: %@", tempKommentarString);
+      //NSLog(@" *** 6 el ***  tempKommentarString: %@", tempKommentarString);
       
       return tempKommentarString;
    }//noch keine Zeile für Mark
@@ -3487,7 +3502,7 @@ QTMovie* qtMovie;
    {
       //		NSString* tempKommentarString=[tempMarkArray objectAtIndex:Kommentar];
       NSString* tempKommentarString=[tempMarkArray lastObject];
-      NSLog(@" *** else  ***  tempKommentarString: %@", tempKommentarString);
+      //NSLog(@" *** else  ***  tempKommentarString: %@", tempKommentarString);
       
       //		return [tempMarkArray objectAtIndex:Kommentar];
       return [tempMarkArray lastObject];
@@ -4119,7 +4134,19 @@ QTMovie* qtMovie;
    //NSLog(@"vor shouldSelectTabViewItem: UserMarkCheckbox: %d",[self.UserMarkCheckbox state]);
    if ([[tabViewItem label]isEqualToString:@"Archiv"])
 	  {
-        
+        [self.StartRecordKnopf setEnabled:YES];
+        [self.StartPlayKnopf setEnabled:NO];
+        [self.StopPlayKnopf setEnabled:NO];
+        [self.ForewardKnopf setEnabled:NO];
+        [self.RewindKnopf setEnabled:NO];
+        [self.BackKnopf setEnabled:NO];
+        [self.SichernKnopf setEnabled:NO];
+        [self.WeitereAufnahmeKnopf setEnabled:NO];
+         [self.RewindKnopf setEnabled:NO];
+        [self.ForewardKnopf setEnabled:NO];
+        [self.KommentarView setString:@""];
+        [self.KommentarView setEditable:NO];
+
         if ([self.ArchivnamenPop indexOfSelectedItem]==0)
         {
            NSImage* StartRecordImg=[NSImage imageNamed:@"recordicon_k.gif"];

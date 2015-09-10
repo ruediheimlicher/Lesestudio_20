@@ -349,7 +349,7 @@
 
 - (void)toStartTempAufnahme
 {
-   NSLog(@"AVAbspielplayer toStartTempAufnahme");
+   //NSLog(@"AVAbspielplayer toStartTempAufnahme");
    {
       AVAbspielplayer.currentTime = 0;
       [AVAbspielplayer stop];

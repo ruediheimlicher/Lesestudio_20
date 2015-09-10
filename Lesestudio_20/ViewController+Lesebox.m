@@ -1385,12 +1385,12 @@ enum
     //[AdminPlayer setLeseboxPfad:LeseboxPfad];
     }
    
-   [self.AblaufMenu setDelegate:self.AdminPlayer];
-   [self.ModusMenu setDelegate:self.AdminPlayer];
-   [self.RecorderMenu setDelegate:self.AdminPlayer];
+//   [self.AblaufMenu setDelegate:self.AdminPlayer];
+//   [self.ModusMenu setDelegate:self.AdminPlayer];
+//   [self.RecorderMenu setDelegate:self.AdminPlayer];
 
-   [[self.ModusMenu itemWithTag:kRecPlayTag] setTarget:self.AdminPlayer];//Recorder
-   [[self.ModusMenu itemWithTag:kAdminTag] setTarget:self.AdminPlayer];//Admin
+//   [[self.ModusMenu itemWithTag:kRecPlayTag] setTarget:self.AdminPlayer];//Recorder
+//   [[self.ModusMenu itemWithTag:kAdminTag] setTarget:self.AdminPlayer];//Admin
 
     [Utils stopTimeout];
     //[AdminPlayer showWindow:self];

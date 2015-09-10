@@ -565,7 +565,7 @@
    [Utils stopTimeout];
    BOOL erfolg=YES;
    NSLog(@"saveRecord tag: %ld Leser: %@ ",(long)[sender tag],self.Leser);
-   NSLog(@"saveRecord hiddenAufnahmePfad: %@",self.hiddenAufnahmePfad);
+   //NSLog(@"saveRecord hiddenAufnahmePfad: %@",self.hiddenAufnahmePfad);
    if ([self.Leser length]==0)
    {
       long Antwort=NSRunAlertPanel(@"Wer hat gelesen?", @"Vor dem Sichern muss ein Name ausgewählt sein",@"OK", NULL,NULL);
@@ -898,10 +898,9 @@
          [self.LogoutKnopf setEnabled:NO];
          [self.RewindKnopf setEnabled:NO];
          [self.ForewardKnopf setEnabled:NO];
-         
-         //*        [self.RecPlayFenster makeFirstResponder:RecPlayFenster];
          [self.KommentarView setString:@""];
          [self.KommentarView setEditable:NO];
+     
          self.QTKitGesamtAufnahmezeit=0;
          
       }break;

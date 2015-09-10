@@ -228,8 +228,9 @@ const short kRecPlayUmgebung=0;
    
    selektierteAufnahmenTableZeile=-1;
    Textchanged=NO;
-
-   
+   NSLog(@"farbe");
+   NSColor* FensterFarbe=[NSColor colorWithDeviceRed: 150.0/255 green:249.0/255 blue:150.0/255 alpha:1.0];
+   [self.view.window setBackgroundColor:FensterFarbe];
 }
 
 
@@ -430,8 +431,8 @@ OptionBString=[[NSString alloc]init];
    //	NSColor* FensterFarbe=[NSColor colorWithDeviceRed:94.0/255 green:249.0/255 blue:94.0/255 alpha:1.0];
    NSColor* FensterFarbe=[NSColor colorWithDeviceRed: 150.0/255 green:249.0/255 blue:150.0/255 alpha:1.0];
    
-   [AdminFenster setBackgroundColor:FensterFarbe];
-   
+   [self.view.window setBackgroundColor:FensterFarbe];
+   [self.view.window display];
    AufnahmenDicArray=[[NSMutableArray alloc]initWithCapacity:0];
    [[[AufnahmenTable tableColumnWithIdentifier:@"usermark"]dataCell] setEnabled:NO];
    
@@ -472,7 +473,7 @@ OptionBString=[[NSString alloc]init];
    [AufnahmenTab setDelegate:self];
    // [[self view]addSubview:self.MarkCheckbox ];
    [LehrerMarkCheckbox setEnabled:YES];
-   NSLog(@"AdminPlayer awake end \nAdminMarkCheckbox: %@ \nUserMarkCheckbox: %@\nsubviews: %@", [LehrerMarkCheckbox description],[UserMarkCheckbox description], [[[self view]subviews]description]);
+   //NSLog(@"AdminPlayer awake end \nAdminMarkCheckbox: %@ \nUserMarkCheckbox: %@\nsubviews: %@", [LehrerMarkCheckbox description],[UserMarkCheckbox description], [[[self view]subviews]description]);
    
    [[NSNotificationCenter defaultCenter] addObserver:self
           selector:@selector(MarkCheckboxAktion:)
@@ -480,7 +481,7 @@ OptionBString=[[NSString alloc]init];
             object:nil];
    
   // [AufnahmenTable setDoubleAction:DoppelSelektor];
-   NSLog(@"setAdminplayer AufnahmenDicArray: %@",[AufnahmenDicArray description]);
+   //NSLog(@"setAdminplayer AufnahmenDicArray: %@",[AufnahmenDicArray description]);
 
    [AufnahmenTable setDelegate:self];
    [AufnahmenTable setDataSource:self];
@@ -796,7 +797,7 @@ OptionBString=[[NSString alloc]init];
          // m4a entfernen, txt anfuegen
          tempAnmerkungPfad = [[tempAnmerkungPfad stringByDeletingPathExtension]stringByAppendingPathExtension:@"txt"];
          
-         NSLog(@"setAdminPlayer tempAnmerkungPfad: %@",tempAnmerkungPfad);
+         //NSLog(@"setAdminPlayer tempAnmerkungPfad: %@",tempAnmerkungPfad);
 			BOOL AdminMark=NO;
 			//
 			if ([Filemanager fileExistsAtPath:tempAnmerkungPfad])
@@ -869,7 +870,7 @@ OptionBString=[[NSString alloc]init];
 				
 			}
 		}
-		NSLog(@"AufnahmeFilesArray nach wenden: %@   index: %d",[AufnahmeFilesArray description],i);
+		//NSLog(@"AufnahmeFilesArray nach wenden: %@   index: %d",[AufnahmeFilesArray description],i);
 		//
 		
 		[AdminDaten setAufnahmeFiles:AufnahmeFilesArray forRow:i];
@@ -1281,7 +1282,7 @@ OptionBString=[[NSString alloc]init];
 		int hit=[[[AdminDaten dataForRow:hitZeile]objectForKey:@"aufnahmen"]intValue];
 		NSString* Leser=[[AdminProjektNamenArray objectAtIndex:hitZeile]description];
 		self.AdminAktuellerLeser=[[AdminProjektNamenArray objectAtIndex:hitZeile]description];
-      NSLog(@"setLeserFuerZeile AdminAktuellerLeser: %@",self.AdminAktuellerLeser);
+ //     NSLog(@"setLeserFuerZeile AdminAktuellerLeser: %@",self.AdminAktuellerLeser);
 
 		//NSLog(@"setLeserFuerZeile    Leser Zeile: %d",hitZeile);
 		//NSLog(@"Leser: %@",[[AdminProjektNamenArray objectAtIndex:[sender selectedRow]]description]);
@@ -1307,7 +1308,7 @@ OptionBString=[[NSString alloc]init];
 		tempAufnahmePfad=[tempAufnahmePfad stringByAppendingPathComponent:AdminAktuelleAufnahme];
        AdminPlayPfad =tempAufnahmePfad ;
       
-      NSLog(@"setLeserFuerZeile AdminAktuellerLeser: %@ AdminAktuelleAufnahme: %@",self.AdminAktuellerLeser,AdminAktuelleAufnahme);
+ //     NSLog(@"setLeserFuerZeile AdminAktuellerLeser: %@ AdminAktuelleAufnahme: %@",self.AdminAktuellerLeser,AdminAktuelleAufnahme);
 
 		//NSFileManager *Filemanager=[NSFileManager defaultManager];
 		//if ([Filemanager fileExistsAtPath
@@ -1529,7 +1530,7 @@ OptionBString=[[NSString alloc]init];
 		tempAdminAufnahmePfad=[tempAdminAufnahmePfad stringByAppendingPathComponent:tempAufnahme];
 		if ([Filemanager fileExistsAtPath:tempAdminAufnahmePfad])//Aufnahme gibt es
 		{
-			NSLog(@"Aufnahme da");
+			//NSLog(@"Aufnahme da");
 		}
 		else
 		{
@@ -1548,11 +1549,11 @@ OptionBString=[[NSString alloc]init];
 		if (istDirectory)
 		{
 			tempAdminKommentarPfad=[tempAdminKommentarPfad stringByAppendingPathComponent:KommentarOrdnerString];
-			NSLog(@"saveKommentarFuerLeser: tempAdminKommentarPfad: %@",tempAdminKommentarPfad);
+			//NSLog(@"saveKommentarFuerLeser: tempAdminKommentarPfad: %@",tempAdminKommentarPfad);
 			if (![Filemanager fileExistsAtPath:tempAdminKommentarPfad isDirectory:&istDirectory])//noch kein Kommentarordner des Lesers ist da
 			{
 				erfolg=[Filemanager createDirectoryAtPath:tempAdminKommentarPfad  withIntermediateDirectories:NO attributes:NULL error:NULL];
-				NSLog(@"saveKommentarFuerLeser: tempAdminKommentarPfad: %@ erfolg: %d",tempAdminKommentarPfad,erfolg);
+				//NSLog(@"saveKommentarFuerLeser: tempAdminKommentarPfad: %@ erfolg: %d",tempAdminKommentarPfad,erfolg);
 
 				if (!erfolg)
 				{
@@ -1565,7 +1566,7 @@ OptionBString=[[NSString alloc]init];
 			tempAdminKommentarPfad=[tempAdminKommentarPfad stringByAppendingPathComponent:[tempAufnahme stringByDeletingPathExtension]];
 			
          tempAdminKommentarPfad= [tempAdminKommentarPfad stringByAppendingPathExtension:@"txt"];
-         NSLog(@"in saveKommentarFuerLeser: tempAdminKommentarPfad: %@",tempAdminKommentarPfad);
+         //NSLog(@"saveKommentarFuerLeser: tempAdminKommentarPfad: %@",tempAdminKommentarPfad);
 			//Kopfstring aufbauen
 			tempKopfString=[NSString stringWithString:self.AdminAktuellerLeser];
 			tempKopfString=[tempKopfString stringByAppendingString:@"\r"];
@@ -1985,7 +1986,7 @@ OptionBString=[[NSString alloc]init];
    
    // von setLeser
    
-   NSLog(@"AufnahmeInPlayer AdminAktuellerLeser: %@ AdminAktuelleAufnahme: %@",self.AdminAktuellerLeser,AdminAktuelleAufnahme);
+ //  NSLog(@"AufnahmeInPlayer AdminAktuellerLeser: %@ AdminAktuelleAufnahme: %@",self.AdminAktuellerLeser,AdminAktuelleAufnahme);
    
    //   BOOL OK=[self setKommentarFuerLeser: AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
    
@@ -2117,7 +2118,7 @@ OptionBString=[[NSString alloc]init];
    
    // von setLeser
   
-   NSLog(@"Aufnahmebereitstellen AdminAktuellerLeser: %@ AdminAktuelleAufnahme: %@",self.AdminAktuellerLeser,AdminAktuelleAufnahme);
+ //  NSLog(@"Aufnahmebereitstellen AdminAktuellerLeser: %@ AdminAktuelleAufnahme: %@",self.AdminAktuellerLeser,AdminAktuelleAufnahme);
    
 //   BOOL OK=[self setKommentarFuerLeser: AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
    
@@ -2312,7 +2313,7 @@ OptionBString=[[NSString alloc]init];
    //[AdminMarkCheckbox setState:NO];
    //[self.MarkCheckbox setEnabled:NO];
    
-    NSLog(@"\n\nAufnahmezuruecklegen end");
+    NSLog(@"Aufnahmezuruecklegen end\n\n");
 }
 
 - (void)backZurListe:(id)sender
@@ -2500,7 +2501,7 @@ OptionBString=[[NSString alloc]init];
    
     posint =(int)pos;
 
-   NSLog(@"AdminPlayer setAbspielanzeigeAnPos dur: %2.2f pos: %2.2f posint: %d",dur,pos,posint);
+   //NSLog(@"AdminPlayer setAbspielanzeigeAnPos dur: %2.2f pos: %2.2f posint: %d",dur,pos,posint);
    
    if (dur - pos < 0.1)
    {
@@ -2512,7 +2513,7 @@ OptionBString=[[NSString alloc]init];
    //NSLog(@"duration: %2.2d",AufnahmeZeit);
    int Minuten = posint/60;
    int Sekunden =posint%60;
-   NSLog(@"Minuten: %d Sekunden: %d",Minuten,Sekunden);
+   //NSLog(@"Minuten: %d Sekunden: %d",Minuten,Sekunden);
    NSString* MinutenString;
    
    NSString* SekundenString;
@@ -2532,7 +2533,7 @@ OptionBString=[[NSString alloc]init];
    {
       MinutenString=[NSString stringWithFormat:@"%d",Minuten];
    }
-   NSLog(@"MinutenString: %@ SekundenString: %@",MinutenString,SekundenString);
+   //NSLog(@"MinutenString: %@ SekundenString: %@",MinutenString,SekundenString);
    [AbspieldauerFeld setStringValue:[NSString stringWithFormat:@"%@:%@",MinutenString, SekundenString]];
    
    
@@ -3611,7 +3612,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 			case  NSAlertDefaultReturn://Papierkorb
          case NSAlertFirstButtonReturn:
 			  {
-				  NSLog(@"NSAlertDefaultReturn: Papier %d",returnCode);
+				  //NSLog(@"NSAlertDefaultReturn: Papier %d",returnCode);
 				  if ([Filemanager fileExistsAtPath:AdminPlayPfad])
 					{
 					  
@@ -3768,7 +3769,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 	//[AdminMarkCheckbox setEnabled:NO];
 	//[AdminMarkCheckbox setEnabled:YES];
 	NSString* Quelle=[QuellenDic objectForKey:@"Quelle"];
-	NSLog(@"AdminZeilenNotifikationAktion: Quelle: %@",Quelle);
+	//NSLog(@"AdminZeilenNotifikationAktion: Quelle: %@",Quelle);
 	
    
    [self Aufnahmezuruecklegen];
@@ -3784,11 +3785,11 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 
 		if ((selektierteZeile>=0)&&(selektierteZeile != nextZeilenNr))//selektierte zeile ist nicht -1 wie beim ersten Klick
 		  {
-			NSLog(@"AdminAktuellerLeser: %@  AdminAktuelleAufnahme: %@",self.AdminAktuellerLeser,AdminAktuelleAufnahme);
+			//NSLog(@"AdminAktuellerLeser: %@  AdminAktuelleAufnahme: %@",self.AdminAktuellerLeser,AdminAktuelleAufnahme);
 
 			if ([self.AdminAktuellerLeser length]&&[AdminAktuelleAufnahme length]&&Moviegeladen&&Textchanged)
 			  {
-				NSLog(@"AdminZeilenNotifikationAktion: save Kommentar in Notification");
+				//NSLog(@"AdminZeilenNotifikationAktion: save Kommentar in Notification");
 				BOOL OK=[self saveKommentarFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
 				Moviegeladen=NO;
 				//Textchanged=NO;
@@ -3807,7 +3808,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
         
 //		[self setLeserFuerZeile:nextZeilenNr];
 		int AnzahlAufnahmenFuerZeile=[self AnzahlAufnahmenFuerZeile:nextZeilenNr];
-		NSLog(@"AdminZeilenNotifikationAktion: nextZeilenNr: %d AnzahlAufnahmenFuerZeile: %d",nextZeilenNr,AnzahlAufnahmenFuerZeile);
+		//NSLog(@"AdminZeilenNotifikationAktion: nextZeilenNr: %d AnzahlAufnahmenFuerZeile: %d",nextZeilenNr,AnzahlAufnahmenFuerZeile);
 		if ((nextZeilenNr>=0)&&AnzahlAufnahmenFuerZeile)
 		  {
 			[PlayTaste setEnabled:YES];
@@ -3839,7 +3840,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 	if ([Quelle isEqualToString:@"AufnahmenTable"])
 	{
       NSDictionary* QuellenDic=[note object];
-		NSLog(@"\n\nAdminZeilenNotifikationAktion:  AufnahmenTable  Quelle: %@",Quelle);
+		//NSLog(@"\n\nAdminZeilenNotifikationAktion:  AufnahmenTable  Quelle: %@",Quelle);
 		NSNumber* ZeilenNummer=[QuellenDic objectForKey:@"zeilennummer"];
 	  	
 		int zeilenNr=[ZeilenNummer intValue];
