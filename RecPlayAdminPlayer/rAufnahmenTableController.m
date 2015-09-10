@@ -186,12 +186,13 @@ NSLog(@"tempName: %@",tempName);
 	NSNotificationCenter * nc;
 	nc=[NSNotificationCenter defaultCenter];
 //	[nc postNotificationName:@"AdminselektierteZeile" object:tempZeilenDic];
+   
+   // von AdminZeilenNotifikationAktion
    {
      // NSDictionary* QuellenDic=[note object];
       //NSLog(@"\n\nAdminZeilenNotifikationAktion:  AufnahmenTable  Quelle: %@",Quelle);
       NSNumber* ZeilenNummer=[tempZeilenDic objectForKey:@"zeilennummer"];
       
-      int zeilenNr=[ZeilenNummer intValue];
       
       [zurListeTaste setEnabled:NO];
       [PlayTaste setEnabled:YES];
@@ -202,7 +203,7 @@ NSLog(@"tempName: %@",tempName);
       //NSString* tempAktuellerLeser=[tempZeilenDic objectForKey:@"leser"];
       NSString* tempAktuelleAufnahme=[tempZeilenDic objectForKey:@"aufnahme"];
       
-      //NSLog(@" zeilenNr: %d derLeser: %@  AdminAktuelleAufnahme: %@",zeilenNr,derLeser,AdminAktuelleAufnahme);
+      //NSLog(@" row: %d derLeser: %@  AdminAktuelleAufnahme: %@",zeilenNr,derLeser,AdminAktuelleAufnahme);
       if ([derLeser length]&&[AdminAktuelleAufnahme length] && Textchanged)
       {
          //NSLog(@"save in Notification");
@@ -337,40 +338,75 @@ NSLog(@"tempName: %@",tempName);
 
 - (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(int)row
 {
-	NSLog(@"AufnahmenTable  shouldSelectRow: %d  selektierteAufnahmenTableZeile: %d" ,row,selektierteAufnahmenTableZeile);
-	int bisherSelektierteZeile=selektierteAufnahmenTableZeile;//bisher selektierte Zeile
-	selektierteAufnahmenTableZeile=row;//neu selektierte Zeile
-	if (bisherSelektierteZeile>=0)
-	{
-	
-	NSNumber* ZeilenNumber=[NSNumber numberWithInt:bisherSelektierteZeile];
-	
-	
-	NSMutableDictionary* NamenZeilenDic=[NSMutableDictionary dictionaryWithObject:ZeilenNumber forKey:@"zeilennummer"];
-	[NamenZeilenDic setObject:@"AufnahmenTable" forKey:@"Quelle"];
-	[NamenZeilenDic setObject:[LesernamenPop titleOfSelectedItem]forKey:@"leser"];//Leser der Aufnahmen im TableView
-	NSString* tempAufnahme=[[AufnahmenDicArray objectAtIndex:bisherSelektierteZeile]objectForKey:@"aufnahme"];//bisher selektierte Aufnahme
-	NSLog(@"AdminAktuelleAufnahme: %@ tempAufnahme: %@", AdminAktuelleAufnahme,tempAufnahme);
-	[NamenZeilenDic setObject:tempAufnahme forKey:@"aufnahme"];
+   NSLog(@"AufnahmenTable  shouldSelectRow: %d  selektierteAufnahmenTableZeile: %d, selectedRow: %d" ,row,selektierteAufnahmenTableZeile, [tableView selectedRow]);
+   
+   int bisherSelektierteZeile=selektierteAufnahmenTableZeile;//bisher selektierte Zeile
+   selektierteAufnahmenTableZeile=row;//neu selektierte Zeile
+   if ([tableView selectedRow]>=0)
+   {
+      [self Aufnahmezuruecklegen];
+   }
+   
+   [AdminKommentarView setEditable:YES];
+   [AdminKommentarView setSelectable:YES];
+   
+   AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:row]objectForKey:@"aufnahme"];
+   self.AdminAktuellerLeser=[LesernamenPop titleOfSelectedItem];
+   [self setPfadFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
+   [self setKommentarFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
+   NSLog(@"AufnahmenTable  shouldSelectRow: %d  AdminAktuelleAufnahme: %@, AdminProjektPfad: %@ AdminPlayPfad. %@" ,row,AdminAktuelleAufnahme, AdminProjektPfad, AdminPlayPfad);
+  
+  
+  [AVAbspielplayer prepareAdminAufnahmeAnURL:[NSURL fileURLWithPath:AdminPlayPfad]];
+   
+   int posint =  [[NSNumber numberWithDouble:[AVAbspielplayer duration]] intValue];
+   
+   int Minuten = posint/60;
+   int Sekunden =posint%60;
+   //NSLog(@"Minuten: %d Sekunden: %d",Minuten,Sekunden);
+   NSString* MinutenString;
+   
+   NSString* SekundenString;
+   if (Sekunden<10)
+   {
+      SekundenString=[NSString stringWithFormat:@"0%d",Sekunden];
+   }
+   else
+   {
+      SekundenString=[NSString stringWithFormat:@"%d",Sekunden];
+   }
+   if (Minuten<10)
+   {
+      MinutenString=[NSString stringWithFormat:@"0%d",Minuten];
+   }
+   else
+   {
+      MinutenString=[NSString stringWithFormat:@"%d",Minuten];
+   }
+   [AufnahmedauerFeld setStringValue:[NSString stringWithFormat:@"%@:%@",MinutenString, SekundenString]];
+   
 
-	//NSLog(@"[AuswahlArray: %@",[[AuswahlArray objectAtIndex:row]description]);
-	NSNotificationCenter * nc;
-	nc=[NSNotificationCenter defaultCenter];
-	[nc postNotificationName:@"AdminselektierteZeile" object:NamenZeilenDic];
-	}//es war eine Zeile selektiert
-	
-	//if (!row==selektierteAufnahmenTableZeile)//aufräumen
-	
-	AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:row]objectForKey:@"aufnahme"];//neu selektierte Aufnahme
-	
-	//[self clearKommentarfelder];
-	[self->PlayTaste setEnabled:YES];
-	[zurListeTaste setEnabled:NO];
-	
-	
-	//aktuelleZeile=row;
-	
-	return YES;
+   
+   [self startAdminPlayer:nil];
+   [self setBackTaste:YES];
+   Moviegeladen=YES;
+   [self.StartPlayKnopf setEnabled:YES];
+   
+   [ExportierenTaste setEnabled:YES];
+   [LoeschenTaste setEnabled:YES];
+   [AdminMarkCheckbox setEnabled:YES];
+   [AdminBewertungfeld setEnabled:YES];
+ 
+   
+   
+   
+ //     [self Aufnahmebereitstellen];
+      
+   
+   //[self clearKommentarfelder];
+   [PlayTaste setEnabled:YES];
+   
+   return YES;
 }
 
 - (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(int)row
@@ -391,11 +427,11 @@ NSLog(@"tempName: %@",tempName);
 		  //NSImage* MarkOnImg=[NSImage imageNamed:@"MarkOnImg.tif"];
 		  if ([[[AufnahmenDicArray objectAtIndex:row]objectForKey:@"adminmark"]intValue])
 		  {
-			  //[cell setImage:[NSImage imageNamed:@"MarkOnImg.tif"]];
+			  [cell setImage:[NSImage imageNamed:@"MarkOnImg.tif"]];
 		  }
 		  else
 		  {
-			  //[cell setImage:[NSImage imageNamed:@"MarkOffImg.tif"]];
+			  [cell setImage:[NSImage imageNamed:@"MarkOffImg.tif"]];
 		  }
 	  }
 }//willDisplayCell
@@ -447,7 +483,11 @@ NSLog(@"tempName: %@",tempName);
 	{
 		
 		NSLog(@"zu 'alle Aufnahmen'");
-		
+      if ([AufnahmenTable selectedRow]>=0)
+      {
+         [self Aufnahmezuruecklegen];
+      }
+
 		NSLog(@"nach Namen vor : AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
 
 		long Zeile=[AufnahmenTable selectedRow];
@@ -487,6 +527,12 @@ NSLog(@"tempName: %@",tempName);
 	if ([[tabViewItem identifier]intValue]==2)//zu 'Nach Namen'
 	{
 		NSLog(@"Tab zu 'nach Namen'");
+      
+      if ([NamenListe selectedRow]>=0)
+      {
+         [self Aufnahmezuruecklegen];
+      }
+
       NSLog(@"AufnahmenDicArray: %@",[AufnahmenDicArray description]);
 		if ([NamenListe numberOfSelectedRows])//es ist eine zeile in der self.NamenListe selektiert
 		{

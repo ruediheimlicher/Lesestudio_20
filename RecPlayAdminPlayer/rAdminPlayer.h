@@ -145,6 +145,9 @@
 	long                    UserExportParID;
    NSMutableArray*			ProjektArray;
 	
+      
+      NSTimer*					posTimer;
+
 // Player
       
 	
@@ -179,6 +182,8 @@
 - (IBAction)setNeuesAdminProjekt:(id)sender;
 
 - (IBAction)setLeser:(id)sender;
+- (IBAction)setZeilenAufnahme:(id)sender;
+
 - (void)setLeserFuerZeile:(int)dieZeile;
 - (BOOL)setPfadFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme;
 - (BOOL)setKommentarFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme;
@@ -196,7 +201,7 @@
 
 - (void)backZurListe:(id)sender;
 - (void)Aufnahmezuruecklegen;
-
+- (void)Aufnahmebereitstellen;
 - (void)setBackTaste:(BOOL)istDefault;
 - (IBAction) AufnahmeLoeschen:(id)sender;
 - (void)EntfernenNotificationAktion:(NSNotification*)note;

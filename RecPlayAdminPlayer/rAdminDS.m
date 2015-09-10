@@ -340,7 +340,7 @@ return index;
 			while(eineAufnahme=[AufnahmenEnumerator nextObject])//Aufnahmen für Menu
          {
             [cell addItemWithTitle:eineAufnahme];
-            int menuIndex=[cell indexOfItemWithTitle:eineAufnahme];
+            double menuIndex=[cell indexOfItemWithTitle:eineAufnahme];
             //NSLog(@"eineAufnahme: %@ index: %d  menuIndex: %d",eineAufnahme,index,menuIndex);
             
             if ([[MarkArray objectAtIndex:row]count])

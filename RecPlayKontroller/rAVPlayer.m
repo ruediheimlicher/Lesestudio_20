@@ -66,7 +66,7 @@
    
    [AVAbspielplayer prepareToPlay];
    double dur = AVAbspielplayer.duration;
-   
+   haltzeit=0;
    NSLog(@"prepareAdminAufnahmeAnURL err: %@ dur: %f",err, dur);
    
 }
@@ -89,16 +89,26 @@
       haltzeit = 0;
       [AVAbspielplayer play];
       
-      if ( [posTimer isValid])
+      if ( [adminposTimer isValid])
       {
-         [posTimer invalidate];
+         [adminposTimer invalidate];
       }
-      posTimer=[NSTimer scheduledTimerWithTimeInterval:0.1
+ 
+      /*
+      NSTimer* tempTimer=[NSTimer scheduledTimerWithTimeInterval:0.1
                                                 target:self
                                               selector:@selector(posAnzeigeFunktion:)
+                                              userInfo:nil
+                                               repeats:YES];
+      */
+
+      adminposTimer=[NSTimer scheduledTimerWithTimeInterval:0.1
+                                                target:self
+                                              selector:@selector(adminPosAnzeigeFunktion:)
                                               userInfo:NULL
                                                repeats:YES];
-      
+      NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+      [runLoop addTimer:adminposTimer forMode:NSDefaultRunLoopMode];
       
    }
    else
@@ -130,7 +140,7 @@
       NSError* err;
       AVAbspielplayer = [[AVAudioPlayer alloc] initWithContentsOfURL: [NSURL fileURLWithPath:  self.hiddenAufnahmePfad]
                                                                error: &err];
-      NSLog(@"playAufnahme err: %@",err);
+      //NSLog(@"playAufnahme err: %@",err);
       [AVAbspielplayer prepareToPlay];
       double dur = AVAbspielplayer.duration;
       haltzeit = 0;
@@ -145,7 +155,8 @@
                                                         selector:@selector(posAnzeigeFunktion:)
                                                         userInfo:NULL
                                                          repeats:YES];
-
+      NSRunLoop* runloop = [NSRunLoop currentRunLoop];
+      [runloop addTimer:posTimer forMode:NSRunLoopCommonModes];
       
    }
   // else
@@ -170,7 +181,7 @@
    
    if (pos)
    {
-  //    NSLog(@"pos: %f dur: %f",pos,dur);
+      NSLog(@"Player posAnzeigeFunktion pos: %f dur: %f",pos,dur);
       NSNotificationCenter * nc=[NSNotificationCenter defaultCenter];
       [nc postNotificationName:@"abspielpos" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                    [NSNumber numberWithDouble:pos] ,@"pos",
@@ -183,6 +194,29 @@
       }
    }
 }
+
+- (void)adminPosAnzeigeFunktion:(NSTimer*)timer
+{
+   NSTimeInterval pos =AVAbspielplayer.currentTime;
+   NSTimeInterval dur =AVAbspielplayer.duration;
+   
+   
+   if (pos)
+   {
+      NSLog(@"AdminPosAnzeigeFunktion pos: %f dur: %f",pos,dur);
+      NSNotificationCenter * nc=[NSNotificationCenter defaultCenter];
+      [nc postNotificationName:@"abspielpos" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                   [NSNumber numberWithDouble:pos] ,@"pos",
+                                                                   [NSNumber numberWithDouble:dur] ,@"dur",nil]];
+      
+      
+      if (pos == dur)
+      {
+         [adminposTimer invalidate];
+      }
+   }
+}
+
 - (void)resetTimer
 {
    if ([posTimer isValid])

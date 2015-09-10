@@ -494,7 +494,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    //   [[self.StartPlayKnopf cell]setImage:StartPlayImg];
    
    
-   [[self.ArchivPlayTaste cell]setImage:StartPlayImg];
+  // [[self.ArchivPlayTaste cell]setImage:StartPlayImg];
    NSImage* StopPlayImg=[NSImage imageNamed:@"StopPlayImg.tif"];
    //[[self.StopPlayKnopf cell]setImage:StopPlayImg];
    //[[self.ArchivStopTaste cell]setImage:StopPlayImg];

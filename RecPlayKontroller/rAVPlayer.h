@@ -14,6 +14,7 @@
 {
    AVAudioPlayer *                     AVAbspielplayer;
    NSTimer* posTimer;
+   NSTimer* adminposTimer;
    NSTimeInterval haltzeit;
 }
 @property (assign) NSWindow *          PlayerFenster;

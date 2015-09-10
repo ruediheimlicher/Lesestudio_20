@@ -790,14 +790,34 @@ OptionBString=[[NSString alloc]init];
 		for (m=0;m<tempAnzAufnahmen;m++)
 		{
 			NSString* tempAnmerkungPfad=[tempLeserPfad stringByAppendingPathComponent:@"Anmerkungen"];
+         
 			tempAnmerkungPfad=[tempAnmerkungPfad stringByAppendingPathComponent:[tempAufnahmenliste objectAtIndex:m]];
+         
+         // m4a entfernen, txt anfuegen
+         tempAnmerkungPfad = [[tempAnmerkungPfad stringByDeletingPathExtension]stringByAppendingPathExtension:@"txt"];
+         
+         NSLog(@"setAdminPlayer tempAnmerkungPfad: %@",tempAnmerkungPfad);
 			BOOL AdminMark=NO;
 			//
 			if ([Filemanager fileExistsAtPath:tempAnmerkungPfad])
 			{
 				//NSLog(@"File exists an Pfad: %@",tempAnmerkungPfad);
-				AdminMark=[self AufnahmeIstMarkiertAnAnmerkungPfad:tempAnmerkungPfad];
-				
+            //
+            NSString* tempKommentarString=[NSString stringWithContentsOfFile:tempAnmerkungPfad encoding:NSMacOSRomanStringEncoding error:NULL];
+            NSMutableArray* tempKommentarArrary=(NSMutableArray *)[tempKommentarString componentsSeparatedByString:@"\r"];
+            //NSLog(@"tempKommentarArrary vor: %@",[tempKommentarArrary description]);
+            if (tempKommentarArrary &&[tempKommentarArrary count])
+            {
+               NSNumber* AdminMarkNumber=[tempKommentarArrary objectAtIndex:kAdminMark];
+               //NSLog(@"istMarkiert		AdminMarkNumber: %d",[AdminMarkNumber intValue]);
+               
+               AdminMark=[AdminMarkNumber intValue];
+               
+            }
+
+            //
+				//AdminMark=[self AufnahmeIstMarkiertAnPfad:tempAnmerkungPfad];
+				NSLog(@"AdminMark: %d",AdminMark);
 				/*
 				NSString* tempKommentarString=[NSString stringWithContentsOfFile:tempAnmerkungPfad];
 				NSMutableArray* tempKommentarArrary=(NSMutableArray *)[tempKommentarString componentsSeparatedByString:@"\r"];
@@ -1142,6 +1162,87 @@ OptionBString=[[NSString alloc]init];
 	}
 }
 
+- (IBAction)setZeilenAufnahme:(id)sender
+{
+   //	*********************************** wird von Aufnahmetable aufgerufen: Lšst Aktion des PopMenues aus !!!
+   double hitZeile=[sender selectedRow];
+   NSLog(@"hitZeile: %d ",hitZeile);
+   if (hitZeile<0)
+      return;
+   [self clearAVPlay];
+   
+   
+   return;
+   
+   if (1)
+   {
+      int hit=[[[AdminDaten dataForRow:hitZeile]objectForKey:@"aufnahmen"]intValue];
+      NSString* Leser=[[AdminProjektNamenArray objectAtIndex:hitZeile]description];
+      self.AdminAktuellerLeser=[[AdminProjektNamenArray objectAtIndex:hitZeile]description];
+      
+      NSLog(@"setLeser Zeile: %ld",[sender selectedRow]);
+      //NSLog(@"Leser: %@",[[AdminProjektNamenArray objectAtIndex:[sender selectedRow]]description]);
+      //NSLog(@"setLeser:     Zeile: %d   hit:%d ",hitZeile,hit);
+      //NSLog(@"i:%d ",hitZeile);
+      
+      [AdminDaten setAuswahl:hit forRow:hitZeile];
+      //NSString* tempAufnahmePfad=[[[AdminDaten AufnahmeFilesFuerZeile:hitZeile]objectAtIndex:hit]description];
+      //NSString* tempAdminAktuelleAufnahme=AdminAktuelleAufnahme;
+      if (![AdminAktuelleAufnahme isEqualToString:[[[AdminDaten AufnahmeFilesFuerZeile:hitZeile]objectAtIndex:hit]description]])//andere Aufnahme gewŠhlt
+      {
+         //NSLog(@"andere Aufnahme");
+         // if (Moviegeladen)
+         {
+            NSLog(@"save alten Kommentar, Movie geladen");
+            [self Aufnahmezuruecklegen];//Aufnahme zurŸcklegen
+         }
+      }
+      //NSLog(@"setLeser   Leser: %@  zeile: %d  hit: %d   File:  %@",Leser, hitZeile, hit, tempAufnahmePfad);
+      AdminAktuelleAufnahme=[[[AdminDaten AufnahmeFilesFuerZeile:hitZeile]objectAtIndex:hit]description];
+      NSLog(@"setLeser   AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
+      
+      
+      
+      //      return;
+      
+      
+      BOOL OK=[self setPfadFuerLeser: Leser FuerAufnahme:AdminAktuelleAufnahme];
+      
+      OK=[self setKommentarFuerLeser: Leser FuerAufnahme:AdminAktuelleAufnahme];
+      
+      NSString* tempAufnahmePfad=[AdminProjektPfad stringByAppendingPathComponent:self.AdminAktuellerLeser];
+      tempAufnahmePfad=[tempAufnahmePfad stringByAppendingPathComponent:AdminAktuelleAufnahme];
+      AdminPlayPfad =tempAufnahmePfad ;
+      /*
+       if ([AdminDaten MarkForRow:hitZeile forItem:hit])
+       {
+       [AdminMarkCheckbox setState:YES];
+       [LehrerMarkCheckbox setState:YES];
+       }
+       else
+       {
+       [AdminMarkCheckbox setState:NO];
+       [LehrerMarkCheckbox setState:NO];
+       
+       }
+       */
+      [self Aufnahmebereitstellen];
+      
+   }
+   else
+   {
+      NSLog(@"SetLeser        Keine Aufnahme");
+      NSBeep();
+      [PlayTaste setEnabled:NO];
+      [ExportierenTaste setEnabled:NO];
+      [LoeschenTaste setEnabled:NO];
+      [AdminMarkCheckbox setState:NO];
+      [LehrerMarkCheckbox setState:NO];
+      [self clearKommentarfelder];
+      
+   }
+}
+
 - (BOOL)AnzahlAufnahmenFuerZeile:(int)dieZeile
 {
 	if ([[AdminDaten AufnahmeFilesFuerZeile:dieZeile]count])
@@ -1260,7 +1361,7 @@ OptionBString=[[NSString alloc]init];
 			if ([Filemanager fileExistsAtPath:ZielPfad])
 			{
 
-				NSLog(@"File da: %@",ZielPfad);
+				//NSLog(@"File da: %@",ZielPfad);
 				AdminPlayPfad = [NSString stringWithString:ZielPfad];
 //            [AVAbspielplayer prepareAdminAufnahmeAnURL:[NSURL fileURLWithPath:AdminPlayPfad]];
             
@@ -1296,7 +1397,7 @@ OptionBString=[[NSString alloc]init];
    int Aufnahmenummer = [self AufnahmeNummerVon:Ziel];
    [AdminNummerfeld setIntValue:Aufnahmenummer];
 	[AdminTitelfeld setStringValue:[self AufnahmeTitelVon:Ziel]];
-	//NSLog(@"setKommentarFuerLeser:%@		FuerAufnahme:%@",derLeser, dieAufnahme);
+	NSLog(@"setKommentarFuerLeser:%@		FuerAufnahme:%@",derLeser, dieAufnahme);
 	BOOL istDirectory;
 	NSString* tempKommentarPfad=[NSString stringWithString:AdminProjektPfad];
 	NSString* KommentarOrdnerString=@"Anmerkungen";
@@ -1344,17 +1445,17 @@ OptionBString=[[NSString alloc]init];
 								  //NSLog(@"UserMarkCheckbox Mark: %d",[self UserMarkVon:KommentarString]);
 								  [UserMarkCheckbox setState:[self UserMarkVon:KommentarString]];
                            
-                           NSLog(@"AdminMarkCheckbox aktueller state: %ld",[AdminMarkCheckbox state]);
-                           NSLog(@"UserMarkCheckbox  aktueller state: %ld",[UserMarkCheckbox  state]);
+                          // NSLog(@"AdminMarkCheckbox aktueller state: %ld",[AdminMarkCheckbox state]);
+                          // NSLog(@"UserMarkCheckbox  aktueller state: %ld",[UserMarkCheckbox  state]);
                            
                            int tempmark = [self AdminMarkVon:KommentarString];
-                           NSLog(@"tempmark: %d",tempmark);
+                           //NSLog(@"tempmark: %d",tempmark);
                            
                            //[AdminMarkCheckbox setState:tempmark];
                            //[UserMarkCheckbox setState:tempmark];
                            [LehrerMarkCheckbox setState:tempmark];
-                           NSLog(@"AdminMarkCheckbox neuer state: %ld",[AdminMarkCheckbox state]);
-                           NSLog(@"UserMarkCheckbox  neuer state: %ld",[UserMarkCheckbox  state]);
+                           //NSLog(@"AdminMarkCheckbox neuer state: %ld",[AdminMarkCheckbox state]);
+                           //NSLog(@"UserMarkCheckbox  neuer state: %ld",[UserMarkCheckbox  state]);
                           
                            
                            NSMutableDictionary* NotificationDic=[[NSMutableDictionary alloc]initWithCapacity:0];
@@ -1362,12 +1463,7 @@ OptionBString=[[NSString alloc]init];
                            NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
                           // [nc postNotificationName:@"markcheckbox" object:self userInfo:NotificationDic];
 
-                           
-                           
-                           //self.MarkCheckbox.state = YES;
-                         //  NSLog(@"MarkCheckbox state nach setstate  state: %ld",(long)[AdminMarkCheckbox state]);
-
-                           
+                            
 								}
 							  else
 								{
@@ -2094,37 +2190,28 @@ OptionBString=[[NSString alloc]init];
 			
 		case 2://Aufnahmen nach Namen
 		{
+         NSLog(@"Aufnahmen nach Namen");
 			if ([AufnahmenTable numberOfSelectedRows])//eine Aufnahme ist selektiert
 			{
+            
 				[AdminKommentarView setEditable:YES];
 				[AdminKommentarView setSelectable:YES];
 				
-				int AufnahmenIndex=[AufnahmenTable selectedRow];
+				double AufnahmenIndex=[AufnahmenTable selectedRow];
 				AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:AufnahmenIndex]objectForKey:@"aufnahme"];
 				self.AdminAktuellerLeser=[LesernamenPop titleOfSelectedItem];
 				[self setPfadFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
 				[self setKommentarFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
-				/* // ist in setKommentar
-            if ([[[AufnahmenDicArray objectAtIndex:AufnahmenIndex]objectForKey:@"adminmark"]intValue])
-				{
-					[AdminMarkCheckbox setState:YES];
-				}
-				else
-				{
-					[AdminMarkCheckbox setState:NO];
-					
-				}
-             */
-//				[AdminQTKitPlayer setHidden:NO];
+            
+            [AVAbspielplayer prepareAdminAufnahmeAnURL:[NSURL fileURLWithPath:AdminPlayPfad]];
+
 				[self startAdminPlayer:nil];
-//				[AdminQTKitPlayer play:nil];
 				[self setBackTaste:YES];
 				Moviegeladen=YES;
 				[ExportierenTaste setEnabled:YES];
 				[LoeschenTaste setEnabled:YES];
 				[AdminMarkCheckbox setEnabled:YES];
 				[AdminBewertungfeld setEnabled:YES];
-				//[self.PlayTaste setEnabled:NO];
 			}
 			else
 			{
@@ -2289,7 +2376,47 @@ OptionBString=[[NSString alloc]init];
    NSLog(@"startAVPlay dur: %f",dur);
    [Abspielanzeige setNeedsDisplay:YES];
    //[self.Fortschritt setDoubleValue:0];
+   [self invalTimer];
+
+   posTimer=[NSTimer scheduledTimerWithTimeInterval:0.1
+                                             target:self
+                                           selector:@selector(posAnzeigeFunktion:)
+                                           userInfo:nil
+                                            repeats:YES];
+   
+   NSRunLoop* runloop = [NSRunLoop currentRunLoop];
+   [runloop addTimer:posTimer forMode:NSRunLoopCommonModes];
+ 
 }
+
+- (void)invalTimer
+{
+   if ( [posTimer isValid])
+   {
+      [posTimer invalidate];
+   }
+}
+
+- (void)posAnzeigeFunktion:(NSTimer*)timer
+{
+   NSTimeInterval pos =AVAbspielplayer.position;
+   NSTimeInterval dur =AVAbspielplayer.duration;
+   if (pos)
+   {
+      //NSLog(@"AdminPlayer posAnzeigeFunktion pos: %f dur: %f",pos,dur);
+      [self setAbspielanzeigeAnPos:pos mitDur:dur];
+      NSNotificationCenter * nc=[NSNotificationCenter defaultCenter];
+      //[nc postNotificationName:@"abspielpos" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+       //                                                            [NSNumber numberWithDouble:pos] ,@"pos",
+        //                                                           [NSNumber numberWithDouble:dur] ,@"dur",nil]];
+      
+      if (pos == dur)
+      {
+         [posTimer invalidate];
+      }
+   }
+}
+
 
 - (IBAction)stopAVPlay:(id)sender
 {
@@ -2333,6 +2460,64 @@ OptionBString=[[NSString alloc]init];
 
 }
 
+- (void)setAbspielanzeigeAnPos:(double)pos mitDur:(double)dur
+
+{
+   
+ //  double pos;
+ //  double dur;
+   int posint;
+   
+    posint =(int)pos;
+
+   NSLog(@"AdminPlayer setAbspielanzeigeAnPos dur: %2.2f pos: %2.2f posint: %d",dur,pos,posint);
+   
+   if (dur - pos < 0.1)
+   {
+      NSLog(@"Ende erreicht");
+      NSNumber* durationNumber=[NSNumber numberWithDouble:[AVAbspielplayer duration]];
+      posint=[durationNumber intValue];
+      
+   }
+   //NSLog(@"duration: %2.2d",AufnahmeZeit);
+   int Minuten = posint/60;
+   int Sekunden =posint%60;
+   NSLog(@"Minuten: %d Sekunden: %d",Minuten,Sekunden);
+   NSString* MinutenString;
+   
+   NSString* SekundenString;
+   if (Sekunden<10)
+   {
+      SekundenString=[NSString stringWithFormat:@"0%d",Sekunden];
+   }
+   else
+   {
+      SekundenString=[NSString stringWithFormat:@"%d",Sekunden];
+   }
+   if (Minuten<10)
+   {
+      MinutenString=[NSString stringWithFormat:@"0%d",Minuten];
+   }
+   else
+   {
+      MinutenString=[NSString stringWithFormat:@"%d",Minuten];
+   }
+   NSLog(@"MinutenString: %@ SekundenString: %@",MinutenString,SekundenString);
+   [AbspieldauerFeld setStringValue:[NSString stringWithFormat:@"%@:%@",MinutenString, SekundenString]];
+   
+   
+   
+   //   int max =[self.Fortschritt maxValue];
+   //NSLog(@"AbspielPosAktion pos: %f dur: %f wert: %f",pos,dur,pos/dur*1024 );
+   //  [self.Abspielanzeige setMax:dur];
+   [Abspielanzeige setLevel:pos];
+   [Abspielanzeige display];
+   
+   
+   
+   //  [self.Fortschritt setDoubleValue:(pos+1)/dur*max];
+}
+
 - (void)AbspielPosAktion:(NSNotification*)note
 {
    
@@ -2351,7 +2536,7 @@ OptionBString=[[NSString alloc]init];
       NSNumber* durNumber=[[note userInfo]objectForKey:@"dur"];
       dur=[durNumber doubleValue];
    }
-   //NSLog(@"dur: %2.2f pos: %2.2f",dur,pos);
+   NSLog(@"AdminPlayer AbspielPosAktion dur: %2.2f pos: %2.2f",dur,pos);
    
    if (dur - pos < 0.1)
    {
@@ -3553,7 +3738,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 	//[AdminMarkCheckbox setEnabled:NO];
 	//[AdminMarkCheckbox setEnabled:YES];
 	NSString* Quelle=[QuellenDic objectForKey:@"Quelle"];
-//	NSLog(@"AdminZeilenNotifikationAktion: Quelle: %@",Quelle);
+	NSLog(@"AdminZeilenNotifikationAktion: Quelle: %@",Quelle);
 	
    
    [self Aufnahmezuruecklegen];
@@ -3624,7 +3809,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 	if ([Quelle isEqualToString:@"AufnahmenTable"])
 	{
       NSDictionary* QuellenDic=[note object];
-		//NSLog(@"\n\nAdminZeilenNotifikationAktion:  AufnahmenTable  Quelle: %@",Quelle);
+		NSLog(@"\n\nAdminZeilenNotifikationAktion:  AufnahmenTable  Quelle: %@",Quelle);
 		NSNumber* ZeilenNummer=[QuellenDic objectForKey:@"zeilennummer"];
 	  	
 		int zeilenNr=[ZeilenNummer intValue];
@@ -3685,7 +3870,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 		
 		[ExportierenTaste setEnabled:NO];
 		[LoeschenTaste setEnabled:NO];
-		//[self.PlayTaste setEnabled:YES];
+		[self.StartPlayKnopf setEnabled:YES];
 		Textchanged=NO;
 	//	[self.MarkCheckbox setEnabled:NO];
 
@@ -3958,10 +4143,13 @@ NSNumber* UmgebungNumber=[[note userInfo]objectForKey:@"Umgebung"];
 	[AdminNamenfeld setStringValue: @""];
 	[AdminDatumfeld setStringValue: @""];
 	[AdminTitelfeld setStringValue: @""];
-//	[AdminBewertungfeld setStringValue: @""];
+	[AdminBewertungfeld setStringValue: @""];
 	[AdminNotenfeld setStringValue: @""];
-	//[AdminMarkCheckbox setState:NO];
+   [LehrerMarkCheckbox setState:NO];
+	[UserMarkCheckbox setState:NO];
 	
+
+
 }
 
 - (OSErr)ExportMovieVonPfad:(NSString*) derAufnahmePfad
