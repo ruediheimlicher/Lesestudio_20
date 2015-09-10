@@ -166,12 +166,13 @@
 	//NSLog(@"Archiv Delegate tableView  shouldSelectRow: %d",row);
 	NSNumber* ZeilenNummer;
 	ZeilenNummer=[NSNumber numberWithLong:row];
+   NSNumber* lastZeilenNumber = [NSNumber numberWithDouble:[tableView selectedRow]];
 	NSMutableDictionary* ArchivZeilenDic=[NSMutableDictionary dictionaryWithObject:ZeilenNummer forKey:@"ArchivZeilenNummer"];
+   [ArchivZeilenDic setObject:lastZeilenNumber forKey:@"lastarchivzeilennummer"];
 	[ArchivZeilenDic setObject:@"ArchivView" forKey:@"Quelle"];
 	NSNotificationCenter * nc;
 	nc=[NSNotificationCenter defaultCenter];
-	[nc postNotificationName:@"selektierteZeile" object:ArchivZeilenDic];
-	//NSLog(@"Archiv Delegate tableView  shouldSelectRow: %d ArchivZeilenDic: %@, AufnahmeFiles objectAtInd: %@",row,[ArchivZeilenDic description],[AufnahmeFiles objectAtIndex:row]);
+	[nc postNotificationName:@"selektierteZeile" object:ArchivZeilenDic]; // >> ZeilenNotifikationAktion
 
 	return YES;
 }

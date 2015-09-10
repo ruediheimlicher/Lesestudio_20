@@ -1370,6 +1370,7 @@ enum
    
     [self ArchivZurListe:nil];
    [self resetRecPlay];
+   [Utils stopTimeout];
    [self.RecPlayTab selectTabViewItemAtIndex:0];
    //   [self.window setIsVisible:NO];
    

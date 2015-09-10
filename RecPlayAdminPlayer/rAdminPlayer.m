@@ -1084,6 +1084,7 @@ OptionBString=[[NSString alloc]init];
 		return NULL;
 	  }
 }
+
 - (IBAction)setLeser:(id)sender
 {
 //	*********************************** wird von AdminListe aufgerufen: Lšst Aktion des PopMenues aus !!!
@@ -1948,6 +1949,35 @@ OptionBString=[[NSString alloc]init];
    
 }
 
+- (NSString*)zeitStringVonInt:(double)zeit
+   {
+      int posint = (int)zeit;
+      
+      int Minuten = posint/60;
+      int Sekunden =posint%60;
+      //NSLog(@"Minuten: %d Sekunden: %d",Minuten,Sekunden);
+      NSString* MinutenString;
+      
+      NSString* SekundenString;
+      if (Sekunden<10)
+      {
+         SekundenString=[NSString stringWithFormat:@"0%d",Sekunden];
+      }
+      else
+      {
+         SekundenString=[NSString stringWithFormat:@"%d",Sekunden];
+      }
+      if (Minuten<10)
+      {
+         MinutenString=[NSString stringWithFormat:@"0%d",Minuten];
+      }
+      else
+      {
+         MinutenString=[NSString stringWithFormat:@"%d",Minuten];
+      }
+      return [NSString stringWithFormat:@"%@:%@",MinutenString, SekundenString];
+   }
+
 
 - (void)AufnahmeInPlayer:(id)sender
 {
@@ -2355,7 +2385,7 @@ OptionBString=[[NSString alloc]init];
    double dur = AVAbspielplayer.duration;
    
 
-   NSLog(@"setPlayerURL prepareAdminAufnahmeAnURL err: %@ dur: %f",err, dur);
+//   NSLog(@"setPlayerURL prepareAdminAufnahmeAnURL err: %@ dur: %f",err, dur);
    
 }
 
@@ -2536,7 +2566,7 @@ OptionBString=[[NSString alloc]init];
       NSNumber* durNumber=[[note userInfo]objectForKey:@"dur"];
       dur=[durNumber doubleValue];
    }
-   NSLog(@"AdminPlayer AbspielPosAktion dur: %2.2f pos: %2.2f",dur,pos);
+//   NSLog(@"AdminPlayer AbspielPosAktion dur: %2.2f pos: %2.2f",dur,pos);
    
    if (dur - pos < 0.1)
    {
@@ -2586,7 +2616,7 @@ OptionBString=[[NSString alloc]init];
 
 
 
-# pragma marl end Player
+# pragma mark end Player
 
 - (void)setMark:(BOOL)derStatus
 {

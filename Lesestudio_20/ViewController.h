@@ -46,7 +46,6 @@
    rTitelListe*                     TitelListePanel;
    rAVRecorder*                     AVRecorder;
    
-//   rAdminPlayer*						   AdminPlayer;
    
    IBOutlet NSWindow*              RecorderFenster;
    IBOutlet rAbspielanzeige*			Abspielanzeige;
@@ -85,7 +84,7 @@
 
 
 @property (weak) IBOutlet AVPlayerView       *playerView;
-@property AVPlayer *player;
+@property AVPlayer *                         player;
 
 @property (weak) IBOutlet AVAudioPlayer *_audioPlayer;
 
@@ -228,7 +227,6 @@
 
 
 
-//@property (weak) IBOutlet rAdminPlayer* AdminPlayer;
 @property  (assign)	IBOutlet rArchivView*			ArchivView;
 @property (weak) IBOutlet NSButton*					ArchivPlayTaste;
 @property (weak) IBOutlet NSButton*					ArchivStopTaste;
@@ -243,6 +241,9 @@
 @property (weak) IBOutlet NSTextField*				ArchivDatumfeld;
 @property (weak) IBOutlet NSTextField*				ArchivBewertungfeld;
 @property (weak) IBOutlet NSTextField*				ArchivNotenfeld;
+@property (weak) IBOutlet NSTextField*				ArchivAufnahmenummerfeld;
+@property (weak) IBOutlet NSTextField*				ArchivAufnahmedauerfeld;
+
 @property (weak) IBOutlet NSButton*					UserMarkCheckbox;
 @property (weak) IBOutlet NSTextField*				ArchivAbspieldauerFeld;
 

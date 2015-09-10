@@ -38,12 +38,14 @@
 {
    if (url)
    {
-      NSLog(@"prepareAufnahmeAnURL: %@",url.path);
-      self.hiddenAufnahmePfad = [url path];
       if ([AVAbspielplayer isPlaying])
       {
          [AVAbspielplayer stop];
       }
+
+      NSLog(@"prepareAufnahmeAnURL: %@",url.path);
+      self.hiddenAufnahmePfad = [url path];
+
    }
    else
    {
@@ -51,6 +53,29 @@
             
    }
 }
+
+
+- (void)prepareArchivAufnahmeAnURL:(NSURL*)url
+{
+   NSLog(@"prepareArchivAufnahmeAnURL: %@",url.path);
+   if ([AVAbspielplayer isPlaying])
+   {
+      [AVAbspielplayer stop];
+   }
+   // an url muss schon ein lokales file sein, nicht nur eine adresse
+   NSError* err;
+   
+   AVAbspielplayer = [[AVAudioPlayer alloc] initWithContentsOfURL: url
+                                                            error: &err];
+   
+   [AVAbspielplayer prepareToPlay];
+   double dur = AVAbspielplayer.duration;
+   haltzeit=0;
+   NSLog(@"prepareArchivAufnahmeAnURL err: %@ dur: %f",err, dur);
+   
+}
+
+
 
 - (void)prepareAdminAufnahmeAnURL:(NSURL*)url
 {
@@ -61,6 +86,7 @@
    }
    // an url muss schon ein lokales file sein, nicht nur eine adresse
    NSError* err;
+   
    AVAbspielplayer = [[AVAudioPlayer alloc] initWithContentsOfURL: url
                                                             error: &err];
    
@@ -117,6 +143,44 @@
    }
 }
 
+- (void)playArchivAufnahme
+{
+   
+   if (haltzeit)
+   {
+      NSLog(@"playAufnahme nach halt: %2.2f",haltzeit);
+      AVAbspielplayer.currentTime = haltzeit;
+      [AVAbspielplayer play];
+   }
+   else if (self.AufnahmeURL)
+      
+   {
+      NSLog(@"playAdminAufnahme: %@", AVAbspielplayer.url.path);
+      // http://stackoverflow.com/questions/1605846/avaudioplayer-with-external-url-to-m4p
+      double dur = AVAbspielplayer.duration;
+      haltzeit = 0;
+      [AVAbspielplayer play];
+      
+      if ( [adminposTimer isValid])
+      {
+         [adminposTimer invalidate];
+      }
+      
+      adminposTimer=[NSTimer scheduledTimerWithTimeInterval:0.1
+                                                     target:self
+                                                   selector:@selector(posAnzeigeFunktion:)
+                                                   userInfo:NULL
+                                                    repeats:YES];
+      NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+      [runLoop addTimer:adminposTimer forMode:NSDefaultRunLoopMode];
+      
+   }
+   else
+   {
+      NSLog(@"playAdminAufnahme: url nil");
+   }
+}
+
 
 - (void)playAufnahme
 {
@@ -127,23 +191,27 @@
       AVAbspielplayer.currentTime = haltzeit;
       [AVAbspielplayer play];
    }
-   else //if (self.AufnahmeURL)
+   else // if (self.AufnahmeURL)
   
    {
       if (AVAbspielplayer)
       {
-         NSLog(@"playAufnahme: AVAbspielplayer schon da.url: %@ ",self.AufnahmeURL.path);
+         //NSLog(@"playAufnahme: AVAbspielplayer schon da.url: %@ ",self.AufnahmeURL.path);
         // AVAbspielplayer=nil;
       }
-      NSLog(@"playAufnahme: %@", AVAbspielplayer.url.path);
+      
       // http://stackoverflow.com/questions/1605846/avaudioplayer-with-external-url-to-m4p
       NSError* err;
       AVAbspielplayer = [[AVAudioPlayer alloc] initWithContentsOfURL: [NSURL fileURLWithPath:  self.hiddenAufnahmePfad]
                                                                error: &err];
       //NSLog(@"playAufnahme err: %@",err);
+      NSLog(@"playAufnahme: %@", AVAbspielplayer.url.path);
       [AVAbspielplayer prepareToPlay];
       double dur = AVAbspielplayer.duration;
+      
       haltzeit = 0;
+      
+
       [AVAbspielplayer play];
       
       if ( [posTimer isValid])
@@ -181,7 +249,7 @@
    
    if (pos)
    {
-      NSLog(@"Player posAnzeigeFunktion pos: %f dur: %f",pos,dur);
+      //NSLog(@"Player posAnzeigeFunktion pos: %f dur: %f",pos,dur);
       NSNotificationCenter * nc=[NSNotificationCenter defaultCenter];
       [nc postNotificationName:@"abspielpos" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                    [NSNumber numberWithDouble:pos] ,@"pos",
@@ -203,7 +271,7 @@
    
    if (pos)
    {
-      NSLog(@"AdminPosAnzeigeFunktion pos: %f dur: %f",pos,dur);
+      //NSLog(@"AdminPosAnzeigeFunktion pos: %f dur: %f",pos,dur);
       NSNotificationCenter * nc=[NSNotificationCenter defaultCenter];
       [nc postNotificationName:@"abspielpos" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                    [NSNumber numberWithDouble:pos] ,@"pos",

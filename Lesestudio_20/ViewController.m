@@ -957,7 +957,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 
 - (IBAction)ArchivaufnahmeInPlayer:(id)sender
 {
-   [self resetArchivPlayer:nil];
+ //  [self resetArchivPlayer:nil];
    self.ArchivPlayerGeladen=YES;
    [self.ArchivInListeTaste setEnabled:YES];
    [self.ArchivInPlayerTaste setEnabled:NO];
@@ -966,7 +966,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    
    NSString* tempAchivPlayPfad = [self.ArchivPlayPfad stringByAppendingPathExtension:@"m4a"];
    
-   NSLog(@"ArchivaufnahmeInPlayertempAchivPlayPfad: %@",tempAchivPlayPfad);
+   NSLog(@"ArchivaufnahmeInPlayer tempAchivPlayPfad: %@",tempAchivPlayPfad);
    
    NSURL *ArchivURL = [NSURL fileURLWithPath:tempAchivPlayPfad];
    [AVAbspielplayer prepareAufnahmeAnURL:ArchivURL];
@@ -3725,10 +3725,12 @@ QTMovie* qtMovie;
         NSString* tempArchivKommentarPfad = [self.ArchivKommentarPfad stringByAppendingPathExtension:@"txt"];
         if ([Filemanager fileExistsAtPath:tempArchivKommentarPfad])
         {
+           NSLog(@"Archiv: Kommentar da");
            [self setArchivKommentarFuerAufnahmePfad:tempArchivKommentarPfad];
         }
         else //Kein Kommentar da
         {
+           NSLog(@"Archiv: KEIN Kommentar da");
            [self clearArchivKommentar];
            
         }
@@ -3750,7 +3752,6 @@ QTMovie* qtMovie;
 
 - (void)setArchivKommentarFuerAufnahmePfad:(NSString*)derAufnahmePfad;
 {
-   
    //NSFileManager *Filemanager=[NSFileManager defaultManager];
    NSLog(@"setArchivKommentarFuerAufnahmePfad: derAufnahmePfad: %@",derAufnahmePfad);
    NSString* tempKommentarString=[NSString stringWithContentsOfFile:derAufnahmePfad encoding:NSMacOSRomanStringEncoding error:NULL];
@@ -3761,8 +3762,12 @@ QTMovie* qtMovie;
       [self.ArchivKommentarView setString:inhalt];
    [self.ArchivKommentarView setSelectable:NO];
    [self.ArchivDatumfeld setStringValue:[self DatumVon:tempKommentarString]];
-   [self.ArchivTitelfeld setStringValue:[self AufnahmeTitelVon:[derAufnahmePfad lastPathComponent]]];
-   //NSLog(@"setArchivKommentarFuerAufnahmePfad 1");
+   
+
+   [self.ArchivTitelfeld setStringValue:[[self AufnahmeTitelVon:[derAufnahmePfad lastPathComponent]]stringByDeletingPathExtension]];
+   int aufnahmenummer=[self AufnahmeNummerVon:[derAufnahmePfad lastPathComponent]];
+   [self.ArchivAufnahmenummerfeld setIntValue:aufnahmenummer];
+   NSLog(@"setArchivKommentarFuerAufnahmePfad titel: %@ nummer: %d",[derAufnahmePfad lastPathComponent],aufnahmenummer);
    if (self.BewertungZeigen)
 	  {
         //[ArchivBewertungfeld setHidden:NO];
@@ -3785,7 +3790,7 @@ QTMovie* qtMovie;
      }
    //NSLog(@"setArchivKommentarFuerAufnahmePfad 2");
    BOOL MarkOK=[self UserMarkVon:tempKommentarString];
-   //NSLog(@"setArchivKommentarFuerAufnahmePfad 3");
+   NSLog(@"setArchivKommentarFuerAufnahmePfad MarkOK: %d",MarkOK);
    [self.UserMarkCheckbox setState:MarkOK];
    //NSLog(@"setArchivKommentatFuerAufnahmepfad: MarkOK: %d",MarkOK);
    return ;
@@ -3820,6 +3825,36 @@ QTMovie* qtMovie;
     */
 }
 
+- (NSString*)zeitStringVonInt:(double)zeit
+{
+   int posint = (int)zeit;
+   
+   int Minuten = posint/60;
+   int Sekunden =posint%60;
+   //NSLog(@"Minuten: %d Sekunden: %d",Minuten,Sekunden);
+   NSString* MinutenString;
+   
+   NSString* SekundenString;
+   if (Sekunden<10)
+   {
+      SekundenString=[NSString stringWithFormat:@"0%d",Sekunden];
+   }
+   else
+   {
+      SekundenString=[NSString stringWithFormat:@"%d",Sekunden];
+   }
+   if (Minuten<10)
+   {
+      MinutenString=[NSString stringWithFormat:@"0%d",Minuten];
+   }
+   else
+   {
+      MinutenString=[NSString stringWithFormat:@"%d",Minuten];
+   }
+   return [NSString stringWithFormat:@"%@:%@",MinutenString, SekundenString];
+}
+
+
 - (IBAction)startArchivPlayer:(id)sender
 {
    TimeValue ArchivDauer;
@@ -3831,58 +3866,18 @@ QTMovie* qtMovie;
    NSURL *ArchivURL = [NSURL fileURLWithPath:tempAchivPlayPfad];
    //   [AVAbspielplayer prepareAufnahmeAnURL:ArchivURL];
    
-   [AVAbspielplayer playAufnahme];
-   /*
-    {
-    
-    ArchivDauer=[tempMovie duration].timeValue/[tempMovie duration].timeScale;
-    
-    // ArchivAbspielanzeige wird mit timeValue ohne Umrechnung geladen
-    [ArchivAbspielanzeige setMax: [tempMovie duration].timeValue];
-    
-    //		NSLog(@"Beginn startArchivPlayer: Dauer in s:%2.2f ",(float)ArchivDauer);
-    
-    if (!tempMovie)
-    {
-    NSLog(@"startArchivPlayer: Kein Movie da");
-    //return;
-    }
-    
-    playArchivBalkenTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
-    target:self
-    selector:@selector(updateArchivPlayBalken:)
-    userInfo:nil
-    repeats:YES];
-    
-    [ArchivAbspieldauerFeld setStringValue:[self Zeitformatieren:ArchivDauer]];
-    [ArchivAbspieldauerFeld setNeedsDisplay:YES];
-    
-    [Utils stopTimeout];
-    
-    }
-    
-    if (QTKitPause)
-    {
-    [ArchivAbspieldauerFeld setStringValue:[self Zeitformatieren:QTKitPause]];
-    //Abspieldauer=QTKitPause;
-    [ArchivAbspielanzeige setLevel:QTKitPause];
-    QTKitPause=0;
-    }
-    else
-    {
-    [ArchivAbspieldauerFeld setStringValue:[self Zeitformatieren:QTKitGesamtAbspielzeit]];
-    //Abspieldauer=GesamtAbspielzeit;
-    [ArchivAbspielanzeige setLevel:0];
-    }
-    */
    
-   [self.ArchivPlayTaste setEnabled:NO];
+   [AVAbspielplayer playArchivAufnahme];
+   
+   
+   
+  // [self.ArchivPlayTaste setEnabled:NO];
    //[self setBackTaste:YES];
    [self.ArchivStopTaste setEnabled:YES];
    [self.ArchivZumStartTaste setEnabled:YES];
    [self.ArchivRewindTaste setEnabled:YES];
    [self.ArchivForewardTaste setEnabled:YES];
-   
+   [Utils startTimeout:self.TimeoutDelay];
    
 }
 
@@ -3988,9 +3983,15 @@ QTMovie* qtMovie;
    //[self setLeser:self.NamenListe ];
    //[self startAdminPlayer:AdminQTPlayer];
 }
+
+
 - (void) ZeilenNotifikationAktion:(NSNotification*)note
 {
-   
+   if ([AVAbspielplayer isPlaying])
+   {
+      [AVAbspielplayer toStartTempAufnahme];
+   }
+
    if (self.ArchivZeilenhit)
 	  {
         //NSLog(@"ArchivZeilenhit=YES");
@@ -3998,14 +3999,27 @@ QTMovie* qtMovie;
         //return ;
      }
    self.ArchivZeilenhit=YES;
+   
+   
    NSDictionary* QuellenDic=[note object];
    
    NSString* Quelle=[QuellenDic objectForKey:@"Quelle"];
-   //NSLog(@"ZeilenNotifikationAktion:   Quelle: %@",Quelle);
+   NSLog(@"ZeilenNotifikationAktion:   Quelle: %@",Quelle);
    
    if ([Quelle isEqualToString:@"ArchivView"])
 	  {
-        //NSLog(@"ZeilenNotifikationAktion:   Quelle: %@",Quelle);
+       // NSLog(@"ZeilenNotifikationAktion:   Quelle: %@",Quelle);
+
+        double lastZeilenNummer = [[QuellenDic objectForKey:@"lastarchivzeilennummer"]doubleValue];
+        
+        
+        if (lastZeilenNummer >=0) // es war eine Zeile selektiert, aufraeumen
+        {
+           [self ArchivZurListe:nil];
+           [self resetArchivPlayer:nil];
+        }
+        
+        
         NSNumber* ZeilenNummer=[QuellenDic objectForKey:@"ArchivZeilenNummer"];
         int zeilenNr=(int)[ZeilenNummer floatValue];
         //NSLog(@"keyDown ZeilenNotifikationAktion description: %@",[ZeilenNummer description]);
@@ -4015,15 +4029,34 @@ QTMovie* qtMovie;
         self.ArchivSelektierteZeile=zeilenNr;
         if ([self.ArchivDaten AufnahmePfadFuerZeile:zeilenNr])
         {
-           [self resetArchivPlayer:nil];
+        //   [self resetArchivPlayer:nil];
+           [self.ArchivPlayTaste setEnabled:YES];
            [self setArchivPfadFuerAufnahme:[self.ArchivDaten AufnahmePfadFuerZeile:zeilenNr]];
+           
+           // NSLog(@"ZeilenNotifikationAktion AchivPlayPfad: %@",self.ArchivPlayPfad);
+           
+           NSString* tempAchivPlayPfad = [self.ArchivPlayPfad stringByAppendingPathExtension:@"m4a"];
+           
+           NSLog(@"ZeilenNotifikationAktion tempAchivPlayPfad: %@",tempAchivPlayPfad);
+           
+           NSURL *ArchivURL = [NSURL fileURLWithPath:tempAchivPlayPfad];
+           [AVAbspielplayer prepareArchivAufnahmeAnURL:ArchivURL];
+           
+          // if ([AVAbspielplayer AufnahmeURL])
+           {
+              double abspieldauer = [AVAbspielplayer duration];
+           
+              [self.ArchivAufnahmedauerfeld setStringValue:[self zeitStringVonInt:abspieldauer]];
+           }
            
            //erfolg=[RecPlayFenster makeFirstResponder:ArchivPlayTaste];
            //[self.PlayTaste setKeyEquivalent:@"\r"];
         }
         else
+        {
            [self.ArchivPlayTaste setEnabled:NO];
-        [self.UserMarkCheckbox setEnabled:NO];
+           [self.UserMarkCheckbox setEnabled:NO];
+        }
         
      }
    //NSTableColumn* tempKolonne;
@@ -4080,11 +4113,13 @@ QTMovie* qtMovie;
 
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
+   
    BOOL umschalten=YES;
    //NSLog(@"vor shouldSelectTabViewItem");
    //NSLog(@"vor shouldSelectTabViewItem: UserMarkCheckbox: %d",[self.UserMarkCheckbox state]);
    if ([[tabViewItem label]isEqualToString:@"Archiv"])
 	  {
+        
         if ([self.ArchivnamenPop indexOfSelectedItem]==0)
         {
            NSImage* StartRecordImg=[NSImage imageNamed:@"recordicon_k.gif"];
