@@ -303,14 +303,16 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    [NSApp setApplicationIconImage: myImage];
    
    [self.AblaufMenu setDelegate:self];
+  // self.ModusMenu = [[NSMenu alloc]initWithName:@"Modus"];
    [self.ModusMenu setDelegate:self];
    [self.RecorderMenu setDelegate:self];
-   
+[[self.ModusMenu itemWithTag:kAdminTag] setTarget:self];//Admin
+   /*
    [[self.ModusMenu itemWithTag:kRecPlayTag] setTarget:self];//Recorder
-   [[self.ModusMenu itemWithTag:kAdminTag] setTarget:self];//Admin
+   
    [[self.ModusMenu itemWithTag:kKommentarTag] setTarget:self];//Kommentar
    [[self.ModusMenu itemWithTag:kEinstellungenTag] setTarget:self];//Kommentar
-   
+   */
    //NSLog(@"Menu: %@ setAutoenablesItems: %d",[[ModusMenu itemWithTag:30002] title],[ModusMenu autoenablesItems]);
    //[AblaufMenu setDelegate:self];
    [[self.AblaufMenu itemWithTag:kAndereLeseboxTag] setTarget:self];//neue Lesebox
@@ -542,10 +544,10 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    [self.ArchivnamenPop setToolTip:@"Liste der Namen im aktuellen Projekt."];
    [self.Leserfeld setToolTip:@"Nach dem Login:\nAktueller Leser"];
    [self.ProjektFeld setToolTip:@"Aktuelles Projekt\nEin anderes Projekt kann im Menü Recorder ausgewählt werden."];
-   [[self.ModusMenu itemWithTag:kAdminTag]setToolTip:@"Hallo"];
-   [[self.ModusMenu itemWithTag:kRecPlayTag]setToolTip:@"Hallo"];
-   [[self.ModusMenu itemWithTag:kKommentarTag]setToolTip:@"Hallo"];
-   [[self.ModusMenu itemWithTag:kEinstellungenTag]setToolTip:@"Hallo"];
+//   [[self.ModusMenu itemWithTag:kAdminTag]setToolTip:@"Hallo"];
+//   [[self.ModusMenu itemWithTag:kRecPlayTag]setToolTip:@"Hallo"];
+//   [[self.ModusMenu itemWithTag:kKommentarTag]setToolTip:@"Hallo"];
+   [[self.AblaufMenu itemWithTag:kEinstellungenTag]setToolTip:@"Hallo"];
    int i=[[[NSUserDefaults standardUserDefaults]objectForKey:@"Wert1"]intValue];
    //NSLog(@"Test Wert1: %d",i);
    //i--;
@@ -588,7 +590,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    self.Testfenster = [self.mainstoryboard instantiateControllerWithIdentifier:@"testfenster"];
    //[[[self.Testfenster view]window] makeKeyAndOrderFront:nil];
     //NSLog(@"Testfenster: %@",[self.Testfenster description]);
-
+ 
    // EinstellungenFenster init
    self.EinstellungenFenster = [self.mainstoryboard instantiateControllerWithIdentifier:@"einstellungenfenster"];
 
@@ -717,9 +719,12 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 }
 
 #pragma mark end segue
-
-
-
+/*
+- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
+{
+return YES;
+}
+*/
 - (void)RecordingAktion2:(NSNotification*)note{
    //NSLog(@"RecordingAktion note: %@",note);
    if ([[note userInfo ]objectForKey:@"record"])
@@ -806,6 +811,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
          }break;
       }//switch
    }
+   [self.view.window makeFirstResponder:self.view];
 }
 
 
@@ -2765,8 +2771,8 @@ QTMovie* qtMovie;
    
    [self resetRecPlay];
    
-   return;
-   [self ArchivZurListe:nil];
+ //  return;
+ //  [self ArchivZurListe:nil];
    
    [self stopPlay:nil];
    [self resetRecPlay];
@@ -2793,7 +2799,7 @@ QTMovie* qtMovie;
    [AVAbspielplayer stopTempAufnahme];
    [Abspielanzeige setLevel:0];
    [Abspielanzeige setNeedsDisplay:YES];
-   
+   [self.view.window makeFirstResponder:self.view];
 }
 
 
@@ -3268,7 +3274,7 @@ QTMovie* qtMovie;
    if (self.AdminZugangOK || [self checkAdminZugang])
    {
       NSLog(@"switchAdminPlayer ok");
-      [[self.ModusMenu itemWithTag:kRecPlayTag]setEnabled:YES];
+   //   [[self.ModusMenu itemWithTag:kRecPlayTag]setEnabled:YES];
       [self beginAdminPlayer:nil];
       
       [Utils stopTimeout];

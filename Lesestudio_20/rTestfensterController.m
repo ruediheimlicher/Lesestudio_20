@@ -26,6 +26,7 @@
 {
    
    NSLog(@"Testfenster reportSchliessenTaste Text: %@",[AnzeigeFeld stringValue]);
+
    [self dismissController:NULL];
 }
 

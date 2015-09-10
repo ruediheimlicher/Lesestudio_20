@@ -33,7 +33,7 @@
 
 
 
-@interface ViewController : NSViewController <NSTabViewDelegate, NSWindowDelegate, NSMenuDelegate>
+@interface ViewController : NSViewController <NSTabViewDelegate, NSWindowDelegate, NSMenuDelegate, NSMenuDelegate>
 
 {
    // Panels
@@ -68,7 +68,7 @@
    NSTimer *AufnahmeTimer;
    int aufnahmetimerstatus;
    double startzeit;
-   NSTimer *AdminTimer;
+   NSTimer *      AdminTimer;
    int AdminTimerCounter;
 
 }
@@ -76,7 +76,9 @@
 // Menues
 @property (weak)IBOutlet NSMenu*					AblaufMenu;
 @property (weak)IBOutlet NSMenu*					RecorderMenu;
-@property (weak)IBOutlet NSMenu*             ModusMenu;
+@property (strong)IBOutlet NSMenu*             ModusMenu;
+
+@property (weak)IBOutlet NSMenuItem*             AdminMenuItem;
 @property (weak)IBOutlet NSMenu*					ProjektMenu;
 
 
@@ -213,6 +215,7 @@
 @property UInt32								Pause;
 @property int									Durchgang;
 @property  NSString*                   hiddenAufnahmePfad;
+
 
 @property  (weak)  IBOutlet NSButton*					StartRecordQTKitKnopf;
 @property  (weak)  IBOutlet NSButton*					StopRecordQTKitKnopf;

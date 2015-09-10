@@ -1386,7 +1386,7 @@ enum
     }
    
 //   [self.AblaufMenu setDelegate:self.AdminPlayer];
-//   [self.ModusMenu setDelegate:self.AdminPlayer];
+  // [self.ModusMenu setDelegate:self.AdminPlayer];
 //   [self.RecorderMenu setDelegate:self.AdminPlayer];
 
 //   [[self.ModusMenu itemWithTag:kRecPlayTag] setTarget:self.AdminPlayer];//Recorder
@@ -1466,7 +1466,7 @@ enum
 {
    
    //NSLog(@"AdminTimerFunktion counter: %d info: %@",AdminTimerCounter,[[timer userInfo]description]);
-   NSLog(@"AdminTimerFunktion counter: %d ",AdminTimerCounter);
+  // NSLog(@"AdminTimerFunktion counter: %d ",AdminTimerCounter);
    if (AdminTimerCounter)
    {
       AdminTimerCounter--;

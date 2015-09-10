@@ -1059,7 +1059,7 @@ OptionBString=[[NSString alloc]init];
 	[ExportierenTaste setEnabled:NO];
 	[LoeschenTaste setEnabled:NO];
 	[zurListeTaste setEnabled:NO];
-	
+ 
 }
 
 - (double)selektierteZeile
