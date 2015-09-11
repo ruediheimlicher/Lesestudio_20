@@ -1252,7 +1252,7 @@ return versionOK;
 	NSMutableArray* tempProjektArray=[[NSMutableArray alloc]initWithCapacity:0];
 	NSString* tempDataPfad=[derLeseboxPfad stringByAppendingPathComponent:@"Data"];
 	//NSString* PListName=NSLocalizedString(@"Lecturebox.plist",@"Name Lesebox.plist");
-   NSString* PListName=@"Name Lesebox.plist";
+   NSString* PListName=@"Lesebox.plist";
 
 	NSString* tempPListPfad=[tempDataPfad stringByAppendingPathComponent:PListName];
 	int saveOK=NO;
@@ -1577,7 +1577,7 @@ return versionOK;
 		BOOL Archivleer=YES;
 		if ([UProjektArray count])//es gibt Namen zu kopieren
 		{
-			[Warnung addButtonWithTitle:NSLocalizedString(@"Copy Folder",@"Taste:Ordner kopieren")];
+			[Warnung addButtonWithTitle:@"Ordner kopieren"];
 			Archivleer=NO;
 		}
 		//else//Archiv ist noch leer: neues Projekt mit einz. Namen eingeben
@@ -1585,14 +1585,14 @@ return versionOK;
 			//[Warnung addButtonWithTitle:NSLocalizedString(@"Particular Names",@"Taste: Einzelne Namen")];
 		}
 		
-		[Warnung addButtonWithTitle:NSLocalizedString(@"List of Names",@"Taste: Aus self.NamenListe")];
-		[Warnung addButtonWithTitle:NSLocalizedString(@"Particular Names",@"Taste: Einzelne Namen")];
+		[Warnung addButtonWithTitle:@"Taste: Aus self.NamenListe"];
+		[Warnung addButtonWithTitle:@"Taste: Einzelne Namen"];
 		
-		NSString* TitelString=NSLocalizedString(@"Project Folder %@ is empty",@"Projektordner %@ ist leer");
+		NSString* TitelString=@"Projektordner %@ ist leer";
 		[Warnung setMessageText:[NSString stringWithFormat:TitelString,tempProjektName]];
 		
-		NSString* s1=NSLocalizedString(@"The names can be copied from another folder, read in from a list of names, or be typed manually.",@"Namen aus Ordner oder Liste kopieren");
-		NSString* s2=NSLocalizedString(@"The list of names must be in the format 'doc', 'text', or 'rtf'",@"Format self.NamenListe doc, txt oder rtf");
+		NSString* s1=@"Namen aus Ordner oder Liste kopieren";
+		NSString* s2=@"Format  der NamenListe: doc, txt";
 		NSString* InformationString=[NSString stringWithFormat:@"%@\n%@",s1,s2];
 		[Warnung setInformativeText:InformationString];
 		[Warnung setAlertStyle:NSWarningAlertStyle];
@@ -1939,7 +1939,7 @@ NSLog(@"EinzelNamenArray>: %@",[a description]);
 
 - (void)UNamenEntfernenAktion:(NSNotification*)note
 {
-	//NSLog(@"\n\n\n*UNamenEntfernenAktion start: %@",[[note userInfo]description]);
+	NSLog(@"\n\n\n*UNamenEntfernenAktion start: %@",[[note userInfo]description]);
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
 	int ausAllenProjekten=0;
 	if ([[note userInfo]objectForKey:@"ausallenprojekten"])
@@ -2056,7 +2056,7 @@ NSLog(@"EinzelNamenArray>: %@",[a description]);
 	BOOL succeeded;
 	NSString* HomeDir=@"";// = [NSHomeDirectory() stringByAppendingPathComponent:@".Trash"];
 	NSFileManager* Filemanager=[NSFileManager defaultManager];
-	//NSLog(@"fileInPapierkorb:NSHomeDirectory %@",NSHomeDirectory());
+	NSLog(@"fileInPapierkorb:NSHomeDirectory %@",NSHomeDirectory());
 
 	NSMutableArray* PfadKomponenten=(NSMutableArray*)[derFilepfad pathComponents] ;
 	int index=0;
@@ -2098,11 +2098,10 @@ NSLog(@"EinzelNamenArray>: %@",[a description]);
  - (int)inPapierkorbMitPfad:(NSString*)derNamenPfad
 {
 	BOOL istDirectory;
-	//[derProjektPfad release];
 	int fehler=0;
 	NSString* tempNamenPfad=[derNamenPfad copy];//Pfad akt. Aufn.
 		NSFileManager* Filemanager=[NSFileManager defaultManager];
-		//NSLog(@"inPapierkorbmitPfad: %@",derNamenPfad);
+		NSLog(@"inPapierkorbmitPfad: %@",derNamenPfad);
 		if ([Filemanager fileExistsAtPath:tempNamenPfad isDirectory:&istDirectory]&&istDirectory)
 		{
 			//[self moveFileToUserTrash:tempAufnahmePfad];	

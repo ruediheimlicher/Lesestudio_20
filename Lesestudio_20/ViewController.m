@@ -76,9 +76,19 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 
 @synthesize Testfenster;
 
+- (id)initWithNibName:(NSString *)nibname bundle:(NSBundle *)bundlename
+{
+   NSLog(@"init nibname: %@ ",self.nibName);
+   self = [ super initWithNibName: nil bundle:nil];
+   return self;
+}
 - (void)viewDidLoad
 {
    [super viewDidLoad];
+      NSLog(@"nibname: %@ window: %@",self.nibName, [[self.view window]description]);
+   
+//   [self initWithNibName:self.nibName bundle:nil];
+   
    RPAufnahmenDirIDKey		=	@"RPAufnahmenDirID";
    Wert1Key=@"Wert1";
    Wert2Key=@"Wert2";
@@ -168,6 +178,13 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
           selector:@selector(neuesProjektAktion:)
               name:@"neuesProjekt"
             object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(neuesProjektVomStartAktion:)
+              name:@"neuesProjektVomStart"
+            object:nil];
+   
+ 
    
    [nc addObserver:self
           selector:@selector(anderesProjektAktion:)
@@ -583,7 +600,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
       AVAbspielplayer.PlayerFenster = [self.view window];
    }
    
-   
+  
    self.mainstoryboard = [NSStoryboard storyboardWithName:@"Main" bundle:nil];
    //NSLog(@"mainstoryboard: %@",[self.mainstoryboard description]);
 //   self.Testfenster = [rTestfensterController new];
@@ -596,14 +613,23 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 
    // Adminplayer init
    self.AdminPlayer = [self.mainstoryboard instantiateControllerWithIdentifier:@"adminplayerfenster"];
+  
+   //self.view.window = [[NSWindow alloc]initWithFrame:[self.view bounds] stylemask:NSBorderlessWindowMask];
+   
+   [self.view.window setIsVisible:YES];
+   [self.view.window makeFirstResponder:nil];
+   
+   NSLog(@"end nibname: %@ window: %@",self.nibName, [[self.view window]description]);
 
+   
+   
 }
 
 
 
 - (void)setRepresentedObject:(id)representedObject {
    [super setRepresentedObject:representedObject];
-
+   NSLog(@"setRepresentedObject");
    // Update the view, if already loaded.
 }
 
@@ -3022,7 +3048,7 @@ QTMovie* qtMovie;
       if (self.aktuellAnzAufnahmen)//der Leser hat schon Aufnahmen
       {
          //Array für die Titel in TitelPop
-         NSMutableArray* TitelPopArray=[[NSMutableArray alloc] initWithCapacity:self.aktuellAnzAufnahmen];
+         NSMutableArray* TitelPopArray=[[NSMutableArray alloc] initWithCapacity:0];
          int tausch=1;
          
          while (tausch)
@@ -3045,7 +3071,7 @@ QTMovie* qtMovie;
                
             }//for anzahl
          }//while tausch
-         //NSLog(@"TitelArray nach Sortieren: %@",[TitelArray description]);
+         NSLog(@"TitelArray nach Sortieren: %@",[TitelArray description]);
          NSMutableArray* AufnahmenPopArray=[[NSMutableArray alloc] initWithCapacity:self.aktuellAnzAufnahmen];
          [self.ArchivDaten resetArchivDaten];
          for (i=(int)[TitelArray count]-1;i>=0;i--)//Reihenfolge umkehren für TitelPop
@@ -3053,6 +3079,8 @@ QTMovie* qtMovie;
             [AufnahmenPopArray addObject:[TitelArray objectAtIndex:i]];
             
             [self.ArchivDaten setAufnahmePfad:[[TitelArray objectAtIndex:i]description] forRow:0];
+            NSLog(@"TitelArray: %@",[[TitelArray objectAtIndex:i]description]);
+            
             //NSLog(@"TitelArray :%@END",[[TitelArray objectAtIndex:i]description]);
             //indexTitelString=[NSString stringWithString:[TitelArray objectAtIndex:i]];
             tempTitelString=[self AufnahmeTitelVon:[TitelArray objectAtIndex:i]];
@@ -3067,12 +3095,12 @@ QTMovie* qtMovie;
             }
          }//for anzahl
          
-         
+         NSLog(@"TitelPopArray : %@",[TitelPopArray description]);
          
          [self.ArchivView reloadData];
          self.ArchivZeilenhit=NO;
          
-         //NSLog(@"AufnahmenPopArray def: %@",[AufnahmenPopArray description]);
+         NSLog(@"AufnahmenPopArray def: %@",[AufnahmenPopArray description]);
          [self.KommentarPop removeAllItems];
          [self.KommentarPop addItemsWithTitles:AufnahmenPopArray];
          //NSLog(@"TitelPopArray def: %@",[TitelPopArray description]);
@@ -3084,7 +3112,7 @@ QTMovie* qtMovie;
          
          //Titel von PList aus Projektordner anfügen
          BOOL PListTitelAktiviert=YES;
-         BOOL TitelEditOK=NO;//Titel editierbar?
+         BOOL TitelEditOK; //Titel editierbar?
          NSArray* tempTitelArray;
          NSArray* tempProjektNamenArray=[self.ProjektArray valueForKey:@"projekt"];//Verzeichnis ProjektNamen
          NSUInteger ProjektIndex=[tempProjektNamenArray indexOfObject:[self.ProjektPfad lastPathComponent]];//Dic des akt. Projekts
@@ -3115,18 +3143,15 @@ QTMovie* qtMovie;
             }//if ([[ProjektArray objectAtIndex:ProjektIndex]objectForKey:@"titelarray"])
          }//if (!(ProjektIndex==NSNotFound))
          
-         //NSLog(@"setLeser nicht leer: LeserPfad: %@ titelfix : %d ",[self.LeserPfad description], TitelEditOK);
+         NSLog(@"setLeser nicht leer: LeserPfad: %@ titelfix : %d ",[self.LeserPfad description], TitelEditOK);
          
-         
+         [self.TitelPop selectItemAtIndex:0];
          [self.TitelPop setEnabled:YES];
          [self.TitelPop setEditable:TitelEditOK];//Nur wenn Titel editierbar
          [self.TitelPop setSelectable:TitelEditOK];
          
          //*
-         BOOL first=[[[self view]window] makeFirstResponder:self.TitelPop];
-         
-         [self.TitelPop performClick:nil];
-         [self.TitelPop selectItemAtIndex:0];
+    //     BOOL first=[[[self view]window] makeFirstResponder:self.TitelPop];
          
          
          [self setKommentarFuerLeser:self.Leser FuerAufnahme:[[TitelArray objectAtIndex:[TitelArray count]-1]description]];
@@ -3181,15 +3206,18 @@ QTMovie* qtMovie;
          {
             [self.TitelPop addItemWithObjectValue:@"neue Aufnahme"];
          }
-         //NSLog(@"setLeser leer: LeserPfad: %@ titelfix : %d ",[LeserPfad description], TitelEditOK);
-         
-         [self.TitelPop setEditable:TitelEditOK];//Nur wenn Titel editierbar
-         [self.TitelPop setSelectable:TitelEditOK];
+         NSLog(@"setLeser leer: LeserPfad: %@ titelfix : %d ",self.LeserPfad , TitelEditOK);
          
          [self.TitelPop selectItemAtIndex:0];
-         [self.ArchivDaten resetArchivDaten];
-         [self.ArchivView reloadData];
-         self.aktuellAnzAufnahmen=0;
+         
+         [[self.TitelPop cell] setEditable:TitelEditOK];//Nur wenn Titel editierbar
+         [[self.TitelPop cell] setSelectable:TitelEditOK];
+         
+         
+       [self.ArchivDaten resetArchivDaten];
+        [self.ArchivView reloadData];
+         
+         //self.aktuellAnzAufnahmen=0;
       }
       
       
@@ -3974,12 +4002,13 @@ QTMovie* qtMovie;
    [self.ArchivView reloadData];
 }
 
+
 - (void)keyDown:(NSEvent *)theEvent
 {
    int nr=[theEvent keyCode];
    NSLog(@"RecPlay  keyDown: nr: %d  char: %@",nr,[theEvent characters]);
-   [self keyDownAktion:nil];
-   //[super keyDown:theEvent];
+  // [self keyDownAktion:nil];
+   [super keyDown:theEvent];
 }
 
 - (IBAction)keyDownAktion:(id)sender
@@ -4136,7 +4165,7 @@ QTMovie* qtMovie;
 {
    
    BOOL umschalten=YES;
-   //NSLog(@"vor shouldSelectTabViewItem");
+   NSLog(@"vor shouldSelectTabViewItem");
    //NSLog(@"vor shouldSelectTabViewItem: UserMarkCheckbox: %d",[self.UserMarkCheckbox state]);
    if ([[tabViewItem label]isEqualToString:@"Archiv"])
 	  {
@@ -4176,7 +4205,7 @@ QTMovie* qtMovie;
         }
         [Utils stopTimeout];
         [AVAbspielplayer invalTimer];
-        NSLog(@"TabView:archiv");
+        NSLog(@"TabView: archiv");
         if (self.aktuellAnzAufnahmen &&!([AVRecorder isRecording]))
         {
            [self resetArchivPlayer:nil];
@@ -4407,13 +4436,17 @@ if (!self.KommentarFenster)
 
 
 
-- (void)neuesProjektAktion:(NSNotification*)note
+- (void)neuesProjektVomStartAktion:(NSNotification*)note
 {
    [Utils stopTimeout];
+   
+   [self showProjektListe:nil];
+   return;
+   
    //Note von Projektliste über neues Projekt: reportNeuesProjekt
    BOOL neuesProjektOK=NO;
    NSMutableDictionary* tempNeuesProjektDic=[[[note userInfo] objectForKey:@"neuesprojektdic"]mutableCopy];
-   NSLog(@"neuesProjektAktion: userInfo: %@",[[note userInfo] description]);
+   NSLog(@"ViewController neuesProjektVomStartAktion: userInfo: %@",[[note userInfo] description]);
    
    //NSLog(@"RPC neuesProjektAktion: tempNeuesProjektDic: %@",[tempNeuesProjektDic description]);
    //NSString* neuesProjektName=[tempNeuesProjektDic objectForKey:projekt];
@@ -4560,7 +4593,7 @@ if (!self.KommentarFenster)
 
 - (void)ProjektEntfernenAktion:(NSNotification*)note
 {
-   //NSLog(@"*********ProjektEntfernenAktion start: %@",[[note userInfo] objectForKey:@"projekt"]);
+   NSLog(@"*********ProjektEntfernenAktion start: %@",[[note userInfo] objectForKey:@"projekt"]);
    NSString* clearProjekt=[[note userInfo] objectForKey:@"projekt"];
    NSFileManager *Filemanager=[NSFileManager defaultManager];
    
@@ -4579,7 +4612,7 @@ if (!self.KommentarFenster)
       {
          case 0://>Papierkorb
          {
-            //NSLog(@"*ProjektEntfernenAktion: Papierkorb: EntfernenPfad: %@",EntfernenPfad);
+            NSLog(@"*ProjektEntfernenAktion: Papierkorb: EntfernenPfad: %@",EntfernenPfad);
             [self fileInPapierkorb:EntfernenPfad];
             NSLog(@"*ProjektEntfernenAktion: nach inPapierkorbMitPfad ");
             [self updateProjektArray];
@@ -4588,7 +4621,7 @@ if (!self.KommentarFenster)
             
          case 1: //Magazin
          {
-            //NSLog(@"*ProjektEntfernenAktion: Magazin: EntfernenPfad: %@",EntfernenPfad);
+            NSLog(@"*ProjektEntfernenAktion: Magazin: EntfernenPfad: %@",EntfernenPfad);
             NSString* MagazinPfad=[self.LeseboxPfad stringByAppendingPathComponent:@"Magazin"];
             //NSLog(@"*ProjektEntfernenAktion: Magazin: MagazinPfad: %@",MagazinPfad);
             BOOL istOrdner=NO;
@@ -4666,9 +4699,9 @@ if (!self.KommentarFenster)
    
 }
 
-- (int) fileInPapierkorb:(NSString*) derFilepfad
+- (NSInteger) fileInPapierkorb:(NSString*) derFilepfad
 {
-   int tag;
+   NSInteger tag;
    BOOL succeeded;
    NSString* HomeDir=@"";// = [NSHomeDirectory() stringByAppendingPathComponent:@".Trash"];
    NSFileManager* Filemanager=[NSFileManager defaultManager];
@@ -4691,12 +4724,13 @@ if (!self.KommentarFenster)
         NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
         
         NSArray * vols=[workspace mountedLocalVolumePaths];
-        //NSLog(@"fileInPapierkorb volumes: %@   sourceDir:%@ trashDir: %@",[vols description],sourceDir, trashDir);
+        NSLog(@"fileInPapierkorb volumes: %@   sourceDir:%@ trashDir: %@",[vols description],sourceDir, trashDir);
         
         NSArray *files = [NSArray arrayWithObject:[derFilepfad lastPathComponent]];
         succeeded = [workspace performFileOperation:NSWorkspaceRecycleOperation
                                              source:sourceDir destination:trashDir
                                               files:files tag:&tag];
+        NSLog(@"fileInPapierkorb tag: %ld succeeded: %d",(long)tag, succeeded);
         return tag;//0 ist OK
      }
    else
@@ -4704,7 +4738,7 @@ if (!self.KommentarFenster)
         
         NSString* sourceDir=derFilepfad;
         int removeIt=[Filemanager removeItemAtURL:[NSURL fileURLWithPath:sourceDir] error:nil];
-        //NSLog(@"removePath: removeIt: %d",removeIt);
+        NSLog(@"removePath: removeIt: %d",removeIt);
         return 0;
         
      }

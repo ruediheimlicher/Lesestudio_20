@@ -21,6 +21,7 @@
 
 - (void)resetArchivDaten;
 - (void)setAufnahmePfad:(NSString*)derAufnahmePfad forRow: (int)dieZeile;
+- (void)insertAufnahmePfad:(NSString*)derAufnahmePfad forRow: (int)dieZeile;
 - (NSString*)AufnahmePfadFuerZeile:(int)dieZeile;
 
 

@@ -57,8 +57,21 @@
 	//[derAufnahmePfad release];
 	//NSString* eineZeile;
 	[AufnahmeFiles addObject:tempString];
+
 	//eineZeile =[derAufnahmePfad copy];
 }
+
+- (void)insertAufnahmePfad:(NSString*)derAufnahmePfad forRow: (int)dieZeile
+{
+   NSString* tempString=[derAufnahmePfad copy];
+   //tempArray=[derArray copy];
+   //[derAufnahmePfad release];
+   //NSString* eineZeile;
+   [AufnahmeFiles insertObject:tempString atIndex:dieZeile];
+   
+   //eineZeile =[derAufnahmePfad copy];
+}
+
 
 - (NSString*)AufnahmePfadFuerZeile:(int)dieZeile
 {

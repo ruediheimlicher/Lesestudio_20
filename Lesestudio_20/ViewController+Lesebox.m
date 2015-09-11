@@ -576,7 +576,7 @@ enum
    //Note von Projektliste über neues Projekt: reportNeuesProjekt
    BOOL neuesProjektOK=NO;
    NSMutableDictionary* tempNeuesProjektDic=[[[note userInfo] objectForKey:@"neuesprojektdic"]mutableCopy];
-   NSLog(@"neuesProjektAktion: userInfo: %@",[[note userInfo] description]);
+   NSLog(@"ViewController Lesebox neuesProjektAktion: userInfo: %@",[[note userInfo] description]);
    
    //NSLog(@"RPC neuesProjektAktion: tempNeuesProjektDic: %@",[tempNeuesProjektDic description]);
    //NSString* neuesProjektName=[tempNeuesProjektDic objectForKey:projekt];
@@ -736,13 +736,14 @@ enum
    //Inhalt von Archiv prüfen
    NSString* tempArchivPfad=[self.LeseboxPfad stringByAppendingPathComponent:@"Archiv"];
    NSMutableArray* tempArchivProjektNamenArray=(NSMutableArray*)[Filemanager contentsOfDirectoryAtPath:tempArchivPfad error:NULL];
-   //NSLog(@"updateProjektArray: ArchivPfad: %@  tempArchivProjektNamenArray roh : %@",tempArchivPfad,[tempArchivProjektNamenArray description]);
+   NSLog(@"updateProjektArray: ArchivPfad: %@  tempArchivProjektNamenArray roh : %@",tempArchivPfad,[tempArchivProjektNamenArray description]);
    
    if ([tempArchivProjektNamenArray count]&&[[tempArchivProjektNamenArray objectAtIndex:0] hasPrefix:@".DS"])					//Unsichtbare Ordner entfernen
    {
       [tempArchivProjektNamenArray removeObjectAtIndex:0];
       
    }
+   
    anzOrdnerImArchiv=[tempArchivProjektNamenArray count];
    //NSLog(@"updateProjektArray Projektnamen im Archiv: tempArchivProjektNamenArray : %@",[tempArchivProjektNamenArray description]);
    //NSLog(@"updateProjektArray Projektnamen im Archiv: tempArchivProjektNamenArray : %@",[[tempArchivProjektNamenArray valueForKey:@"projekt"]description]);
@@ -1248,6 +1249,7 @@ enum
    
    
    //NSLog(@"ProjektStartAktion: %@",[[note userInfo]description]);
+   [[self.view window]display];
    [[self.view window]makeKeyAndOrderFront:[self.view window]];
    
    NSString* tempProjektWahl=[[note userInfo] objectForKey:@"projektwahl"];
@@ -1323,7 +1325,12 @@ enum
       
       
    }
-   
+   [self.view.window setIsVisible:YES];
+
+   [[self.view window]makeFirstResponder:nil];
+   [[self.view window]display];
+   [[self.view window]makeKeyAndOrderFront:nil];
+
 }
 
 - (void)setProjektMenu

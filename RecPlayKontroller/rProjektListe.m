@@ -77,7 +77,7 @@
 
 - (IBAction)okAktion:(id)sender
 {
-int z=[sender selectedRow];
+double z=[sender selectedRow];
 NSString* tempProjektString=[[ProjektArray objectAtIndex:z]objectForKey:@"projekt"];
 BOOL istProjektZeile=[tempProjektString isEqualToString:aktuellesProjekt];
 BOOL istAktiviert=[[[ProjektArray objectAtIndex:z]objectForKey:@"OK"]boolValue];
@@ -90,6 +90,8 @@ BOOL istAktiviert=[[[ProjektArray objectAtIndex:z]objectForKey:@"OK"]boolValue];
 NSLog(@"okAktion: Zeile %d    istAktiviert: %d",z,istAktiviert);
 
 }
+
+
 - (void)EnterKeyNotifikationAktion:(NSNotification*)note
 {
 	NSLog(@"Projektliste    EnterKeyNotifikationAktion: note: %@",[note object]);
@@ -193,19 +195,19 @@ vomStart=NO;
 
 - (IBAction)reportEntfernen:(id)sender
 {
-  int ProjektIndex=[ProjektTable selectedRow];
+  double ProjektIndex=[ProjektTable selectedRow];
   
   NSLog(@"reportEntfernen");
   if ([ProjektTable selectedRow]>=0)
   {
 	  NSString* ProjektEntfernenString=[[ProjektArray objectAtIndex:ProjektIndex]objectForKey:@"projekt"];//Name des neuen Projekts
-	  
+	  NSLog(@"reportEntfernen ProjektEntfernenString: %@",ProjektEntfernenString);
 	  NSAlert *Warnung = [[NSAlert alloc] init];
-	  NSString* s3=NSLocalizedString(@"What should be done with the project folder %@?",@"Was soll mit dem  Projektordner %@ geschehen?");
-	  [Warnung addButtonWithTitle:NSLocalizedString(@"> Trash",@"> Papierkorb")];
+	  NSString* s3=@"Was soll mit dem  Projektordner %@ geschehen?";
+	  [Warnung addButtonWithTitle:@"> Papierkorb"];
 	  [Warnung addButtonWithTitle:@"> Magazin"];
-	  [Warnung addButtonWithTitle:NSLocalizedString(@"Clear Now",@"Sofort lšschen")];
-	  [Warnung addButtonWithTitle:NSLocalizedString(@"Cancel",@"Abbrechen")];
+	  [Warnung addButtonWithTitle:@"Sofort lšschen"];
+	  [Warnung addButtonWithTitle:@"Abbrechen"];
 	  [Warnung setMessageText:[NSString stringWithFormat:s3,ProjektEntfernenString]];
 	  
 	  NSString* s1=NSLocalizedString(@"It can be moved into trash or into the folder 'Magazin' in the lecturebox",@"Er kann in den Papierkorb oder in den Ordner 'Magazin' in der Lesebox verschoben werden.");
@@ -364,9 +366,9 @@ vomStart=NO;
 	[CancelTaste setEnabled:YES];
 	[InListeTaste setKeyEquivalent:@""];
 	[SchliessenTaste setKeyEquivalent:@""];
-	if ([ProjektArray count]>1)
+	if (([ProjektArray count]>1) && [ProjektTable numberOfSelectedRows])
 	{
-	[EntfernenTaste setEnabled:YES];
+      [EntfernenTaste setEnabled:YES];
 	}
 	if ([ProjektArray count])
 	{

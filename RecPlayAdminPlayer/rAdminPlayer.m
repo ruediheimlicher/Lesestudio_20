@@ -82,7 +82,7 @@ const short kRecPlayUmgebung=0;
    // Do view setup here.
    
       NSLog(@"AdminPlayer  viewDidLoad");
-   NSLog(@"NSModalResponseOK: %d  NSOKButton: %d",NSModalResponseOK , NSOKButton);
+   //NSLog(@"NSModalResponseOK: %d  NSOKButton: %d",NSModalResponseOK , NSOKButton);
    NSNotificationCenter * nc;
    nc=[NSNotificationCenter defaultCenter];
    

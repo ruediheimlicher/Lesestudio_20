@@ -196,7 +196,8 @@ extern const int StartmitDialog;//=2;
 	[NSApp stopModalWithCode:0];
 	[[self window]orderOut:NULL];
 	
-	[nc postNotificationName:@"ProjektStart" object:self userInfo:NotificationDic];
+  // [nc postNotificationName:@"ProjektStart" object:self userInfo:NotificationDic];
+	[nc postNotificationName:@"neuesProjektVomStart" object:self userInfo:NotificationDic];
    
 	
 }

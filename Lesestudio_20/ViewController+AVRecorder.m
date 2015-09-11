@@ -557,14 +557,13 @@
 
 - (IBAction)saveRecord:(id)sender
 {
-   if ([self.playBalkenTimer isValid])
-   {
-      [self.playBalkenTimer invalidate];
-   }
    [AVAbspielplayer invalTimer];
    [Utils stopTimeout];
    BOOL erfolg=YES;
    NSLog(@"saveRecord tag: %ld Leser: %@ ",(long)[sender tag],self.Leser);
+   
+   NSLog(@"anzProjekte vor: %d",[[self.ProjektArray valueForKey:@"projekt"]count]);
+
    //NSLog(@"saveRecord hiddenAufnahmePfad: %@",self.hiddenAufnahmePfad);
    if ([self.Leser length]==0)
    {
@@ -579,8 +578,8 @@
       NSAlert *Warnung = [[NSAlert alloc] init];
       [Warnung addButtonWithTitle:@"OK"];
       //[Warnung addButtonWithTitle:@"Cancel"];
-      [Warnung setMessageText:NSLocalizedString(@"No Record",@"Keine Aufnahme")];
-      [Warnung setInformativeText:NSLocalizedString(@"No record present ir already saved",@"Keine Aufnahme oder schon gesichert")];
+      [Warnung setMessageText:@"Keine Aufnahme"];
+      [Warnung setInformativeText:@"Keine Aufnahme oder schon gesichert"];
       [Warnung setAlertStyle:NSWarningAlertStyle];
       [Warnung runModal];
       
@@ -684,10 +683,10 @@
          
          if (([titel length]==0)||([titel isEqualToString:@"neue Aufnahme"]))
          {
-            NSString* s1=NSLocalizedString(@"Title For Record",@"Titel für Aufnahme");
-            NSString* s2=NSLocalizedString(@"You have not yet given a matching title.",@"Noch kein passender Titel");
-            NSString* s3=NSLocalizedString(@"Enter Title",@"Titel eingeben");
-            NSString* s4=NSLocalizedString(@"Continue",@"Weiter");
+            NSString* s1=@"Titel für Aufnahme";
+            NSString* s2=@"Noch kein passender Titel";
+            NSString* s3=@"Titel eingeben";
+            NSString* s4=@"Weiter";
             
             int Antwort=NSRunAlertPanel(s1, s2, s3, s4,NULL);
             if (Antwort==1)
@@ -709,9 +708,6 @@
          
          tempAufnahmePfad=[self.LeserPfad stringByAppendingPathComponent:[AufnahmeTitel stringByDeletingPathExtension]];//Pfad im Ordner in der Lesebox
          
-         
-         
-         
          NSLog(@"saveRecord tempAufnahmePfad : %@", tempAufnahmePfad);
          //[Manager movePath: neueAufnahmePfad toPath:tempAufnahmePfad handler:NULL];
          
@@ -730,7 +726,29 @@
             NSError *error = nil;
             if ([[NSFileManager defaultManager] moveItemAtURL:[NSURL fileURLWithPath:self.hiddenAufnahmePfad] toURL:[NSURL fileURLWithPath:tempAufnahmePfad] error:&error]) // move OK
             {
-               NSLog(@"move 1");
+               [self updateProjektArray];
+              // [self.ArchivDaten resetArchivDaten];
+               [self.ArchivDaten insertAufnahmePfad:[AufnahmeTitel stringByDeletingPathExtension] forRow:0];
+               
+               [self.ArchivView reloadData];
+               self.ArchivZeilenhit=NO;
+               
+               NSError* err;
+ 
+               NSMutableArray* tempArray =(NSMutableArray*)[[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.LeserPfad error:&err];
+               NSLog(@"tempArray: %@",[tempArray description]);
+               
+               if ([[tempArray objectAtIndex:0] hasPrefix:@".DS"]) //Unsichtbare Ordner
+               {
+                  [tempArray removeObjectAtIndex:0];
+               }
+               [tempArray removeObject:@"Anmerkungen"];
+               double anz = [tempArray count];
+               
+               
+               self.aktuellAnzAufnahmen = anz;
+               NSLog(@"move 1 anz: %f tempAufnahmePfad: %@",anz, tempAufnahmePfad);
+               
                // Platz machen
                [[NSFileManager defaultManager] removeItemAtURL:[NSURL fileURLWithPath:self.hiddenAufnahmePfad] error:nil];
                
@@ -747,7 +765,7 @@
                [Warnung setAlertStyle:NSWarningAlertStyle];
                
                //[Warnung setIcon:RPImage];
-               int antwort=[Warnung runModal];
+               double antwort=[Warnung runModal];
                
                NSLog(@"Fehler beim Sichern der Aufnahmen");
                [[NSFileManager defaultManager] removeItemAtURL:[NSURL fileURLWithPath:self.hiddenAufnahmePfad] error:nil];
@@ -784,8 +802,9 @@
          
          
          //Leser zur Sessionliste zufügen
+         NSLog(@"anzProjekte nach: %lu",(unsigned long)[[self.ProjektArray valueForKey:@"projekt"]count]);
          
-         int ProjektIndex=[[self.ProjektArray valueForKey:@"projekt"] indexOfObject:[self.ProjektPfad lastPathComponent]];
+         double ProjektIndex=[[self.ProjektArray valueForKey:@"projekt"] indexOfObject:[self.ProjektPfad lastPathComponent]];
          //NSLog(@"ProjektIndex: %d",ProjektIndex);
          if (ProjektIndex<NSNotFound)
          {

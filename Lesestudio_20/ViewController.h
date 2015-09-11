@@ -85,7 +85,7 @@
 @property (nonatomic, strong)rEinstellungen*						EinstellungenFenster;
 
 
-@property (weak) IBOutlet AVPlayerView       *playerView;
+@property (weak) IBOutlet NSView       *playerView;
 @property AVPlayer *                         player;
 
 @property (weak) IBOutlet AVAudioPlayer *_audioPlayer;
