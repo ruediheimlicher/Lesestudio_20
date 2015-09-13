@@ -3161,6 +3161,7 @@ QTMovie* qtMovie;
          if (!(ProjektIndex==NSNotFound))
          {
             NSDictionary* tempProjectDic=[self.ProjektArray objectAtIndex:ProjektIndex];
+            NSLog(@"tempProjectDic: %@",[tempProjectDic description]);
             if ([tempProjectDic objectForKey:@"fix"])
             {
                TitelEditOK=![[tempProjectDic objectForKey:@"fix"]boolValue];//Titel sind nicht fixiert
@@ -3189,13 +3190,17 @@ QTMovie* qtMovie;
          
          [self.TitelPop selectItemAtIndex:0];
          [self.TitelPop setEnabled:YES];
-         [self.TitelPop setEditable:TitelEditOK];//Nur wenn Titel editierbar
- //        [self.TitelPop setSelectable:TitelEditOK];
-//         [self.TitelPop selectText:self];
-         NSLog(@"TitelPop stringValue: %@", [self.TitelPop stringValue]);
-         [[self.TitelPop currentEditor] setSelectedRange:NSMakeRange([[self.TitelPop stringValue] length], 0)];
-//         [self.view.window makeFirstResponder:self.TitelPop];
-         /* 
+         if (TitelEditOK)
+         {
+            
+            
+            [self.TitelPop setEditable:TitelEditOK];//Nur wenn Titel editierbar
+            [self.TitelPop setSelectable:TitelEditOK];
+            //[self.TitelPop selectText:self];
+            //       [[self.TitelPop currentEditor] setSelectedRange:NSMakeRange([[self.TitelPop stringValue] length], 0)];
+            [self.view.window makeFirstResponder:self.TitelPop];
+         }
+         /*
           // http://stackoverflow.com/questions/764179/focus-a-nstextfield
           [textField selectText:self];
          [[textField currentEditor] setSelectedRange:NSMakeRange([[textField stringValue] length], 0)];
@@ -3209,6 +3214,7 @@ QTMovie* qtMovie;
       }//if aktuellAnzAufnahmen
       else //noch keine Aufnahmen im Ordner
       {
+         NSLog(@"setLeser leer: LeserPfad: %@ ",[self.LeserPfad description]);
          
          [self.TitelPop removeAllItems];
          
