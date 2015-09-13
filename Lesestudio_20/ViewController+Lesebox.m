@@ -2268,7 +2268,7 @@ enum
 
 - (void)savePListAktion:(NSNotification*)note
 {
-   NSLog(@"savePListAktion: PList: %@",[self.PListDic  description]);
+   //NSLog(@"savePListAktion: PList: %@",[self.PListDic  description]);
    //NSLog(@"savePListAktion adminpw aus PList: %@",[[PListDic objectForKey:@"adminpw"] description]);
    
    //	NSLog(@"savePListAktion projektarray aus PList: %@",[[PListDic objectForKey:@"projektarray"] description]);

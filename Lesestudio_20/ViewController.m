@@ -895,6 +895,7 @@ return YES;
             [self saveRecord:NULL];
             [self resetRecPlay];
             [Utils stopTimeout];
+            [self.view.window makeFirstResponder:self.view];
          }break;
             
          case 0://Timeout abbrechen
@@ -903,7 +904,7 @@ return YES;
          }break;
       }//switch
    }
-   [self.view.window makeFirstResponder:self.view];
+ //
 }
 
 
@@ -3113,7 +3114,7 @@ QTMovie* qtMovie;
                
             }//for anzahl
          }//while tausch
-         NSLog(@"TitelArray nach Sortieren: %@",[TitelArray description]);
+         //NSLog(@"TitelArray nach Sortieren: %@",[TitelArray description]);
          NSMutableArray* AufnahmenPopArray=[[NSMutableArray alloc] initWithCapacity:self.aktuellAnzAufnahmen];
          [self.ArchivDaten resetArchivDaten];
          for (i=(int)[TitelArray count]-1;i>=0;i--)//Reihenfolge umkehren für TitelPop
@@ -3121,7 +3122,7 @@ QTMovie* qtMovie;
             [AufnahmenPopArray addObject:[TitelArray objectAtIndex:i]];
             
             [self.ArchivDaten setAufnahmePfad:[[TitelArray objectAtIndex:i]description] forRow:0];
-            NSLog(@"TitelArray: %@",[[TitelArray objectAtIndex:i]description]);
+            //NSLog(@"TitelArray: %@",[[TitelArray objectAtIndex:i]description]);
             
             //NSLog(@"TitelArray :%@END",[[TitelArray objectAtIndex:i]description]);
             //indexTitelString=[NSString stringWithString:[TitelArray objectAtIndex:i]];
@@ -3142,7 +3143,7 @@ QTMovie* qtMovie;
          [self.ArchivView reloadData];
          self.ArchivZeilenhit=NO;
          
-         NSLog(@"AufnahmenPopArray def: %@",[AufnahmenPopArray description]);
+         //NSLog(@"AufnahmenPopArray def: %@",[AufnahmenPopArray description]);
          [self.KommentarPop removeAllItems];
          [self.KommentarPop addItemsWithTitles:AufnahmenPopArray];
          //NSLog(@"TitelPopArray def: %@",[TitelPopArray description]);
@@ -3184,15 +3185,16 @@ QTMovie* qtMovie;
             }//if ([[ProjektArray objectAtIndex:ProjektIndex]objectForKey:@"titelarray"])
          }//if (!(ProjektIndex==NSNotFound))
          
-         NSLog(@"setLeser nicht leer: LeserPfad: %@ titelfix : %d ",[self.LeserPfad description], TitelEditOK);
+         NSLog(@"setLeser nicht leer: LeserPfad: %@ TitelEditOK : %d ",[self.LeserPfad description], TitelEditOK);
          
          [self.TitelPop selectItemAtIndex:0];
          [self.TitelPop setEnabled:YES];
          [self.TitelPop setEditable:TitelEditOK];//Nur wenn Titel editierbar
-         [self.TitelPop setSelectable:TitelEditOK];
-         [self.TitelPop selectText:self];
+ //        [self.TitelPop setSelectable:TitelEditOK];
+//         [self.TitelPop selectText:self];
+         NSLog(@"TitelPop stringValue: %@", [self.TitelPop stringValue]);
          [[self.TitelPop currentEditor] setSelectedRange:NSMakeRange([[self.TitelPop stringValue] length], 0)];
-         [self.view.window makeFirstResponder:self.TitelPop];
+//         [self.view.window makeFirstResponder:self.TitelPop];
          /* 
           // http://stackoverflow.com/questions/764179/focus-a-nstextfield
           [textField selectText:self];
@@ -3278,6 +3280,7 @@ QTMovie* qtMovie;
    [self setArchivView];
    
    [Utils startTimeout:self.TimeoutDelay];
+   
 }
 
 
