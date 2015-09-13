@@ -63,9 +63,9 @@ enum
    
    if (self.LeseboxOK)
    {
-      //NSLog(@"Leseboxvorbereiten LeseboxOK=1 PListDic lesen");
+      NSLog(@"Leseboxvorbereiten LeseboxOK=1 PListDic lesen");
       self.PListDic=[[Utils PListDicVon:self.LeseboxPfad aufSystemVolume:self.istSystemVolume]mutableCopy];
-      
+      NSLog(@"Leseboxvorbereiten LeseboxOK=1 PListDic: %@",[self.PListDic description]);
       
       // Anfang busy
       
@@ -561,7 +561,7 @@ enum
 - (void)ProjektListeAktion:(NSNotification*)note
 {
    //Note von Projektliste über neue Projekte und/oder Änderungen am bestehenden Projektarray
-   //NSLog(@"*ProjektListeAktion startProjektarray aus Panel: %@",[[[note userInfo] objectForKey:@"projektarray"]description]);
+   NSLog(@"*ProjektListeAktion startProjektarray aus Panel: %@",[[[note userInfo] objectForKey:@"projektarray"]description]);
    //ProjektArray
    NSMutableArray* tempProjektArray=[[[note userInfo] objectForKey:@"projektarray"]mutableCopy];
    //NSLog(@"\n****ProjektListeAktion projektarray: %@",[[[note userInfo] objectForKey:@"projektarray"]description]);
@@ -2021,17 +2021,17 @@ enum
    if (ProjektIndex<NSNotFound)
    {
       NSMutableDictionary* tempProjektDic=(NSMutableDictionary*)[self.ProjektArray objectAtIndex:ProjektIndex];
-      
+      NSLog(@"anderesProjektEinrichtenMit tempProjektDic: %@",[tempProjektDic description]);
       if ([tempProjektDic objectForKey:@"sessiondatum"])
       {
          NSString* SessionDatum=[tempProjektDic objectForKey:@"sessiondatum"];
          
-         //NSLog(@"anderesProjektEinrichtenMit: %@  SessionDatum: %@",dasProjekt,SessionDatum);
-         if ([SessionDatum compare:heuteDatumString]==NSOrderedDescending)
+         NSLog(@"anderesProjektEinrichtenMit: %@  SessionDatum: %@ heuteDatumString: %@",dasProjekt,SessionDatum, heuteDatumString);
+   //      if ([SessionDatum compare:heuteDatumString]== NSOrderedDescending)
          {
             //NSLog(@"anderesProjektEinrichten: alte Session");
          }
-         else
+        // else
          {
             //NSLog(@"anderesProjektEinrichten: aktuelle Session");
          }
@@ -2513,7 +2513,7 @@ enum
 - (void)saveNeuenProjektArray:(NSArray*)derProjektArray
 {
    NSLog(@"saveNeuenProjektArray");
-   //NSLog(@"saveNeuenProjektArray: derProjektArray: %@",[derProjektArray  description]);
+   NSLog(@"saveNeuenProjektArray: derProjektArray: %@",[derProjektArray   description]);
    //NSLog(@"saveNeuenProjektArray: ProjektNamen: %@  LeseboxPfad: %@",[[derProjektArray valueForKey:@"projekt"]description],LeseboxPfad);
    
    
@@ -2536,9 +2536,14 @@ enum
    NSMutableDictionary* tempPListDic;
    
    tempPListDic=[[NSMutableDictionary alloc]initWithContentsOfFile:PListPfad];
+   
+   NSLog(@"saveNeuenProjektArray: tempPListDic: %@",[[tempPListDic objectForKey:@"projektarray" ]description]);
+   
    if (tempPListDic)
    {
       [tempPListDic setObject:derProjektArray forKey:@"projektarray"];
+      self.ProjektArray =(NSMutableArray*)derProjektArray;
+      [self.PListDic setObject:derProjektArray forKey:@"projektarray"];
    }//if tempPListDic
    else
    {
@@ -2550,6 +2555,13 @@ enum
    BOOL PListOK=[tempPListDic writeToFile:PListPfad atomically:YES];
    NSLog(@"PListOK: %d",PListOK);
    
+   
+   
+   // Kontrolle
+    tempPListDic=[[NSMutableDictionary alloc]initWithContentsOfFile:PListPfad];
+   
+   NSLog(@"tempPListDic nach: %@",[tempPListDic description]);
+   NSLog(@"self.ProjektArray nach: %@",[self.ProjektArray description]);
    //[tempUserInfo release];
 }
 

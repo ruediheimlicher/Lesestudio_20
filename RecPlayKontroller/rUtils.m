@@ -1395,7 +1395,7 @@ return versionOK;
 	if ([Filemanager fileExistsAtPath:PListPfad])
 	{
 		tempPListDic=[[NSDictionary dictionaryWithContentsOfFile:PListPfad]mutableCopy];
-      //NSLog(@"tempPListDic: %@",tempPListDic);
+      //NSLog(@"Utils tempPListDic: %@",[tempPListDic description]);
 		if ([[[tempPListDic objectForKey:@"adminpw"]objectForKey:@"pw"]length]==0)
 		{
 			NSAlert *Warnung = [[NSAlert alloc] init];

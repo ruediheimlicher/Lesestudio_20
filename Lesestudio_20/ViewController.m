@@ -3138,7 +3138,7 @@ QTMovie* qtMovie;
             }
          }//for anzahl
          
-         NSLog(@"TitelPopArray : %@",[TitelPopArray description]);
+         //NSLog(@"TitelPopArray : %@",[TitelPopArray description]);
          
          [self.ArchivView reloadData];
          self.ArchivZeilenhit=NO;
@@ -3161,7 +3161,7 @@ QTMovie* qtMovie;
          if (!(ProjektIndex==NSNotFound))
          {
             NSDictionary* tempProjectDic=[self.ProjektArray objectAtIndex:ProjektIndex];
-            NSLog(@"tempProjectDic: %@",[tempProjectDic description]);
+            //NSLog(@"tempProjectDic: %@",[tempProjectDic description]);
             if ([tempProjectDic objectForKey:@"fix"])
             {
                TitelEditOK=![[tempProjectDic objectForKey:@"fix"]boolValue];//Titel sind nicht fixiert
