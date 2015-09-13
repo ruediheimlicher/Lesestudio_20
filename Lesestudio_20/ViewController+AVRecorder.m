@@ -456,7 +456,7 @@
       [self updateAudioLevels:Level];
       
    }
-   if ([[note userInfo]objectForKey:@"duration"])
+   if ([[note userInfo]objectForKey:@"duration"] && [self isRecording])
    {
       NSNumber* durationNumber=[[note userInfo]objectForKey:@"duration"];
       AufnahmeZeit=[durationNumber intValue];
@@ -483,6 +483,7 @@
       {
          MinutenString=[NSString stringWithFormat:@"%d",Minuten];
       }
+      
       [self.Zeitfeld setStringValue:[NSString stringWithFormat:@"%@:%@",MinutenString, SekundenString]];
 
       
@@ -602,7 +603,6 @@
    [Abspielanzeige setLevel:0];
    [Abspielanzeige setNeedsDisplay:YES];
    
-   [self.Zeitfeld setStringValue:@""];
    //NSLog(@"saveRecord: QTKitGesamtAufnahmezeit: %2.2f",QTKitGesamtAufnahmezeit);
    NSString* tempAufnahmePfad;
    //tempLeserPfad=[NSString stringWithString:@""];

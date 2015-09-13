@@ -808,6 +808,7 @@ OptionBString=[[NSString alloc]init];
          //NSLog(@"setAdminPlayer tempAnmerkungPfad: %@",tempAnmerkungPfad);
 			BOOL AdminMark=NO;
 			//
+         
 			if ([Filemanager fileExistsAtPath:tempAnmerkungPfad])
 			{
 				//NSLog(@"File exists an Pfad: %@",tempAnmerkungPfad);

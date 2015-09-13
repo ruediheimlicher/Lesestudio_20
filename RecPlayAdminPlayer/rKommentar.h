@@ -99,6 +99,6 @@
 - (void)KommentarSichernMitProjektDicArray:(NSArray*)derProjektDicArray;
 
 // aus Kommentarkontroller
-
+- (NSString*)lastKommentarVonLeser:(NSString*)derLeser anProjektPfad:(NSString*)derProjektPfad;
 - (void)setKommentarMitProjektArray:(NSArray*)derProjektArray mitLeser:(NSString*)aktuellerLeser anPfad:(NSString*)aktuellerProjektPfad;
 @end

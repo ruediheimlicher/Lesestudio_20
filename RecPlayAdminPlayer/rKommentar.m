@@ -849,6 +849,7 @@ typedef NS_ENUM(NSInteger, A)
                  
                  if ([Filemanager fileExistsAtPath:tempKommentarPfad])//Kommentar für diese Aufnahme ist da)
                  {
+                    //
                     int n=[self AufnahmeNummerVon:eineAufnahme];
                     if (n>letzte)
                     {
@@ -859,6 +860,7 @@ typedef NS_ENUM(NSInteger, A)
               }//while enumerator
               tempLeserKommentarPfad=[tempLeserKommentarPfad stringByAppendingPathComponent:letzteAufnahme];
               lastKommentarString=[NSString stringWithContentsOfFile:tempLeserKommentarPfad encoding:NSMacOSRomanStringEncoding error:NULL];
+              
               
               NSDictionary* Attrs=[Filemanager attributesOfItemAtPath:tempLeserKommentarPfad error:NULL];
               NSNumber *fsize, *refs, *owner;
@@ -876,13 +878,13 @@ typedef NS_ENUM(NSInteger, A)
            {
               NSLog(@"Keine Aufnahmen von: %@",derLeser);
               //NSLog(@"alleKommentareZuTitel: Kommentarordner von %@ ist leer",tempLeser);
-              NSString* keineAufnahmeString=NSLocalizedString(@"There are no records for this user",@"Für dieses Leser hat es keine Aufnahmen");
+              NSString* keineAufnahmeString=@"Für dieses Leser hat es keine Aufnahmen";
               lastKommentarString=keineAufnahmeString;
            }
         }//[tempAufnahmen count]
         else
         {
-           NSLog(@"Leser %@ hat keine ",derLeser);
+           NSLog(@"Leser %@ hat keine Aufnahmen",derLeser);
         }
         //[tempAufnahmen release];
         
@@ -1257,7 +1259,7 @@ typedef NS_ENUM(NSInteger, A)
 
 - (NSArray*)createKommentarStringArrayWithProjektPfadArray:(NSArray*)derProjektPfadArray
 {
-   NSLog(@"\n\n*********\n			                                     Beginn createKommentarStringArrayWithProjektPfadArray\n\n");
+   NSLog(@"\n\n*********\n		Beginn createKommentarStringArrayWithProjektPfadArray\n\n");
    NSLog(@"\nderProjektPfadArray: %@",[derProjektPfadArray description]);
   // NSLog(@"AuswahlOption: %d  OptionAString: %@  OptionBString: %@",AuswahlOption,OptionAString,OptionBString);
    NSLog(@"   [self OptionA]: %@  [self PopBOption]: %@  AnzahlDics: %lu",[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem],(unsigned long)[derProjektPfadArray count]);
@@ -1501,7 +1503,7 @@ typedef NS_ENUM(NSInteger, A)
                            
                            //Zeilenwechsel entfernen
                            NSRange r=NSMakeRange(0,[tempString length]);
-                           int anzn, anzr;
+                           long anzn, anzr;
                            //NSLog(@"tempString orig: %s",[tempString cString]);
                            anzn=[tempString replaceOccurrencesOfString:@"\n" withString:@" " options:NSBackwardsSearch range:r];
                            anzr=[tempString replaceOccurrencesOfString:@"\r" withString:@" " options:NSBackwardsSearch range:r];
@@ -1630,8 +1632,8 @@ typedef NS_ENUM(NSInteger, A)
    {
       //Keine Kommentare für diese Settings
       NSMutableDictionary* keinKommentarStringDic=[[NSMutableDictionary alloc]initWithCapacity:0];
-      NSString* keinKommentarProjektString=NSLocalizedString(@"Empty Comments Folder",@"Leerer Ordner für Anmerkungen");
-      NSString* keinKommentarString=NSLocalizedString(@"No comments for these settings ",@"Keine Kommentare für diese Einstellungen");
+      NSString* keinKommentarProjektString=@"Leerer Ordner für Anmerkungen";
+      NSString* keinKommentarString=@"Keine Kommentare für diese Einstellungen";
       
       [keinKommentarStringDic setObject: keinKommentarString forKey:@"kommentarstring"];
       [keinKommentarStringDic setObject: keinKommentarProjektString forKey:@"projekt"];
@@ -1768,7 +1770,7 @@ typedef NS_ENUM(NSInteger, A)
 {
    NSLog(@"setPopBMenu  derArray: %@ erstesItem: %@ aktuell: %@ Prompt: %@",[derArray description], dasItem, aktuellerString, dasPrompt);
    
-   NSString* alle=NSLocalizedString(@"All",@"alle");
+   NSString* alle=@"alle";
    //NSString* namenwaehlen=@"Namen wählen";
    [PopBMenu setEnabled:YES];
    [AnzahlPop setEnabled:YES];
@@ -2166,7 +2168,7 @@ typedef NS_ENUM(NSInteger, A)
    int maxTitelbreite=12;
    int Textschnitt=10;
    int AnzahlAnmerkungen=0;
-   
+   NSLog(@"setKommentarMit KommentarDicArray: %@",[derKommentarDicArray objectAtIndex:0]);
    NSEnumerator* TabEnum=[derKommentarDicArray objectEnumerator];
    id einTabDic;
    //NSLog(@"setKommentarMit Komm.DicArray: vor while   Anz. Dics: %d",[derKommentarDicArray count]);
@@ -2532,8 +2534,8 @@ typedef NS_ENUM(NSInteger, A)
    //NSMutableDictionary* KommentarOptionDic=[NSMutableDictionary dictionaryWithObject:AuswahlOptionTag forKey:@"auswahl"];
    
    NSNumber* AbsatzOptionTag;
-   AbsatzOption=[[AbsatzMatrix selectedCell]tag];
-   AbsatzOptionTag=[NSNumber numberWithInt:[AbsatzMatrix selectedColumn]];
+   //AbsatzOption=[[AbsatzMatrix selectedCell]tag];
+   AbsatzOptionTag=0; //[NSNumber numberWithInt:[AbsatzMatrix selectedColumn]];
    NSLog(@"reportKommentarOption:AbsatzOptionTag: %d ",[AbsatzOptionTag intValue]);
    [KommentarOptionDic setObject:AbsatzOptionTag forKey:@"Absatz"];
    
@@ -2601,6 +2603,189 @@ typedef NS_ENUM(NSInteger, A)
 }
 */
 
+- (NSString*)KommentarVon:(NSString*) derKommentarString
+{
+   NSArray* tempMarkArray=[derKommentarString componentsSeparatedByString:@"\r"];
+   //NSLog(@"tempMarkVon: anz Components: %d",[tempMarkArray count]);
+   if ([tempMarkArray count]==6)//noch keine Zeile für Mark
+   {
+      NSString* tempKommentarString=[tempMarkArray objectAtIndex:5];
+      return [tempMarkArray objectAtIndex:5];
+      //[tempKommentarString release];
+      tempKommentarString=[derKommentarString copy];
+      int AnzReturns=0;
+      int pos=0;
+      int KommentarReturnAlt=5;
+      while((AnzReturns<KommentarReturnAlt)&&(pos<[tempKommentarString length]))
+      {
+         if (([tempKommentarString characterAtIndex:pos]=='\r')||([tempKommentarString characterAtIndex:pos]=='\n'))
+         {
+            AnzReturns++;
+         }
+         pos++;
+      }//while
+      tempKommentarString=[tempKommentarString substringFromIndex:pos];
+      //NSLog(@"******  tempKommentarString: %@", tempKommentarString);
+      
+      return tempKommentarString;
+   }//noch keine Zeile für Mark
+   else if ([tempMarkArray count]==8)//neue version von Kommentar
+   {
+      NSString* tempKommentarString=[tempMarkArray objectAtIndex:7];
+      
+      return tempKommentarString;
+      
+   }
+   return @"alt";
+}
+
+- (NSString*)DatumVon:(NSString*) derKommentarString
+{
+   const short DatumReturn=2;
+   NSString* tempDatumString;
+   tempDatumString=[derKommentarString copy];
+   int AnzReturns=0;
+   int returnpos1=0,returnpos2=0;
+   int pos=0;
+   while(pos<[tempDatumString length])
+	  {
+        if (([tempDatumString characterAtIndex:pos]=='\r')||([tempDatumString characterAtIndex:pos]=='\n'))
+        {
+           AnzReturns++;
+           if ((returnpos1==0)&&(AnzReturns==DatumReturn))
+           {
+              returnpos1=pos;
+           }
+           else
+              //if ((returnpos2==0)&&(AnzReturns==DatumReturn+1))
+              if (returnpos1&&(returnpos2==0))
+              {
+                 returnpos2=pos;
+              }
+           
+        }
+        pos++;
+     }//while
+   
+   
+   returnpos1++;
+   if (returnpos2>returnpos1)
+	  {
+        NSRange r=NSMakeRange(returnpos1,returnpos2-returnpos1);
+        tempDatumString=[tempDatumString substringWithRange:r];
+        if ([tempDatumString length]==0)
+        {
+           tempDatumString=@"--";
+           return tempDatumString;
+        }
+        //NSLog(@"tempDatumString: %@", tempDatumString);
+        pos=0;
+        int leerpos=0;
+        while(pos<[tempDatumString length])
+        {
+           if ([tempDatumString characterAtIndex:pos]==' ')
+           {
+              leerpos=pos;
+           }
+           pos++;
+        }//while
+        if (leerpos)
+        {
+           r=NSMakeRange(0,leerpos);
+           tempDatumString=[tempDatumString substringWithRange:r];
+           //NSLog(@"DatumVon tempDatumString: %@", tempDatumString);
+        }
+        else
+        {
+           tempDatumString=@" ";
+        }
+     }
+   
+   
+   return tempDatumString;
+   
+}
+- (NSString*)ZeitVon:(NSString*) derKommentarString
+{
+   const short DatumReturn=2;
+   NSString* tempZeitString;
+   tempZeitString=[derKommentarString copy];
+   int AnzReturns=0;
+   int returnpos1=0,returnpos2=0;
+   int pos=0;
+   while(pos<[tempZeitString length])
+	  {
+        if (([tempZeitString characterAtIndex:pos]=='\r')||([tempZeitString characterAtIndex:pos]=='\n'))
+        {
+           AnzReturns++;
+           if ((returnpos1==0)&&(AnzReturns==DatumReturn))
+           {
+              returnpos1=pos;
+           }
+           else
+              //if ((returnpos2==0)&&(AnzReturns==DatumReturn+1))
+              if (returnpos1&&(returnpos2==0))
+              {
+                 returnpos2=pos;
+              }
+           
+        }
+        pos++;
+     }//while
+   
+   returnpos1++;
+   
+   if (returnpos2>returnpos1)
+	  {
+        NSRange r=NSMakeRange(returnpos1,returnpos2-returnpos1);
+        tempZeitString=[tempZeitString substringWithRange:r]; // ganze DatumZeile
+        NSArray* tempArray= [tempZeitString componentsSeparatedByString:@" "];
+        if ([tempArray count]> 1)
+        {
+           tempZeitString = [tempArray objectAtIndex:1];
+        }
+        else
+        {
+           tempZeitString = @"";
+        }
+        
+        
+     }
+   
+   
+   return tempZeitString;
+   
+}
+
+
+
+-(int) tagVonDatum:(NSString*)datumstring
+{
+   int returnvalue=0;
+   returnvalue = [[[datumstring componentsSeparatedByString:@"."]objectAtIndex:0]intValue];
+   return returnvalue;
+}
+-(int) monatVonDatum:(NSString*)datumstring
+{
+   int returnvalue=0;
+   returnvalue = [[[datumstring componentsSeparatedByString:@"."]objectAtIndex:1]intValue];
+   return returnvalue;
+}
+-(int) jahrVonDatum:(NSString*)datumstring
+{
+   int returnvalue=0;
+   returnvalue = [[[datumstring componentsSeparatedByString:@"."]objectAtIndex:2]intValue];
+   return returnvalue;
+}
+
+-(int) stundeVonZeit:(NSString*)zeitstring
+{
+   int returnvalue=0;
+   returnvalue = [[[zeitstring componentsSeparatedByString:@":"]objectAtIndex:0]intValue];
+   return returnvalue;
+}
+
+
 - (void)KommentarSuchenMitDic:(NSDictionary*)OptionDic
 {
    NSString* alle=@"alle";
@@ -2621,7 +2806,7 @@ typedef NS_ENUM(NSInteger, A)
    
    
    NSNumber* AuswahlNummer=[OptionDic objectForKey:@"auswahl"];
-   if (AuswahlNummer) // index von AuswahlPop
+   if (AuswahlNummer) // index von AuswahlPop,
    {
       AuswahlOption=(int)[AuswahlNummer intValue];
       NSLog(@"KommentarSuchenMitDic AuswahlOption: %d",[AuswahlNummer intValue]);
@@ -2629,9 +2814,116 @@ typedef NS_ENUM(NSInteger, A)
       {
          case lastKommentarOption:
          {
+            NSLog(@"KommentarSuchenMitDic lastKommentarOption");
             [self resetPopAMenu];
             [self resetPopBMenu];
-            
+            switch (ProjektAuswahlOption)
+            {
+               case 0://Nur ein Projekt
+               {
+                  NSLog(@"alleVonNameKommentarOption: Nur 1 Projekt AdminProjektPfad: %@ tempProjektName: %@",AdminProjektPfad,tempProjektName);
+                  
+                  NSString* tempAdminProjektPfad=[[AdminProjektPfad stringByDeletingLastPathComponent]stringByAppendingPathComponent:tempProjektName];
+                  NSLog(@"tempAdminProjektPfad: %@",tempAdminProjektPfad);
+                  NSArray* tempNamenArray=[self LeserArrayAnProjektPfad:tempAdminProjektPfad];
+                  NSLog(@"lastKommentarOption: Nur 1 Projekt tempNamenArray: %@",[tempNamenArray description]);
+                  
+                  NSString* tempKommentarPfad = [tempAdminProjektPfad stringByAppendingPathComponent:@"Anmerkungen"];
+                  
+                  for (int namenindex=0;namenindex < [tempNamenArray count];namenindex++)
+                  {
+                     
+                     NSString* lastKommentarstring = [self lastKommentarVonLeser:[tempNamenArray objectAtIndex:namenindex] anProjektPfad:tempAdminProjektPfad];
+                     
+                     /*
+                     NSError* err;
+                     NSString* tempKommentarPfad  = [tempAdminProjektPfad stringByAppendingPathComponent:[tempNamenArray objectAtIndex:namenindex]];
+                     NSString* tempKommentarfuerNamePfad = [tempKommentarPfad stringByAppendingPathComponent:@"Anmerkungen"];
+                     // NSLog(@"tempKommentarfuerNamePfad: %@",tempKommentarfuerNamePfad);
+                     NSArray* AnmerkungenArray = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:tempKommentarfuerNamePfad error: &err];
+                     
+                     //NSLog(@"AnmerkungenArray: %@",[AnmerkungenArray description]);
+                     int tag=0;
+                     int monat=0;
+                     int jahr=0;
+                     NSLog(@"Leser: %@",[tempNamenArray objectAtIndex:namenindex]);
+                     for (int kommentarindex = 0;kommentarindex < [AnmerkungenArray count]; kommentarindex ++ )
+                     {
+                        if ([[AnmerkungenArray objectAtIndex:kommentarindex] rangeOfString:@".DS_Store"].location == NSNotFound )
+                        {
+                           NSString* tempAnmerkungPfad = [tempKommentarfuerNamePfad stringByAppendingPathComponent:[AnmerkungenArray objectAtIndex:kommentarindex]];
+                           
+                           NSString* namenKommentarString=[NSString stringWithContentsOfFile:tempAnmerkungPfad encoding:NSMacOSRomanStringEncoding error:NULL];
+                           //NSLog(@"Pfad: %@ namenKommentarString: \n%@",tempAnmerkungPfad,namenKommentarString);
+                           NSString* tempAnmerkung = [self KommentarVon:namenKommentarString ];
+                           if ([tempAnmerkung length] > 2)
+                           {
+                              NSString* DatumString = [self DatumVon:namenKommentarString];
+                              NSString* ZeitString = [self ZeitVon:namenKommentarString];
+                              //NSLog(@"Kommentar: %@ Datum: %@",[AnmerkungenArray objectAtIndex:kommentarindex],DatumString);
+                              int tempstunde = [self stundeVonZeit:ZeitString];
+                              int temptag = [self tagVonDatum:DatumString];
+                              int tempmonat = [self monatVonDatum:DatumString];
+                              int tempjahr = [self jahrVonDatum:DatumString]%2000;
+                              
+                              //NSLog(@"Datum: %@ temptag: %d tempMonat: %d tempjahr: %d",DatumString,temptag, tempmonat, tempjahr);
+                              long datumcode = tempstunde + temptag*100 + 10000*tempmonat + 1000000*tempjahr;
+                             // NSLog(@"Datum: %@ temptag: %d tempstunde: %d tempMonat: %d tempjahr: %d  datumcode: %ld",DatumString,tempstunde,temptag, tempmonat, tempjahr,datumcode);
+                              NSLog(@"Datum: %@ datumcode: %ld tempAnmerkung: %@",DatumString,datumcode, tempAnmerkung);
+                           }
+                           
+                        }
+                     }
+                     */
+                     
+                     
+                  }
+                  
+                  
+                  
+                  
+                  [self setPopAMenu:tempNamenArray erstesItem:alle aktuell:NULL];
+                  [self resetPopBMenu];
+                  
+               }break;
+                  
+               case 1://Nur aktive Projekte
+               {
+                  //NSLog(@"    ++++++++++++++       alleVonNameKommentarOption	Nur aktive Projekte\n");
+                  //[KommentarFenster setPopAMenu:NULL erstesItem:alle aktuell:alle];
+                  NSMutableArray* tempNamenArray=[[NSMutableArray alloc]initWithCapacity:0];
+                  
+                  NSEnumerator* ProjektArrayEnum=[AdminProjektArray objectEnumerator];
+                  id einProjektDic;
+                  while (einProjektDic=[ProjektArrayEnum nextObject])
+                  {
+                     //NSLog(@"		Nur aktive Projekte: %@",[einProjektDic description]);
+                     if ([einProjektDic objectForKey:@"ok"])
+                     {
+                        if ([[einProjektDic objectForKey:@"ok"]boolValue]&&[einProjektDic objectForKey:@"projektpfad"])
+                        {
+                           NSString* tempProjektName=[[einProjektDic objectForKey:@"projektpfad"]lastPathComponent];
+                           NSString* tempProjektPfad=[einProjektDic objectForKey:@"projektpfad"];
+                           NSArray* tempProjektNamenArray=[self LeserArrayAnProjektPfad:tempProjektPfad];
+                           //NSLog(@"tempProjektNamenArray: %@",[tempProjektNamenArray description]);
+                           //
+                           //		Namen addieren
+                           //
+                        }
+                     }
+                  }//while enum
+                  //NSLog(@"tempNamenArray: %@",[tempNamenArray description]);
+                  
+                  [self setPopAMenu:tempNamenArray erstesItem:alle aktuell:alle];
+                  [self setPopBMenu:NULL erstesItem:alle aktuell:alle mitPrompt:@"mit Titel:"];
+               }break;
+                  
+               case 2://Alle Projekte
+               {
+                  
+               }break;
+                  
+            }
             
             
          }break;//lastKommentarOption
@@ -2823,7 +3115,7 @@ typedef NS_ENUM(NSInteger, A)
                //NSLog(@"TitelArray: %@	OptionAString: %@  OptionBString. %@",	[TitelArray description],[PopAMenu  titleOfSelectedItem],[PopBMenu  titleOfSelectedItem]);
                if(ProjektAuswahlOption==0)//nur bei einzelnem Projekt
                {
-                  [self setPopBMenu:TitelArray erstesItem:alle aktuell:alle mitPrompt:NSLocalizedString(@"with title",@"mit Titel:")];
+                  [self setPopBMenu:TitelArray erstesItem:alle aktuell:alle mitPrompt:@"mit Titel:"];
                }
             }
          }break;//alleVonNameKommentarOption

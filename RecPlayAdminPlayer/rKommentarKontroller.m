@@ -887,7 +887,7 @@ return tempProjektDicArray;
 					//NSLog(@"TitelArray: %@	OptionAString: %@  OptionBString. %@",	[TitelArray description],[self OptionA],[self OptionB]);
 					if(ProjektAuswahlOption==0)//nur bei einzelnem Projekt
 					{
-						[KommentarFenster setPopBMenu:TitelArray erstesItem:@"alle" aktuell:@"alle" mitPrompt:NSLocalizedString(@"with title",@"mit Titel:")];
+						[KommentarFenster setPopBMenu:TitelArray erstesItem:@"alle" aktuell:@"alle" mitPrompt:@"mit Titel:"];
 					}
 				}
 			}break;//alleVonNameKommentarOption
@@ -2306,7 +2306,7 @@ return tempLeserArray;
 		  NSMutableArray* tempAufnahmen=(NSMutableArray*)[Filemanager contentsOfDirectoryAtPath:LeserPfad error:NULL];
 		  if ([tempAufnahmen count])//Aufnahmen vorhanden
 			{
-				int KommentarIndex=NSNotFound;
+				long KommentarIndex=NSNotFound;
 				KommentarIndex=[tempAufnahmen indexOfObject:locKommentar];
 				if (!(KommentarIndex==NSNotFound))
 				  {
@@ -2688,12 +2688,10 @@ return tempTitelDicArray;
 
 - (NSString*)KommentarVon:(NSString*) derKommentarString
 {
-	
 	NSArray* tempMarkArray=[derKommentarString componentsSeparatedByString:@"\r"];
 	//NSLog(@"tempMarkVon: anz Components: %d",[tempMarkArray count]);
 	if ([tempMarkArray count]==6)//noch keine Zeile für Mark
 	{
-		
 		NSString* tempKommentarString=[tempMarkArray objectAtIndex:5];
 		return [tempMarkArray objectAtIndex:5];
 		//[tempKommentarString release];
@@ -2716,13 +2714,14 @@ return tempTitelDicArray;
 	}//noch keine Zeile für Mark
 	else if ([tempMarkArray count]==8)//neue version von Kommentar
 	{
-		NSString* tempKommentarString=[tempMarkArray objectAtIndex:Kommentar];
+		NSString* tempKommentarString=[tempMarkArray objectAtIndex:7];
 		
 		return tempKommentarString;
 		
 	}
 	return @"alt";
 }
+
 - (NSString*)DatumVon:(NSString*) derKommentarString
 {
 	NSString* tempDatumString;
