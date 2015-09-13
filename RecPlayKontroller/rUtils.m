@@ -2249,7 +2249,7 @@ return versionOK;
 				id einProjekt;
 				while (einProjekt=[ProjektEnum nextObject])
 				{
-					if ([[einProjekt objectForKey:@"OK"]intValue]==1) // aktiviert
+					if ([[einProjekt objectForKey:@"ok"]intValue]==1) // aktiviert
 					{
 						NSString* tempProjektPfad=[UArchivPfad stringByAppendingPathComponent:[einProjekt objectForKey:@"projekt"]];
 						NSEnumerator* NamenEnum=[tempNeueNamenArray objectEnumerator];
@@ -2281,7 +2281,7 @@ return versionOK;
 					id einProjekt;
 					while (einProjekt=[ProjektEnum nextObject])
 					{
-						//if ([[einProjekt objectForKey:@"OK"]intValue]==1)
+						//if ([[einProjekt objectForKey:@"ok"]intValue]==1)
 						{
 							NSString* tempProjektPfad=[UArchivPfad stringByAppendingPathComponent:[einProjekt objectForKey:@"projekt"]];
 							NSEnumerator* NamenEnum=[tempNeueNamenArray objectEnumerator];

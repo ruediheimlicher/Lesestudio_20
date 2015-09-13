@@ -3177,7 +3177,7 @@ QTMovie* qtMovie;
                {
                   //NSLog(@"einTitelDic: %@",[einTitelDic description]);
                   NSString* tempTitel=[einTitelDic objectForKey:@"titel"];
-                  if ([[einTitelDic objectForKey:@"OK"]boolValue]&&[tempTitel length])
+                  if ([[einTitelDic objectForKey:@"ok"]boolValue]&&[tempTitel length])
                   {
                      [self.TitelPop addItemWithObjectValue:tempTitel];
                   }
@@ -3242,7 +3242,7 @@ QTMovie* qtMovie;
                {
                   //NSLog(@"einTitelDic: %@",[einTitelDic description]);
                   NSString* tempTitel=[einTitelDic objectForKey:@"titel"];
-                  if ([[einTitelDic objectForKey:@"OK"]boolValue]&&[tempTitel length])
+                  if ([[einTitelDic objectForKey:@"ok"]boolValue]&&[tempTitel length])
                   {
                      [self.TitelPop addItemWithObjectValue:tempTitel];
                   }
@@ -3320,7 +3320,7 @@ QTMovie* qtMovie;
             //NSLog(@"istAktiviert einProjekt: %@",[einProjekt description]);
             if([[einProjekt objectForKey:@"projekt"]isEqualToString:dasProjekt])
             {
-               checkAktiviert= [[einProjekt objectForKey:@"OK"]boolValue];
+               checkAktiviert= [[einProjekt objectForKey:@"ok"]boolValue];
             }
             //NSLog(@"istAktiviert einProjekt: %@ checkAktiviert: %d",[einProjekt description],checkAktiviert);
          }
@@ -4534,7 +4534,7 @@ if (!self.KommentarFenster)
             
             neuesProjektDic=[NSMutableDictionary dictionaryWithObject:neuesProjektName forKey:@"projekt"];
             [neuesProjektDic setObject:[tempProjektPfad copy] forKey:@"projektpfad"];
-            [neuesProjektDic setObject: [NSNumber numberWithInt:1] forKey:@"OK"];//Projekt ist aktiviert
+            [neuesProjektDic setObject: [NSNumber numberWithInt:1] forKey:@"ok"];//Projekt ist aktiviert
             [neuesProjektDic setObject:heuteDatumString forKey:@"sessiondatum"];
             
             

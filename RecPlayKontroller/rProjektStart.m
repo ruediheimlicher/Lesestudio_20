@@ -220,7 +220,7 @@ extern const int StartmitDialog;//=2;
       }
    }
    
-	[NotificationDic setObject:[NSNumber numberWithInt:1] forKey:@"OK"];
+	[NotificationDic setObject:[NSNumber numberWithInt:1] forKey:@"ok"];
 	[NotificationDic setObject:[NSNumber numberWithInt:0] forKey:@"mituserpw"];
 	[NotificationDic setObject:[NSNumber numberWithInt:0] forKey:@"fix"];
 	[NotificationDic setObject:[NSNumber numberWithInt:1] forKey:@"umgebung"];

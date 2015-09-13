@@ -61,13 +61,13 @@
 		{
 			[tempDic setObject:[[einObjekt objectForKey:@"titel"]copy]forKey:@"titel"];//copy scheint wichtig zu sein
 			//NSLog(@"tempDic 1: %@",[tempDic description]);
-			if ([einObjekt objectForKey:@"OK"])
+			if ([einObjekt objectForKey:@"ok"])
 			{
-				[tempDic setObject:[einObjekt objectForKey:@"OK"] forKey:@"OK"];
+				[tempDic setObject:[einObjekt objectForKey:@"ok"] forKey:@"ok"];
 			}
 			else
 			{
-				[tempDic setObject:[NSNumber numberWithBool:YES] forKey:@"OK"];
+				[tempDic setObject:[NSNumber numberWithBool:YES] forKey:@"ok"];
 			}
 			//NSLog(@"tempDic 2: %@",[tempDic description]);
 		[TitelArray addObject:tempDic];
@@ -89,7 +89,7 @@
 
 NSMutableDictionary* tempTitelDic=[[NSMutableDictionary alloc]initWithCapacity:0];
 [tempTitelDic setObject:@"Projekt" forKey:@"projekt"];
-[tempTitelDic setObject:[NSNumber numberWithBool:YES] forKey:@"OK"];
+[tempTitelDic setObject:[NSNumber numberWithBool:YES] forKey:@"ok"];
 [tempTitelDic setObject:[NSString string] forKey:@"titel"];
 //NSLog(@"neueZeile: tempTitelDic: %@",[tempTitelDic description]);
 [TitelArray addObject:tempTitelDic];
@@ -104,7 +104,7 @@ NSMutableDictionary* tempTitelDic=[[NSMutableDictionary alloc]initWithCapacity:0
 	{
 		NSMutableDictionary* tempTitelDic=[[NSMutableDictionary alloc]initWithCapacity:0];
 		//[tempTitelDic setObject:@"Projekt" forKey:@"projekt"];
-		[tempTitelDic setObject:[NSNumber numberWithBool:YES] forKey:@"OK"];
+		[tempTitelDic setObject:[NSNumber numberWithBool:YES] forKey:@"ok"];
 		[tempTitelDic setObject:[EingabeFeld stringValue] forKey:@"titel"];
 		[TitelArray addObject:tempTitelDic];
 		[TitelTable reloadData];

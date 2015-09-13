@@ -131,11 +131,6 @@ if ([ProjektArray count])
 //	NSString* ProjektString=[NSString string];
 	NSLog(@"ProjektListe reportCancel");
 	NSString* ProjektString=@"";
-	NSMutableDictionary* NotificationDic=[NSMutableDictionary dictionaryWithObject:ProjektString forKey:@"projekt"];
-	[NotificationDic setObject:ProjektArray forKey:@"projektarray"];
-
-	NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
-//	[nc postNotificationName:@"ProjektWahl" object:self userInfo:NotificationDic];
 	[EingabeFeld setStringValue:@""];
 	[InListeTaste setEnabled:NO];
 	[NSApp stopModalWithCode:0];
@@ -148,11 +143,6 @@ if ([ProjektArray count])
 	[NSApp stopModalWithCode:0];
 	[[self window]orderOut:NULL];
 
-  //Beenden
-	NSMutableDictionary* BeendenDic=[[NSMutableDictionary alloc]initWithCapacity:0];
-	[BeendenDic setObject:[NSNumber numberWithInt:1] forKey:@"beenden"];
-	NSNotificationCenter* beendennc=[NSNotificationCenter defaultCenter];
-	[beendennc postNotificationName:@"externbeenden" object:self userInfo:BeendenDic];
 	}
 vomStart=NO;
 }

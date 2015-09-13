@@ -109,7 +109,7 @@
 @property (weak)IBOutlet rLevelmeter*				Levelmeter;
 @property (weak)IBOutlet NSLevelIndicator       *audioLevelMeter;
 
-
+@property  (weak) IBOutlet NSImageView*				titelfixcheck;
 
 @property  (weak) IBOutlet NSTextField*				PWFeld;
 @property  (weak) IBOutlet NSTextField*				TitelString;

@@ -309,7 +309,7 @@ enum
          NSLog(@"ProjektPfad nicht gefunden");
       }
       
-      
+
       
       //NSLog(@"//Umgebung: %d  ProjektPfad: %@",Umgebung, ProjektPfad);
       
@@ -346,6 +346,7 @@ enum
       {
          tempProjektDic=[self.ProjektArray objectAtIndex:ProjektIndex];
          [self checkSessionDatumFor:[self.ProjektPfad lastPathComponent]];
+         
          if ([tempProjektDic objectForKey:@"sessiondatum"])
          {
             ProjektSessionDatum=[tempProjektDic objectForKey:@"sessiondatum"];
@@ -355,6 +356,20 @@ enum
          {
             ProjektSessionDatum=heuteDatumString;
          }
+         
+         int titelfix = [[tempProjektDic objectForKey:@"fix"]intValue];
+         if (titelfix)
+         {
+            NSImage* roterpunkt = [NSImage imageNamed:@"fixiert"];
+            [self.titelfixcheck setImage:roterpunkt];
+         }
+         else
+         {
+            NSImage* gruenerpunkt = [NSImage imageNamed:@"editierbar"];
+            [self.titelfixcheck setImage:gruenerpunkt];
+            
+         }
+
          
       }
       //NSLog(@"LB vorbereiten ProjektSessionDatum: %@",ProjektSessionDatum);
@@ -613,7 +628,7 @@ enum
             
             neuesProjektDic=[NSMutableDictionary dictionaryWithObject:neuesProjektName forKey:@"projekt"];
             [neuesProjektDic setObject:[tempProjektPfad copy] forKey:@"projektpfad"];
-            [neuesProjektDic setObject: [NSNumber numberWithInt:1] forKey:@"OK"];//Projekt ist aktiviert
+            [neuesProjektDic setObject: [NSNumber numberWithInt:1] forKey:@"ok"];//Projekt ist aktiviert
            
             //eventuell bei replace all irtuemlichauf gross umgestellt
             [neuesProjektDic setObject: [NSNumber numberWithInt:1] forKey:@"ok"];//Projekt ist aktiviert
@@ -630,6 +645,18 @@ enum
             {
                [neuesProjektDic setObject: [NSNumber numberWithInt:0] forKey:@"fix"];
             }
+            if (tempFix)
+            {
+               NSImage* roterpunkt = [NSImage imageNamed:@"fixiert"];
+               [self.titelfixcheck setImage:roterpunkt];
+            }
+            else
+            {
+               NSImage* gruenerpunkt = [NSImage imageNamed:@"editierbar"];
+               [self.titelfixcheck setImage:gruenerpunkt];
+               
+            }
+
             //NSLog(@"neuesProjektAktion neuesProjektDic: %@",[neuesProjektDic description]);
             
             NSNumber* tempMitUserPW=[tempNeuesProjektDic objectForKey:@"mituserpw"];//Mit Userpasswort?
@@ -986,7 +1013,7 @@ enum
                {
                   //NSLog(@"Objekt neu");
                   
-                  [tempProjektDic setObject:[NSNumber numberWithInt:1] forKey:@"OK"];
+                  [tempProjektDic setObject:[NSNumber numberWithInt:1] forKey:@"ok"];
                   [tempProjektDic setObject:[NSNumber numberWithInt:0] forKey:@"fix"];
                   [tempProjektDic setObject:[NSNumber numberWithInt:0] forKey:@"mituserpw"];
                   
@@ -1015,9 +1042,9 @@ enum
                NSString* tempPListProjektName=[einPListProjektDic objectForKey:@"projekt"];//Projekt aus plist
                if([tempProjektName isEqualToString:tempPListProjektName])//Projekt hat einen Eintrag in der plist
                {
-                  if ([einPListProjektDic objectForKey:@"OK"])//objekt für ok ist in plist
+                  if ([einPListProjektDic objectForKey:@"ok"])//objekt für ok ist in plist
                   {
-                     [einProjektDic setObject: [einPListProjektDic objectForKey:@"OK"] forKey:@"OK"];
+                     [einProjektDic setObject: [einPListProjektDic objectForKey:@"ok"] forKey:@"ok"];
                   }
                   if ([einPListProjektDic objectForKey:@"fix"])//objekt für fix ist in plist
                   {
@@ -1426,7 +1453,7 @@ enum
    NSString* aktuellerProjektName=[self.ProjektPfad lastPathComponent];
    for (i=0;i<[self.ProjektArray count];i++)
    {
-      BOOL ProjektOK=[[[self.ProjektArray objectAtIndex:i]objectForKey:@"OK"]boolValue];
+      BOOL ProjektOK=[[[self.ProjektArray objectAtIndex:i]objectForKey:@"ok"]boolValue];
       if (ProjektOK)//Projekt ist aktiv und soll in ProjektMenu
       {
          NSString* tempItemString=[[self.ProjektArray objectAtIndex:i]objectForKey:@"projekt"];
@@ -1768,7 +1795,7 @@ enum
          int SessionJahr=[Utils localJahrvonDatumString: [tempProjektDic objectForKey:@"sessiondatum"]];
          int SessionMonat=[Utils localMonatvonDatumString: [tempProjektDic objectForKey:@"sessiondatum"]];
         
-         //NSLog(@"checkSessionDatumFor: %@  SessionDatum: %@ SessionTag: %d",dasProjekt,SessionDatum,SessionTag);
+         NSLog(@"checkSessionDatumFor: %@  SessionDatum: %@ SessionMonat: %d SessionTag: %d",dasProjekt,SessionDatum,SessionMonat,SessionTag);
          
          //		NSLog(@"SessionInterval: %f		heuteInterval: %f",SessionInterval,heuteInterval);
          //NSLog(@"lastJahr: %d		heuteJahr: %d",SessionJahr,heuteJahr);
@@ -1783,8 +1810,8 @@ enum
             SessionTag=0;
          }
          
-         //NSLog(@"SessionTag: %d		heute: %d",SessionTag,heuteTag);
-         if ([tempProjektDic objectForKey:@"sessionleserarray"]&&[[tempProjektDic objectForKey:@"sessionleserarray"]count])
+         NSLog(@"SessionTag: %d		heute: %d",SessionTag,heuteTag);
+         if ([tempProjektDic objectForKey:@"sessionleserarray"]&&[[tempProjektDic objectForKey:@"sessionleserarray"]count]) // schon Leser da
          {
             if (heuteTag>SessionTag)//letzteSession ist mindestens von gestern
             {
@@ -2039,6 +2066,17 @@ enum
       }
       
       int titelfix=[[tempProjektDic objectForKey:@"fix"]intValue];
+      if (titelfix)
+      {
+      NSImage* roterpunkt = [NSImage imageNamed:@"fixiert"];
+      [self.titelfixcheck setImage:roterpunkt];
+      }
+      else
+      {
+         NSImage* gruenerpunkt = [NSImage imageNamed:@"editierbar"];
+         [self.titelfixcheck setImage:gruenerpunkt];
+      
+      }
       //NSLog(@"anderesProjektEinrichtenMit: %@  titelfix: %d",dasProjekt, titelfix);
       if ([tempProjektDic objectForKey:@"titelarray"]&&[[tempProjektDic objectForKey:@"titelarray"]count])
       {
