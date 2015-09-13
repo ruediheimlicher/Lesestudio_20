@@ -183,7 +183,7 @@
 						</object>
 						<object class="NSButton" id="935496808">
 							<reference key="NSNextResponder" ref="679396154"/>
-							<int key="NSvFlags">288</int>
+							<int key="NSvFlags">-2147483360</int>
 							<string key="NSFrame">{{357, 81}, {128, 32}}</string>
 							<reference key="NSSuperview" ref="679396154"/>
 							<reference key="NSWindow"/>
@@ -507,7 +507,7 @@
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1680, 1027}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1280, 777}}</string>
 				<string key="NSMinSize">{380, 374}</string>
 				<string key="NSMaxSize">{500, 622}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
@@ -530,14 +530,6 @@
 						<reference key="destination" ref="43163581"/>
 					</object>
 					<int key="connectionID">60</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">reportClose:</string>
-						<reference key="source" ref="999617303"/>
-						<reference key="destination" ref="935496808"/>
-					</object>
-					<int key="connectionID">51</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -610,6 +602,14 @@
 						<reference key="destination" ref="959142465"/>
 					</object>
 					<int key="connectionID">33</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">reportAdmin:</string>
+						<reference key="source" ref="999617303"/>
+						<reference key="destination" ref="935496808"/>
+					</object>
+					<int key="connectionID">82</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -891,7 +891,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">81</int>
+			<int key="maxID">82</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -990,6 +990,7 @@
 					<string key="className">rProjektStart</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="neueZeile:">id</string>
+						<string key="reportAdmin:">id</string>
 						<string key="reportCancel:">id</string>
 						<string key="reportClose:">id</string>
 						<string key="reportNeuesProjekt:">id</string>
@@ -998,6 +999,10 @@
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="neueZeile:">
 							<string key="name">neueZeile:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="reportAdmin:">
+							<string key="name">reportAdmin:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="reportCancel:">

@@ -31,6 +31,9 @@ extern NSString* OK;//=@"OK";
 	UProjektArray=[[NSMutableArray alloc]initWithCapacity:0];
 	UProjektNamenArray=[[NSMutableArray alloc]initWithCapacity:0];
 
+   heuteDatumString = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];//  12.09.2015 19:20:26
+   heuteTagDesJahres = [[NSCalendar currentCalendar] ordinalityOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:[NSDate date]];
+    
 	NSNotificationCenter * nc;
 	nc=[NSNotificationCenter defaultCenter];
 	[nc addObserver:self
@@ -601,15 +604,20 @@ return istSystemVolume;
 	//NSLog(@"resourcePath: %@",[[NSBundle mainBundle]resourcePath]);
 
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
-	NSCalendarDate* Heute=[NSCalendarDate date];
-	int HeuteTag=[Heute dayOfMonth];
-	int HeuteMonat=[Heute monthOfYear];
-	int HeuteJahr=[Heute yearOfCommonEra];
-	//NSLog(@"Heute: %d %d %d",HeuteTag,HeuteMonat,HeuteJahr);
-	[Heute setCalendarFormat:@"%d.%m.%Y"];
+	//NSDate* Heute=[NSDate date];
+	
+   int HeuteTag=[self localTagvonDatumString:heuteDatumString];
+   
+   int HeuteMonat=[self localMonatvonDatumString:heuteDatumString];
+
+	int HeuteJahr=[self localJahrvonDatumString:heuteDatumString];
+   //NSLog(@"Heute: %d %d %d",HeuteTag,HeuteMonat,HeuteJahr);
+	NSLog(@"HeuteJahr: %d ",HeuteJahr);
+	//[Heute setCalendarFormat:@"%d.%m.%Y"];
 	//NSLog(@"Heute: %@",[Heute description]);
 	NSString* RPVersionString=[NSString stringWithFormat:@"%d.%d",HeuteJahr%2000,HeuteMonat];
-	//NSLog(@"RPVersionString: %@",RPVersionString);
+	
+   //NSLog(@"RPVersionString: %@",RPVersionString);
 //	NSString* ResourcenPfad=[[[NSBundle mainBundle]bundlePath]stringByAppendingPathComponent:@"Contents/Resources"];
 	NSString* ResourcenPfad=[[[NSBundle mainBundle]bundlePath]stringByAppendingPathComponent:@"Contents"];
 	//NSLog(@"ResourcenPfad: %@ Inhalt: %@",ResourcenPfad,[Filemanager contentsOfDirectoryAtPath:ResourcenPfad error:NULL]);
@@ -1446,6 +1454,7 @@ return versionOK;
       const short kUtilsAdminUmgebung=1;
       const short kUtilsRecPlayUmgebung=0;
 
+      
 		tempPListDic=[[NSMutableDictionary alloc]initWithCapacity:0];
       NSMutableDictionary* tempPWDictionary=[[NSMutableDictionary alloc]initWithCapacity:0];
       NSString* defaultPWString=@"homer";
@@ -1458,7 +1467,8 @@ return versionOK;
       
       [tempPListDic setObject:tempPWDic forKey:@"adminpw"];//AdminPasswort muss vorhanden sein
       
-      [tempPListDic setObject: [NSCalendarDate calendarDate] forKey:@"lastdate"];
+      [tempPListDic setObject: heuteDatumString forKey:@"lastdate"];
+      
       [tempPListDic setObject: [[NSMutableArray alloc]initWithCapacity:0] forKey:@"projektarray"];
 
  //     [tempPListDic setObject: [self.ProjektPfad lastPathComponent] forKey:@"lastprojekt"];
@@ -1858,55 +1868,55 @@ return versionOK;
 
 - (IBAction)showNamenListe:(id)sender
 {
-	//NSLog(@"\n\nshowProjektListe start");
-	if (!UNamenListePanel)
+   //NSLog(@"\n\nshowProjektListe start");
+   if (!UNamenListePanel)
 	  {
-		UNamenListePanel=[[rNamenListe alloc]init];
-	  }
-	//NSLog(@"showself.NamenListe nach init:ProjektArray: %@  ",[ProjektArray description]);
-	//NSLog(@"showself.NamenListe nach init:ProjektArray: %@  \nProjektPfad: %@",[UProjektArray description],UProjektPfad);
-	//NSLog(@"showself.NamenListe nach init:ProjektPfad: %@",UProjektPfad);
-
-	//[ProjektPanel showWindow:self];
-	NSModalSession NamenSession=[NSApp beginModalSessionForWindow:[UNamenListePanel window]];
-
-	if ([UProjektArray count])
+        UNamenListePanel=[[rNamenListe alloc]init];
+     }
+   //NSLog(@"showself.NamenListe nach init:ProjektArray: %@  ",[ProjektArray description]);
+   //NSLog(@"showself.NamenListe nach init:ProjektArray: %@  \nProjektPfad: %@",[UProjektArray description],UProjektPfad);
+   //NSLog(@"showself.NamenListe nach init:ProjektPfad: %@",UProjektPfad);
+   
+   //[ProjektPanel showWindow:self];
+   NSModalSession NamenSession=[NSApp beginModalSessionForWindow:[UNamenListePanel window]];
+   
+   if ([UProjektArray count])
 	  {
-	  	NSFileManager *Filemanager=[NSFileManager defaultManager];
-
-	  	NSMutableArray* tempNamenListeArray=[[NSMutableArray alloc]initWithCapacity:0];
-		
-		NSArray* tempNamenArray=[Filemanager contentsOfDirectoryAtPath:UProjektPfad error:NULL];
-		//NSLog(@"showself.NamenListe tempNamenArray: %@  ",[tempNamenArray description]);
-	  if (tempNamenArray&&[tempNamenArray count])
-	  {
-	  NSEnumerator* NamenEnum=[tempNamenArray objectEnumerator];
-	  id einName;
-	  while(einName=[NamenEnum nextObject])
-	  {
-	  if ([einName length])
-	  {
-	  [tempNamenListeArray addObject: einName];
-	  }//if 
-	  }//while
-	  }
-	  
-	  [UNamenListePanel  setNamenListeArray:tempNamenListeArray  vonProjekt:[UProjektPfad lastPathComponent]];
-	  }
-	int modalAntwort = [NSApp runModalForWindow:[UNamenListePanel window]];
-	//int modalAntwort = [NSApp runModalSession:ProjektSession];
-	//NSLog(@"showProjektliste Antwort: %d",modalAntwort);
-	[NSApp endModalSession:NamenSession];
-	//[[ProjektPanel window] orderOut:NULL];   
-	
+        NSFileManager *Filemanager=[NSFileManager defaultManager];
+        
+        NSMutableArray* tempNamenListeArray=[[NSMutableArray alloc]initWithCapacity:0];
+        
+        NSArray* tempNamenArray=[Filemanager contentsOfDirectoryAtPath:UProjektPfad error:NULL];
+        //NSLog(@"showself.NamenListe tempNamenArray: %@  ",[tempNamenArray description]);
+        if (tempNamenArray&&[tempNamenArray count])
+        {
+           NSEnumerator* NamenEnum=[tempNamenArray objectEnumerator];
+           id einName;
+           while(einName=[NamenEnum nextObject])
+           {
+              if ([einName length])
+              {
+                 [tempNamenListeArray addObject: einName];
+              }//if
+           }//while
+        }
+        
+        [UNamenListePanel  setNamenListeArray:tempNamenListeArray  vonProjekt:[UProjektPfad lastPathComponent]];
+     }
+   int modalAntwort = [NSApp runModalForWindow:[UNamenListePanel window]];
+   //int modalAntwort = [NSApp runModalSession:ProjektSession];
+   //NSLog(@"showProjektliste Antwort: %d",modalAntwort);
+   [NSApp endModalSession:NamenSession];
+   //[[ProjektPanel window] orderOut:NULL];
+   
 }
 
 - (IBAction)showEinzelNamen:(id)sender
 {
-NSLog(@"showEinzelNamen");
-NSArray* a=[self EinzelNamenArray];
-NSLog(@"EinzelNamenArray>: %@",[a description]);
-
+   NSLog(@"showEinzelNamen");
+   NSArray* a=[self EinzelNamenArray];
+   NSLog(@"EinzelNamenArray>: %@",[a description]);
+   
 }
 - (NSArray*)EinzelNamenArray
 {
@@ -2052,46 +2062,47 @@ NSLog(@"EinzelNamenArray>: %@",[a description]);
 
  - (int) fileInPapierkorb:(NSString*) derFilepfad
 {
-	int tag;
-	BOOL succeeded;
-	NSString* HomeDir=@"";// = [NSHomeDirectory() stringByAppendingPathComponent:@".Trash"];
-	NSFileManager* Filemanager=[NSFileManager defaultManager];
-	NSLog(@"fileInPapierkorb:NSHomeDirectory %@",NSHomeDirectory());
-
-	NSMutableArray* PfadKomponenten=(NSMutableArray*)[derFilepfad pathComponents] ;
-	int index=0;
-	while (index<[PfadKomponenten count] && ![[PfadKomponenten objectAtIndex:index]isEqualToString:@"Documents"])
+   int tag;
+   BOOL succeeded;
+   NSString* HomeDir=@"";// = [NSHomeDirectory() stringByAppendingPathComponent:@".Trash"];
+   NSFileManager* Filemanager=[NSFileManager defaultManager];
+   NSLog(@"fileInPapierkorb:NSHomeDirectory %@",NSHomeDirectory());
+   
+   NSMutableArray* PfadKomponenten=(NSMutableArray*)[derFilepfad pathComponents] ;
+   int index=0;
+   while (index<[PfadKomponenten count] && ![[PfadKomponenten objectAtIndex:index]isEqualToString:@"Documents"])
 	  {
-		NSString* tempString=[PfadKomponenten objectAtIndex:index];
-		HomeDir=[HomeDir stringByAppendingPathComponent:tempString];
-		index++;
-	  }
-	if ([HomeDir isEqualToString:NSHomeDirectory()])
+        NSString* tempString=[PfadKomponenten objectAtIndex:index];
+        HomeDir=[HomeDir stringByAppendingPathComponent:tempString];
+        index++;
+     }
+   if ([HomeDir isEqualToString:NSHomeDirectory()])
 	  {
-		NSString* trashDir = [NSHomeDirectory() stringByAppendingPathComponent:@".Trash"];
-		trashDir=[trashDir stringByAppendingPathComponent:@".Trash"];
-		
-		NSString* sourceDir=[derFilepfad stringByDeletingLastPathComponent];
-		NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-		
-		NSArray * vols=[workspace mountedLocalVolumePaths];
-		//NSLog(@"fileInPapierkorb volumes: %@   sourceDir:%@ trashDir: %@",[vols description],sourceDir, trashDir);
-		
-		NSArray *files = [NSArray arrayWithObject:[derFilepfad lastPathComponent]];
-		succeeded = [workspace performFileOperation:NSWorkspaceRecycleOperation
-											 source:sourceDir destination:trashDir
-											  files:files tag:&tag];
-		return tag;//0 ist OK
-	  }
-	else
-	  {	
-
-		NSString* sourceDir=derFilepfad;
-		int removeIt=[Filemanager removeItemAtURL:[NSURL fileURLWithPath:sourceDir ] error:nil];
-		//NSLog(@"removePath: removeIt: %d",removeIt);
-		return 0;
-
-	  }
+        NSString* trashDir = [NSHomeDirectory() stringByAppendingPathComponent:@".Trash"];
+        //trashDir=[trashDir stringByAppendingPathComponent:@".Trash"];
+        
+        NSString* sourceDir=[derFilepfad stringByDeletingLastPathComponent];
+        NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
+        
+        NSArray * vols=[workspace mountedLocalVolumePaths];
+        //NSLog(@"fileInPapierkorb volumes: %@   sourceDir:%@ trashDir: %@",[vols description],sourceDir, trashDir);
+        
+        NSArray *files = [NSArray arrayWithObject:[derFilepfad lastPathComponent]];
+        succeeded = [workspace performFileOperation:NSWorkspaceRecycleOperation
+                                             source:sourceDir destination:trashDir
+                                              files:files tag:&tag];
+        return tag;//0 ist OK
+     }
+   else
+	  {
+        
+        NSString* sourceDir=derFilepfad;
+        int removeIt=[Filemanager removeItemAtURL:[NSURL fileURLWithPath:sourceDir ] error:nil];
+        //NSLog(@"removePath: removeIt: %d",removeIt);
+        return 0;
+        
+     }
+   return 0;
 }
  
  
@@ -2121,28 +2132,35 @@ NSLog(@"EinzelNamenArray>: %@",[a description]);
 	NSString* tempMagazinPfad=[[UArchivPfad stringByDeletingLastPathComponent]stringByAppendingPathComponent:@"Magazin"]; 
 	NSLog(@"tempMagazinPfad: %@",tempMagazinPfad);
 	BOOL magazinOK=YES;
+   BOOL createOK = YES;
+   NSError* err;
 	if (![Filemanager fileExistsAtPath:tempMagazinPfad])
 	{
-		magazinOK=[Filemanager createDirectoryAtPath:tempMagazinPfad  withIntermediateDirectories:NO attributes:NULL error:NULL];
-		if (!magazinOK)
+		createOK=[Filemanager createDirectoryAtPath:tempMagazinPfad  withIntermediateDirectories:NO attributes:NULL error:&err];
+      NSLog(@"magazinOK createdir: %d",createOK);
+
+		if (!createOK)
 		{
-			NSString* s1=NSLocalizedString(@"The folder 'Magazin' could not be created in folder 'Lecturebox'",@"Ordner 'Magazin' im Ordner 'Lesebox' nicht eingerichtet");
-			NSString* s2=NSLocalizedString(@"Folder %@ not moved",@"Ordner von %@ nicht verschoben");
+			NSString* s1=@"Ordner 'Magazin' im Ordner 'Lesebox' nicht eingerichtet";
+			NSString* s2=@"Ordner von %@ nicht verschoben";
 			NSString* MagazinString=[NSString stringWithFormat:@"%@%@%@%@",s1,@"\r",s2,[tempNamenPfad lastPathComponent]];
-			//NSLog(@"MagazinString: %@",MagazinString);
-			NSString* TitelString=NSLocalizedString(@"Creating Magazin",@"Magazin einrichten");
+			NSLog(@"MagazinString: %@",MagazinString);
+			NSString* TitelString=@"Magazin einrichten";
 			fehler=NSRunAlertPanel(TitelString, MagazinString,@"OK", NULL,NULL);
 			
 		}
 	}
+   
 	if (magazinOK)//Ordner 'Magazin' ist da
 	{
-		NSString* tempMagazinNamenPfad=[[tempNamenPfad lastPathComponent]stringByAppendingPathExtension:@"old"];
+      NSLog(@"Ordner 'Magazin' ist da");
+		NSString* tempMagazinNamenPfad=[[tempNamenPfad lastPathComponent]stringByAppendingString:@"_mag"];
 		NSString* tempZielPfad=[tempMagazinPfad stringByAppendingPathComponent:tempMagazinNamenPfad];
-		[Filemanager removeItemAtURL:[NSURL fileURLWithPath:tempZielPfad] error:NULL];//Eventuell schon vorhandenen Ordner löschen
-		//[Filemanager movePath:tempNamenPfad toPath:tempZielPfad handler:NULL];
-      BOOL MagazinOK=[Filemanager moveItemAtURL:[NSURL fileURLWithPath:tempNamenPfad]  toURL:[NSURL fileURLWithPath:tempZielPfad] error:nil];
-
+      NSLog(@"tempZielPfad: %@",tempZielPfad);
+      [Filemanager removeItemAtURL:[NSURL fileURLWithPath:tempZielPfad] error:&err];//Eventuell schon vorhandenen Ordner löschen
+      // Ordner verscjhieben
+      BOOL magazinOK=[Filemanager moveItemAtURL:[NSURL fileURLWithPath:tempNamenPfad]  toURL:[NSURL fileURLWithPath:tempZielPfad] error:nil];
+      NSLog(@"magazinOK: %d",magazinOK);
    }
 	
 	return fehler;  
@@ -2173,11 +2191,18 @@ NSLog(@"EinzelNamenArray>: %@",[a description]);
 - (void)UNamenEinsetzenAktion:(NSNotification*)note
 {
 	//NSLog(@"\n\n*UNamenEinsetzenAktion	UProjektArray: %@\n",[UProjektArray description]);
-	//NSLog(@"\n\n*UNamenEinsetzenAktion userInfo: %@",[[note userInfo] description]);
+	NSLog(@"\n\n*UNamenEinsetzenAktion userInfo: %@",[[note userInfo] description]);
 	//NSLog(@"*UNamenEinsetzenAktion  UArchivPfad:%@",UArchivPfad);
+   
+   // Ordner der wirklich aufzunehehmenden Namen
 	NSMutableArray* tempPfadArray=[[NSMutableArray alloc]initWithCapacity:0];
+   
+   // Ordner mit Namen, die schon vorkommen
 	NSMutableArray* doppelteNamenArray=[[NSMutableArray alloc]initWithCapacity:0];
+   
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
+   
+   //Ordner der eingegebenen neuen Namen
 	NSMutableArray* tempNeueNamenArray=[[NSMutableArray alloc]initWithCapacity:0];
 	
 	if ([[note userInfo] objectForKey:@"neueNamenArray"])//Array mit neuen Namen(>=1)
@@ -2224,7 +2249,7 @@ NSLog(@"EinzelNamenArray>: %@",[a description]);
 				id einProjekt;
 				while (einProjekt=[ProjektEnum nextObject])
 				{
-					if ([[einProjekt objectForKey:@"OK"]intValue]==1)
+					if ([[einProjekt objectForKey:@"OK"]intValue]==1) // aktiviert
 					{
 						NSString* tempProjektPfad=[UArchivPfad stringByAppendingPathComponent:[einProjekt objectForKey:@"projekt"]];
 						NSEnumerator* NamenEnum=[tempNeueNamenArray objectEnumerator];
@@ -2283,23 +2308,33 @@ NSLog(@"EinzelNamenArray>: %@",[a description]);
 		}//switch 		einsetzenVariante
 		
 	}
-	NSLog(@"*UNamenEinsetzenAktion  tempPfadArray:\n%@",[tempPfadArray description]);
-	NSLog(@"*UNamenEinsetzenAktion  doppelteNamenArray:\n%@",[doppelteNamenArray description]);
+	NSLog(@"*UNamenEinsetzenAktion  tempPfadArray:\n%@",[tempPfadArray description]); // Namen sollen eingesetzt werden
+	NSLog(@"*UNamenEinsetzenAktion  doppelteNamenArray:\n%@",[doppelteNamenArray description]); // Namen sind schon vorhanden
 	
-	NSMutableArray* fehlendeOrdnerArray=[[NSMutableArray alloc]initWithCapacity:0];
+	NSMutableArray* fehlendeOrdnerArray=[[NSMutableArray alloc]initWithCapacity:0]; // Ordner fuer Namen mit Misserfolg
+   NSMutableArray* eingesetzteNamenArray=[[NSMutableArray alloc]initWithCapacity:0]; // Ordner fuer Namen mit Misserfolg
 	
+   //Getestete Namen einsetzen
 	NSEnumerator* NamenEnum=[tempPfadArray objectEnumerator];
 	id einPfad;
 	int erfolg=-1;
 	while (einPfad=[NamenEnum nextObject])
-	{
-		erfolg=[Filemanager createDirectoryAtPath:einPfad  withIntermediateDirectories:NO attributes:NULL error:NULL];
-		if (!erfolg)
-		{
-			[fehlendeOrdnerArray addObject:[[einPfad stringByDeletingLastPathComponent]lastPathComponent]];
-		}
-	}//while
-	//NSLog(@"*UNamenEinsetzenAktion  fehlendeOrdnerArray:%@",[fehlendeOrdnerArray description]);
+   {
+      erfolg=[Filemanager createDirectoryAtPath:einPfad  withIntermediateDirectories:NO attributes:NULL error:NULL];
+      if (!erfolg)
+      {
+         [fehlendeOrdnerArray addObject:[[einPfad stringByDeletingLastPathComponent]lastPathComponent]];
+      }
+      else
+      {
+         [eingesetzteNamenArray addObject:[[einPfad stringByDeletingLastPathComponent]lastPathComponent]];
+         // Anmerkungen-Ordner einsetzen
+         erfolg=[Filemanager createDirectoryAtPath:[einPfad stringByAppendingPathComponent:@"Anmerkungen"]  withIntermediateDirectories:NO attributes:NULL error:NULL];
+      }
+      
+   }//while
+   NSLog(@"*UNamenEinsetzenAktion  fehlendeOrdnerArray:%@",[fehlendeOrdnerArray description]);
+   NSLog(@"*UNamenEinsetzenAktion  eingesetzteNamenArray:%@",[eingesetzteNamenArray description]);
 	
 	if ([fehlendeOrdnerArray count])
 	{
@@ -2318,6 +2353,7 @@ NSLog(@"EinzelNamenArray>: %@",[a description]);
 		//[Warnung setIcon:RPImage];
 		int antwort=[Warnung runModal];
 	}
+   
 	NSMutableDictionary* NotificationDic=[[NSMutableDictionary alloc]initWithCapacity:0];
 	[NotificationDic setObject:[NSNumber numberWithBool:erfolg] forKey:@"einsetzenOK"];
 	if ([[note userInfo] objectForKey:@"neuerName"])//nur ein neuer Name
@@ -2326,6 +2362,8 @@ NSLog(@"EinzelNamenArray>: %@",[a description]);
 		[NotificationDic setObject:tempNeuerName forKey:@"neuerName"];
 	}
 	[NotificationDic setObject:tempNeueNamenArray forKey:@"neueNamenArray"];
+   [NotificationDic setObject:eingesetzteNamenArray forKey:@"eingesetzteNamenArray"];
+
 	//NSLog(@"UNamenEinsetzenAktion: NotificationDic: %@",[NotificationDic description]);
 	NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
 	[nc postNotificationName:@"NameIstEingesetzt" object:self userInfo:NotificationDic];
@@ -2597,10 +2635,10 @@ if (UTimeoutDialogPanel)
 	
 	
 	//Heutiges Datum einsetzen		  
-	NSCalendarDate* tempDatum=[[NSCalendarDate calendarDate]dateWithCalendarFormat:@"%d.%m.%Y %H:%M:%S" timeZone:nil];
+//	NSCalendarDate* tempDatum=[[NSCalendarDate calendarDate]dateWithCalendarFormat:@"%d.%m.%Y %H:%M:%S" timeZone:nil];
 	
 //	NSLog(@"tempDatum: %@",[tempDatum description]);
-	tempKopfString=[tempKopfString stringByAppendingString:[tempDatum description]];
+	tempKopfString=[tempKopfString stringByAppendingString:heuteDatumString];
 	
 //	NSLog(@"in createKommentarFuerLeser tempKopfString mit Datum: %@",tempKopfString);
 	
@@ -2844,5 +2882,78 @@ NSUInteger dayOfYearForDate(NSDate *dasDatum)
    return day;
 }
 
+// 12.09.2015 19:20:26
+- (int)localTagvonDatumString:(NSString*)datumstring
+{
+   NSLog(@"localTagvonDatumString datumstring: %@, desc: %@",datumstring, [datumstring description]);
+   
+   int tag =0;
+   NSString* datumteil = [[[[datumstring description]componentsSeparatedByString:@" "]objectAtIndex:0]description];
+  NSLog(@"localTagvonDatumString datumteil: %@",datumteil);
+   NSString* sep;
+   if ([datumteil rangeOfString:@"-"].location< NSNotFound)
+   {
+      
+      sep = @"-";
+      NSArray* datumarray =[datumteil componentsSeparatedByString:sep];
+      NSLog(@"datumarray: %@",datumarray);
+
+       tag = [[[datumteil componentsSeparatedByString:sep]objectAtIndex:2]intValue]; // Reihenfolge invertiert
+   }
+   else
+   {
+      sep = @".";
+      NSArray* datumarray =[datumteil componentsSeparatedByString:sep];
+      NSLog(@"datumarray: %@",datumarray);
+
+        tag = [[[datumteil componentsSeparatedByString:sep]objectAtIndex:0]intValue];
+   }
+//   NSArray* datumarray =[datumteil componentsSeparatedByString:sep];
+//   NSLog(@"datumarray: %@",datumarray);
+  
+   
+   return tag;
+}
+- (int)localMonatvonDatumString:(NSString*)datumstring
+{
+   int monat =0;
+    NSString* datumteil = [[[[datumstring description]componentsSeparatedByString:@" "]objectAtIndex:0]description];
+    NSLog(@"localMonatvonDatumString datumteil: %@",datumteil);
+   NSString* sep;
+   if ([datumteil rangeOfString:@"-"].location< NSNotFound)
+   {
+      sep = @"-";
+      monat = [[[datumteil componentsSeparatedByString:sep]objectAtIndex:1]intValue];
+   }
+   else
+   {
+      sep = @".";
+      monat = [[[datumteil componentsSeparatedByString:sep]objectAtIndex:1]intValue];
+   }
+
+   
+   return monat;
+}
+
+- (int)localJahrvonDatumString:(NSString*)datumstring
+{
+   int jahr =0;
+    NSString* datumteil = [[[[datumstring description]componentsSeparatedByString:@" "]objectAtIndex:0]description];
+    NSLog(@"localJahrvonDatumString datumteil: %@",datumteil);
+   NSString* sep;
+   if ([datumteil rangeOfString:@"-"].location< NSNotFound)
+   {
+      sep = @"-";
+      jahr = [[[datumteil componentsSeparatedByString:sep]objectAtIndex:0]intValue];
+   }
+   else
+   {
+      sep = @".";
+      jahr = [[[datumteil componentsSeparatedByString:sep]objectAtIndex:2]intValue];
+   }
+
+   
+   return jahr;
+}
 
 @end

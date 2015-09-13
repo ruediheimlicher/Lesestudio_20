@@ -115,7 +115,7 @@ extern const int StartmitDialog;//=2;
       NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
       [nc postNotificationName:@"ProjektStart" object:self userInfo:NotificationDic];
       
-      [NSApp stopModalWithCode:1];
+      [NSApp stopModalWithCode:0];
       [[self window] orderOut:NULL];
    }//if ProjektIndex
 	else
@@ -143,12 +143,45 @@ extern const int StartmitDialog;//=2;
       
       // String* UmgebungString=[SegmentTaste Segment]label];
       
-      [NotificationDic setObject:[NSNumber numberWithLong:[sender tag]] forKey:@"umgebung"];	// Aufnehmen: 0, Admin: 1
+      [NotificationDic setObject:[NSNumber numberWithLong:0] forKey:@"umgebung"];	// Aufnehmen: 0, Admin: 1
       [NotificationDic setObject:[NSNumber numberWithInt:3] forKey:@"aktion"];
       NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
       [NotificationDic setObject:ProjektString forKey:@"projekt"];
       //NSLog(@"Projektstart reportClose1: NotificationDic: \n%@",[NotificationDic description]);
       [nc postNotificationName:@"ProjektStart" object:self userInfo:NotificationDic];
+      
+      [NSApp stopModalWithCode:0];
+      [[self window] orderOut:NULL];
+      
+   }//if ProjektIndex
+   else
+      NSBeep();
+   
+}
+
+- (IBAction)reportAdmin:(id)sender
+{
+   long ProjektIndex=[ProjektTable selectedRow];
+   if (ProjektIndex>=0)
+   {
+      NSString* ProjektString=[[ProjektArray objectAtIndex:ProjektIndex]objectForKey:@"projekt"];
+
+      NSMutableDictionary* NotificationDic=[NSMutableDictionary dictionaryWithObject:ProjektArray forKey:@"projektarray"];
+       BOOL mitUserPW=YES;
+      if ([[ProjektArray objectAtIndex:ProjektIndex]objectForKey:@"mituserpw"])
+      {
+         mitUserPW=[[[ProjektArray objectAtIndex:ProjektIndex]objectForKey:@"mituserpw"]boolValue];
+      }
+      [NotificationDic setObject:[NSNumber numberWithBool:mitUserPW] forKey:@"mituserpw"];
+      
+      // String* UmgebungString=[SegmentTaste Segment]label];
+      
+      [NotificationDic setObject:[NSNumber numberWithLong:1] forKey:@"umgebung"];	// Aufnehmen: 0, Admin: 1
+      [NotificationDic setObject:[NSNumber numberWithInt:3] forKey:@"aktion"];
+      NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
+      [NotificationDic setObject:ProjektString forKey:@"projekt"];
+      NSLog(@"Projektstart reportAdmin: NotificationDic: \n%@",[NotificationDic description]);
+      [nc postNotificationName:@"adminstart" object:self userInfo:NotificationDic];
       
       [NSApp stopModalWithCode:1];
       [[self window] orderOut:NULL];
@@ -156,7 +189,9 @@ extern const int StartmitDialog;//=2;
    else
       NSBeep();
    
+   
 }
+
 
 
 - (IBAction)reportNeuesProjekt:(id)sender
@@ -297,8 +332,8 @@ extern const int StartmitDialog;//=2;
 
 - (void)controlTextDidBeginEditing:(NSNotification *)aNotification
 {
-   //NSLog(@"controlTextDidBeginEditing: %@",[[aNotification  userInfo]objectForKey:@"NSFieldEditor"]);
-   //[[self window]makeFirstResponder:InListeTaste];
+   NSLog(@"controlTextDidBeginEditing: %@",[[aNotification  userInfo]objectForKey:@"NSFieldEditor"]);
+   [[self window]makeFirstResponder:InListeTaste];
    [InListeTaste setKeyEquivalent:@"\r"];
    [InListeTaste setEnabled:YES];
 }

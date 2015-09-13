@@ -81,8 +81,13 @@ const short kRecPlayUmgebung=0;
    [super viewDidLoad];
    // Do view setup here.
    
-      NSLog(@"AdminPlayer  viewDidLoad");
+     // NSLog(@"AdminPlayer  viewDidLoad");
    //NSLog(@"NSModalResponseOK: %d  NSOKButton: %d",NSModalResponseOK , NSOKButton);
+   heuteDatumString = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];//  12.09.2015 19:20:26
+   heuteTagDesJahres = [[NSCalendar currentCalendar] ordinalityOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:[NSDate date]];
+
+   
+   
    NSNotificationCenter * nc;
    nc=[NSNotificationCenter defaultCenter];
    
@@ -236,7 +241,7 @@ const short kRecPlayUmgebung=0;
 
 - (id)init
 {
-   NSLog(@"AdminPlayer init");
+   //NSLog(@"AdminPlayer init");
    self=[super init] ;//]WithWindowNibName:@"RPAdmin"];
 	//AdminDaten = [[rAdminDS alloc] initWithRowCount: 10];
 	NSNotificationCenter * nc;
@@ -332,7 +337,7 @@ OptionBString=[[NSString alloc]init];
 		   selector:@selector(ProjektArrayNotificationAktion:)
 			   name:@"ProjektArray"
 			 object:nil];
-	
+/*
 	[nc addObserver:self
 		   selector:@selector(NameIstEntferntAktion:)
 			   name:@"NameIstEntfernt"
@@ -342,7 +347,7 @@ OptionBString=[[NSString alloc]init];
 		   selector:@selector(NameIstEingesetztAktion:)
 			   name:@"NameIstEingesetzt"
 			 object:nil];
-
+*/
 	[nc addObserver:self
 		   selector:@selector(SelectionDidChangeAktion:)
 			   name:@"NSTableViewSelectionDidChangeNotification"
@@ -485,6 +490,9 @@ OptionBString=[[NSString alloc]init];
 
    [AufnahmenTable setDelegate:self];
    [AufnahmenTable setDataSource:self];
+   NSLog(@"farbe");
+   FensterFarbe=[NSColor colorWithDeviceRed: 150.0/255 green:249.0/255 blue:150.0/255 alpha:1.0];
+   [self.view.window setBackgroundColor:FensterFarbe];
 
 }
 
@@ -818,7 +826,7 @@ OptionBString=[[NSString alloc]init];
 
             //
 				//AdminMark=[self AufnahmeIstMarkiertAnPfad:tempAnmerkungPfad];
-				NSLog(@"AdminMark: %d",AdminMark);
+				//NSLog(@"AdminMark: %d",AdminMark);
 				/*
 				NSString* tempKommentarString=[NSString stringWithContentsOfFile:tempAnmerkungPfad];
 				NSMutableArray* tempKommentarArrary=(NSMutableArray *)[tempKommentarString componentsSeparatedByString:@"\r"];
@@ -1114,13 +1122,13 @@ OptionBString=[[NSString alloc]init];
 			  //NSLog(@"andere Aufnahme");
 			 // if (Moviegeladen)
 				{
-				  NSLog(@"save alten Kommentar, Movie geladen");
+				  //NSLog(@"save alten Kommentar, Movie geladen");
 				  [self Aufnahmezuruecklegen];//Aufnahme zurücklegen
 				}
 		  }
 		//NSLog(@"setLeser   Leser: %@  zeile: %d  hit: %d   File:  %@",Leser, hitZeile, hit, tempAufnahmePfad);
 		AdminAktuelleAufnahme=[[[AdminDaten AufnahmeFilesFuerZeile:hitZeile]objectAtIndex:hit]description];
-      NSLog(@"setLeser   AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
+      //NSLog(@"setLeser   AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
       
       
       
@@ -1195,13 +1203,13 @@ OptionBString=[[NSString alloc]init];
          //NSLog(@"andere Aufnahme");
          // if (Moviegeladen)
          {
-            NSLog(@"save alten Kommentar, Movie geladen");
+            //NSLog(@"save alten Kommentar, Movie geladen");
             [self Aufnahmezuruecklegen];//Aufnahme zurücklegen
          }
       }
       //NSLog(@"setLeser   Leser: %@  zeile: %d  hit: %d   File:  %@",Leser, hitZeile, hit, tempAufnahmePfad);
       AdminAktuelleAufnahme=[[[AdminDaten AufnahmeFilesFuerZeile:hitZeile]objectAtIndex:hit]description];
-      NSLog(@"setLeser   AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
+      //NSLog(@"setLeser   AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
       
       
       
@@ -1348,7 +1356,7 @@ OptionBString=[[NSString alloc]init];
 
 - (BOOL)setPfadFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme
 {
-	NSLog(@"setPfadFuerLeser:%@ dieAufnahme: %@",derLeser, dieAufnahme);
+	//NSLog(@"setPfadFuerLeser:%@ dieAufnahme: %@",derLeser, dieAufnahme);
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
 	NSString* Leser=[derLeser copy];
 	
@@ -1399,7 +1407,7 @@ OptionBString=[[NSString alloc]init];
    int Aufnahmenummer = [self AufnahmeNummerVon:Ziel];
    [AdminNummerfeld setIntValue:Aufnahmenummer];
 	[AdminTitelfeld setStringValue:[self AufnahmeTitelVon:Ziel]];
-	NSLog(@"setKommentarFuerLeser:%@		FuerAufnahme:%@",derLeser, dieAufnahme);
+	//NSLog(@"setKommentarFuerLeser:%@		FuerAufnahme:%@",derLeser, dieAufnahme);
 	BOOL istDirectory;
 	NSString* tempKommentarPfad=[NSString stringWithString:AdminProjektPfad];
 	NSString* KommentarOrdnerString=@"Anmerkungen";
@@ -1595,8 +1603,8 @@ OptionBString=[[NSString alloc]init];
 			NSDate* CreationDate = [AufnahmeAttrs objectForKey:NSFileCreationDate];
 			if (CreationDate)
 			{	
-				NSCalendarDate* tempDatum=[CreationDate dateWithCalendarFormat:@"%d.%m.%Y %H:%M:%S" timeZone:nil];
-				tempKopfString=[tempKopfString stringByAppendingString:[tempDatum description]];
+				//NSCalendarDate* tempDatum=[CreationDate dateWithCalendarFormat:@"%d.%m.%Y %H:%M:%S" timeZone:nil];
+				tempKopfString=[tempKopfString stringByAppendingString:heuteDatumString];
 				//NSLog(@"ModDate: %@  Datum: %@",[moddate description],[tempDatum description]);
 			}
 			else
@@ -3914,13 +3922,13 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 	BOOL erfolg;
 	//NSLog(@"AdminTabNotifikationAktion: note: %@",[note object]);
 	NSDictionary* QuellenDic=[note object];
-   NSLog(@"QuellenDic :%@",[QuellenDic description]);
+   //NSLog(@"QuellenDic :%@",[QuellenDic description]);
 	//[AdminMarkCheckbox setEnabled:YES];
 	NSString* Quelle=[QuellenDic objectForKey:@"Quelle"];
 	
 	if ([Quelle isEqualToString:@"AdminView"]) // von 'Alle Aufnahmen' zu 'nach Namen'
 	  {
-		NSLog(@"AdminTabNotifikationAktion:  AdminView  Quelle: %@",Quelle);
+		//NSLog(@"AdminTabNotifikationAktion:  AdminView  Quelle: %@",Quelle);
 		NSNumber* ZeilenNummer=[QuellenDic objectForKey:@"zeilennnummer"];
 	  	
 		//int zeilenNr=(int)[ZeilenNummer floatValue];
@@ -3957,7 +3965,7 @@ NSLog(@"result von Aufnahme insMagazin: %d",result);
 	  
 	if ([Quelle isEqualToString:@"AufnahmenTable"]) // nach Namen
 	{
-		NSLog(@"AdminTabNotifikationAktion:  AufnahmenTable  Quelle: %@",Quelle);
+		//NSLog(@"AdminTabNotifikationAktion:  AufnahmenTable  Quelle: %@",Quelle);
 		
 		NSNumber* ZeilenNummer=[QuellenDic objectForKey:@"zeilennummer"];
 	  	
@@ -4280,6 +4288,8 @@ NSNumber* UmgebungNumber=[[note userInfo]objectForKey:@"Umgebung"];
 - (BOOL)windowShouldClose:(id)sender
 {
 	
+   [self dismissController:nil];
+   return YES;
 	BOOL OK=[self FensterschliessenOK];
 	//NSLog(@"windowShouldClose");
 	if (OK)
@@ -4413,7 +4423,7 @@ if (entfernenOK==0)//allesOK
 }
 - (void)NameIstEingesetztAktion:(NSNotification*)note
 {
-	//NSLog(@"NameIstEingesetztNotificationAktion: %@",[note description]);
+	NSLog(@"NameIstEingesetztNotificationAktion: %@",[note description]);
 	if ([[note userInfo]objectForKey:@"einsetzenOK"])
 	{
 		int EinsetzenOK=[[[note userInfo]objectForKey:@"einsetzenOK"]intValue];	
@@ -4469,6 +4479,7 @@ if (entfernenOK==0)//allesOK
 	NSLog(@"rAdminPlayer: ComboBoxAktion textchanged YES");
 	Textchanged=YES;
 	Kommentarsaved=NO;
+   
 }
 
 

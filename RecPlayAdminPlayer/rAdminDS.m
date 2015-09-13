@@ -104,7 +104,7 @@ return rowData;
     NS_HANDLER
         if ([[localException name] isEqual: @"NSRangeException"])
         {
-            NSLog(@"Setting data out of bounds.");
+            //NSLog(@"Setting data out of bounds.");
             return nil;
         }
         else [localException raise];
@@ -316,13 +316,13 @@ return index;
 
 - (BOOL)tableView:(NSTableView *)aTableView shouldEditTableColumn:(NSTableColumn *)aTableColumn row:(long)rowIndex
 {
-	NSLog(@"shouldEditTableColumn");
+	//NSLog(@"shouldEditTableColumn");
     return [self isEditable];
 }
 
 - (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(long)row
 {
-	//NSLog(@"AdminDS willDisplayCell Zeile: %d, numberOfSelectedRows:%d", row ,[tableView numberOfSelectedRows]);
+	////NSLog(@"AdminDS willDisplayCell Zeile: %d, numberOfSelectedRows:%d", row ,[tableView numberOfSelectedRows]);
 	
    if ([[tableColumn identifier] isEqualToString:@"aufnahmen"])
 	{
@@ -466,7 +466,7 @@ return index;
 	//NSLog(@"**AdminDS tableView  shouldSelectRow: %d  [tableView clickedRow]:%d" ,row,[tableView clickedRow]);
 	
 	long selektierteZeile=[tableView selectedRow];//vorher selektierte Zeile
-   NSLog(@"**AdminDS tableView  shouldSelectRow: %ld  clickedRow :%d selectedRow: %d" ,row,[tableView clickedRow],[tableView selectedRow]);
+   //NSLog(@"**AdminDS tableView  shouldSelectRow: %ld  clickedRow :%d selectedRow: %d" ,row,[tableView clickedRow],[tableView selectedRow]);
 
 	NSString* tempLastLesernamen=[NSString string];//leer wenn zeilennummer=-1 beim ersten Klick
 	

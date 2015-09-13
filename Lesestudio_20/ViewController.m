@@ -88,7 +88,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
       NSLog(@"nibname: %@ window: %@",self.nibName, [[self.view window]description]);
    
 //   [self initWithNibName:self.nibName bundle:nil];
-   
+   startcode=0;
    RPAufnahmenDirIDKey		=	@"RPAufnahmenDirID";
    Wert1Key=@"Wert1";
    Wert2Key=@"Wert2";
@@ -122,6 +122,33 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    [self.view.window setDelegate:self];
    
    //NSLog(@"NSAlertDefaultReturn: %d",NSAlertDefaultReturn);
+   
+   NSLog(@"[NSDate date]: %@",[[NSDate date]description]); // 2015-09-12 17:15:21 +0000
+ //  NSLog(@"[NSCalendarDate date]: %@",[[NSCalendarDate date]description]); // 2015-09-12 19:16:41 +0200
+   
+   
+   // http://stackoverflow.com/questions/1268509/convert-utc-nsdate-to-local-timezone-objective-c
+   localDate = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];//  12.09.2015 19:20:26
+   NSLog(@"localDate: %@",localDate);
+   heuteDatumString = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];//  12.09.2015 19:20:26
+   NSLog(@"heuteDatumString: %@",heuteDatumString);
+   
+   NSDate *currentDate = [NSDate date];
+   NSCalendar* calendar = [NSCalendar currentCalendar];
+   NSDateComponents* components = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:currentDate]; // Get necessary date components
+
+   long monat = [components month]; //gives you month
+   long tag = [components day]; //gives you day
+   long jahr = [components year]; // gives you year
+
+   NSLog(@"tag: %ld monat: %ld jahr: %ld",tag,monat,jahr);
+   
+   heuteTagDesJahres = [[NSCalendar currentCalendar] ordinalityOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:[NSDate date]];
+
+   NSLog(@"heuteTagDesJahres: %ld ",heuteTagDesJahres);
+ 
+   
+   
    NSNotificationCenter * nc;
    nc=[NSNotificationCenter defaultCenter];
    [nc addObserver:self
@@ -261,6 +288,22 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
           selector:@selector(RecordingAktion2:)
               name:@"AVCaptureSessionDidStartRunningNotification"
             object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(AdminStartAktion:)
+              name:@"adminstart"
+            object:nil];
+  
+   [nc addObserver:self
+          selector:@selector(NameIstEntferntAktion:)
+              name:@"NameIstEntfernt"
+            object:nil];
+   
+   [nc addObserver:self
+          selector:@selector(NameIstEingesetztAktion:)
+              name:@"NameIstEingesetzt"
+            object:nil];
+
    
    
    NSArray* windowViewArray = [[self view] subviews];
@@ -539,7 +582,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
       [self.PWFeld setStringValue:@"Ohne Passwort"];
    }
    NSLog(@"TimeoutDelay: %f",self.TimeoutDelay);
-   self.TimeoutDelay=40.0;
+   //self.TimeoutDelay=40.0;
    self.AdminTimeoutDelay = 40.0;
    //Tooltips
    
@@ -622,7 +665,10 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    NSLog(@"end nibname: %@ window: %@",self.nibName, [[self.view window]description]);
 
    
-   
+   if (startcode)
+   {
+    //  [self beginAdminPlayer:nil];
+   }
 }
 
 
@@ -701,7 +747,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
        [self.EinstellungenFenster setBewertung:YES];
        [self.EinstellungenFenster setNote:YES];
        [self.EinstellungenFenster setzeAnzeigeFeld:@"Hallo Anzeige"];
-       [self.EinstellungenFenster setTimeoutDelay:120];
+       [self.EinstellungenFenster setTimeoutDelay:self.TimeoutDelay];
     }
    
    if ([[segue identifier] isEqualToString:@"adminplayersegue"]) // erster kontakt
@@ -751,6 +797,26 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 return YES;
 }
 */
+
+- (void)AdminStartAktion:(NSNotification*)note
+{
+   NSLog(@"AdminStartAktion note: %@",note);
+   
+   NSString* tempProjektWahl=[[note userInfo] objectForKey:@"projektwahl"];
+   //tempProjektWahl = [tempProjektWahl stringByAppendingPathComponent:tempProjektWahl];
+   // NSLog(@"ProjektStartAktion tempProjektWahl: %@",tempProjektWahl);
+   
+   self.ProjektPfad=[self.ArchivPfad stringByAppendingPathComponent:tempProjektWahl];
+   if ([[note userInfo] objectForKey:@"projektpfad"])
+   {
+      self.ProjektPfad=[[note userInfo] objectForKey:@"projektpfad"];
+   }
+   NSLog(@"ArchivPfad :%@ * ProjektPfad: %@",self.ArchivPfad,self.ProjektPfad);
+  //  [self beginAdminPlayer:nil];
+   startcode=1;
+}
+
+
 - (void)RecordingAktion2:(NSNotification*)note{
    //NSLog(@"RecordingAktion note: %@",note);
    if ([[note userInfo ]objectForKey:@"record"])
@@ -1259,6 +1325,7 @@ return YES;
 {
    [self.TitelPop setEnabled:YES];
    [self.TitelPop setEditable:YES];
+   
 }
 
 - (IBAction)Einstellungentest:(id)sender
@@ -2024,7 +2091,7 @@ QTMovie* qtMovie;
    // 16.1.2010
    //SessionLeserArray aktualisieren
    
-    NSCalendarDate* creatingDatum=[NSCalendarDate calendarDate];
+    NSString* creatingDatum=heuteDatumString;
    //NSLog(@"Projekt: %@ creatingDatum: %@",[ProjektPfad lastPathComponent],creatingDatum);
    
    NSString* tempLeser=[self.ArchivnamenPop titleOfSelectedItem];
@@ -2089,7 +2156,6 @@ QTMovie* qtMovie;
    
    [self.Abspieldauerfeld setStringValue:@"00:00"];
    [self.ArchivAbspieldauerFeld setStringValue:@"00:00"];
-   
    [self.Zeitfeld setStringValue:@"00:00"];
    
    //   [RecPlayFenster makeFirstResponder:RecPlayFenster];
@@ -2108,12 +2174,11 @@ QTMovie* qtMovie;
    
    [self ArchivZurListe:nil];
    
+   [Abspielanzeige setLevel:0];
+   [Abspielanzeige setNeedsDisplay:YES];
    [self.ArchivAbspielanzeige setLevel:0];
    [self.ArchivAbspielanzeige setNeedsDisplay:YES];
    
-   
-   [Abspielanzeige setLevel:0];
-   [Abspielanzeige setNeedsDisplay:YES];
    
    //LeserPfad  =@"";
 }
@@ -2128,13 +2193,6 @@ QTMovie* qtMovie;
 
 - (OSErr)Aufnahmevorbereiten
 {
-   OSErr err=noErr;
-   FSSpec 		outFileSpec;
-   
-   //FSRef		neueAufnahmeRef;
-   //FSSpec		neueAufnahmeSpec;
-   FSRef		DokumentordnerRef;
-   
    OSStatus status;
    UniChar buffer[255]; // HFS+ filename max is 255
    
@@ -2154,14 +2212,8 @@ QTMovie* qtMovie;
       //neueAufnahmePfad = [[PfadArray objectAtIndex:0] stringByAppendingPathComponent:[neueAufnahme lastPathComponent]];
       //i++;
       NSString *DokumentordnerPfad = [PfadArray objectAtIndex:0];//[LeseboxPfad stringByDeletingLastPathComponent];
-      
-      //status = FSPathMakeRef((UInt8*)[DokumentordnerPfad fileSystemRepresentation],  &DokumentordnerRef, NULL);
-      //neueAufnahmePfad=[NSString stringWithString:Dokumentordner];
       self.neueAufnahmePfad=[DokumentordnerPfad stringByAppendingPathComponent:neueAufnahmeName];
       //NSLog(@"Aufnahmevorbereiten  neueAufnahmePfad: %@",neueAufnahmePfad);
-      
-      
-      
       
       status=YES;
       
@@ -2169,10 +2221,6 @@ QTMovie* qtMovie;
    
    [self.Zeitfeld setStringValue:@"00:00"];
    self.Pause=0;
-   self.QTKitPause=0;
-   //[neueAufnahmePfad release];
-   //[PfadArray release];
-   //**
    
    return status;
 }
@@ -2380,7 +2428,7 @@ QTMovie* qtMovie;
       }
       else
       {
-//         ProjektSessionDatum=[NSCalendarDate date];
+//         ProjektSessionDatum=localDate   ;
       }
       
    }
@@ -2426,7 +2474,7 @@ QTMovie* qtMovie;
    int ItemIndex=1;
    while (einSessionName=[SessionNamenEnum nextObject])
    {
-      //NSLog(@"tempProjektNamenArray index: %d: einSessionName: %@",ItemIndex,einSessionName);
+      //NSLog(@"setArchivNamenPopMitProjektArray tempProjektNamenArray index: %d: einSessionName: %@",ItemIndex,einSessionName);
       BOOL NameDa=NO;
       
       
@@ -2491,14 +2539,7 @@ QTMovie* qtMovie;
    }
    
    
-   NSString* LeserNamenListesauber=[Leseboxobjekte description];
-   
-   NSEnumerator *enumerator = [Leseboxobjekte objectEnumerator];
-   id anObject;
-   NSString* tempString;
-   
    NSString* ArchivString=[NSString stringWithFormat:@"Archiv"];
-   NSString* KommentarString=@"Anmerkungen";
    self.ArchivPfad=[self.LeseboxPfad stringByAppendingPathComponent:ArchivString];//Pfad des Archiv-Ordners
    
    if ([Filemanager fileExistsAtPath:self.ProjektPfad])
@@ -2821,7 +2862,8 @@ QTMovie* qtMovie;
    [self.TitelPop setEnabled:NO];
    [self clearArchiv];
    self.aktuellAnzAufnahmen=0;
-   
+   [self.Abspieldauerfeld setStringValue:@""];
+   [self.Zeitfeld setStringValue:@""];
    [AVAbspielplayer stopTempAufnahme];
    [Abspielanzeige setLevel:0];
    [Abspielanzeige setNeedsDisplay:YES];
@@ -3111,7 +3153,6 @@ QTMovie* qtMovie;
          //[TitelPop selectText:nil];
          
          //Titel von PList aus Projektordner anfügen
-         BOOL PListTitelAktiviert=YES;
          BOOL TitelEditOK; //Titel editierbar?
          NSArray* tempTitelArray;
          NSArray* tempProjektNamenArray=[self.ProjektArray valueForKey:@"projekt"];//Verzeichnis ProjektNamen
@@ -3149,9 +3190,16 @@ QTMovie* qtMovie;
          [self.TitelPop setEnabled:YES];
          [self.TitelPop setEditable:TitelEditOK];//Nur wenn Titel editierbar
          [self.TitelPop setSelectable:TitelEditOK];
-         
+         [self.TitelPop selectText:self];
+         [[self.TitelPop currentEditor] setSelectedRange:NSMakeRange([[self.TitelPop stringValue] length], 0)];
+         [self.view.window makeFirstResponder:self.TitelPop];
+         /* 
+          // http://stackoverflow.com/questions/764179/focus-a-nstextfield
+          [textField selectText:self];
+         [[textField currentEditor] setSelectedRange:NSMakeRange([[textField stringValue] length], 0)];
+         */
          //*
-    //     BOOL first=[[[self view]window] makeFirstResponder:self.TitelPop];
+         //     BOOL first=[[[self view]window] makeFirstResponder:self.TitelPop];
          
          
          [self setKommentarFuerLeser:self.Leser FuerAufnahme:[[TitelArray objectAtIndex:[TitelArray count]-1]description]];
@@ -3214,8 +3262,8 @@ QTMovie* qtMovie;
          [[self.TitelPop cell] setSelectable:TitelEditOK];
          
          
-       [self.ArchivDaten resetArchivDaten];
-        [self.ArchivView reloadData];
+         [self.ArchivDaten resetArchivDaten];
+         [self.ArchivView reloadData];
          
          //self.aktuellAnzAufnahmen=0;
       }
@@ -3906,14 +3954,11 @@ QTMovie* qtMovie;
 
 - (IBAction)startArchivPlayer:(id)sender
 {
-   TimeValue ArchivDauer;
    // NSLog(@"startArchivPlayer:");
    NSLog(@"startArchivPlayer:			ArchivPlayPfad: %@",self.ArchivPlayPfad);
    
-   NSString* tempAchivPlayPfad = [self.ArchivPlayPfad stringByAppendingPathExtension:@"m4a"];
+  // NSString* tempAchivPlayPfad = [self.ArchivPlayPfad stringByAppendingPathExtension:@"m4a"];
    
-   NSURL *ArchivURL = [NSURL fileURLWithPath:tempAchivPlayPfad];
-   //   [AVAbspielplayer prepareAufnahmeAnURL:ArchivURL];
    
    
    [AVAbspielplayer playArchivAufnahme];
@@ -3961,9 +4006,9 @@ QTMovie* qtMovie;
    AufnahmenArray=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:self.LeserPfad error:NULL]];
    //NSLog(@"Archiv AufnahmenArray: %@",[AufnahmenArray description]);
    SEL DoppelSelektor;
-   DoppelSelektor=@selector(ArchivaufnahmeInPlayer:);
+//   DoppelSelektor=@selector(ArchivaufnahmeInPlayer:);
    
-   [self.ArchivView setDoubleAction:DoppelSelektor];
+//   [self.ArchivView setDoubleAction:DoppelSelektor];
 }
 
 - (IBAction)resetArchivPlayer:(id)sender
@@ -4025,7 +4070,7 @@ QTMovie* qtMovie;
 }
 - (void) KeyNotifikationAktion:(NSNotification*)note
 {
-   //NSLog(@"KeyNotifikationAktion: note: %@",[note object]);
+   NSLog(@"KeyNotifikationAktion: note: %@",[note object]);
    NSNumber* KeyNummer=[note object];
    //int keyNr=(int)[KeyNummer floatValue];
    //NSLog(@"keyDown KeyNotifikationAktion description: %@",[KeyNummer description]);
@@ -4136,7 +4181,7 @@ QTMovie* qtMovie;
            [self.ArchivInListeTaste setEnabled:YES];
            [self.ArchivInPlayerTaste setEnabled:NO];
            
-           erfolg=[self.RecPlayFenster makeFirstResponder:self.ArchivInListeTaste];
+           //erfolg=[self.RecPlayFenster makeFirstResponder:self.ArchivInListeTaste];
            [self.ArchivInListeTaste setKeyEquivalent:@"\r"];
            [self.ArchivPlayTaste setEnabled:YES];
            
@@ -4184,7 +4229,6 @@ QTMovie* qtMovie;
 
         if ([self.ArchivnamenPop indexOfSelectedItem]==0)
         {
-           NSImage* StartRecordImg=[NSImage imageNamed:@"recordicon_k.gif"];
            //self.StartStopKnopf.image=StartRecordImg;
            [self.StartStopString setStringValue:@"START"];
            NSAlert *NamenWarnung = [[NSAlert alloc] init];
@@ -4338,6 +4382,8 @@ QTMovie* qtMovie;
 {
    NSNumber* mitPasswort=[[note userInfo]objectForKey:@"mituserpasswort"];
    self.mitUserPasswort=[mitPasswort intValue];
+   [self.PListDic setObject:mitPasswort forKey:@"mituserpasswort"];
+
    NSLog(@"StartStatusNotifikationAktion	mitPasswort: %@",[mitPasswort description]);
    if (self.mitUserPasswort)
    {
@@ -4353,6 +4399,10 @@ QTMovie* qtMovie;
    self.NoteZeigen=[[[note userInfo]objectForKey:@"notenstatus"]intValue];
    [self.PListDic setObject:[NSNumber numberWithInt:self.NoteZeigen] forKey:RPNoteKey];
    
+   self.TimeoutDelay = [[[note userInfo]objectForKey:@"timeoutdelay"]intValue];
+   [self.PListDic setObject:[NSNumber numberWithInt:self.TimeoutDelay] forKey:@"timeoutdelay"];
+   NSLog(@"TimeoutDelay: %f",self.TimeoutDelay);
+   [self.TimeoutFeld setIntValue:self.TimeoutDelay];
    //[Utils startTimeout:TimeoutDelay];
    //[Utils stopTimeout];
    //[ProjektArray setArray:[Utils ProjektArrayAusPListAnPfad:LeseboxPfad]];
@@ -4371,7 +4421,7 @@ QTMovie* qtMovie;
 }
 - (void) Umgebung:(NSNotification*)note
 {
-   NSNumber* UmgebungNumber=[[note userInfo]objectForKey:@"Umgebung"];
+   NSNumber* UmgebungNumber=[[note userInfo]objectForKey:@"umgebung"];
    self.Umgebung=(int)[UmgebungNumber floatValue];
 }
 
@@ -4476,7 +4526,7 @@ if (!self.KommentarFenster)
             neuesProjektDic=[NSMutableDictionary dictionaryWithObject:neuesProjektName forKey:@"projekt"];
             [neuesProjektDic setObject:[tempProjektPfad copy] forKey:@"projektpfad"];
             [neuesProjektDic setObject: [NSNumber numberWithInt:1] forKey:@"OK"];//Projekt ist aktiviert
-            [neuesProjektDic setObject:[NSCalendarDate date] forKey:@"sessiondatum"];
+            [neuesProjektDic setObject:heuteDatumString forKey:@"sessiondatum"];
             
             
             

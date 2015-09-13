@@ -3,7 +3,7 @@
 - (id) init
 {
     //if ((self = [super init]))
-	self = [super initWithWindowNibName:@"RPself.NamenListe"];
+	self = [super initWithWindowNibName:@"RPNamenListe"];
 	{
 		NamenArray=[[NSMutableArray alloc] initWithCapacity: 0];
 	  neueNamenArray=[[NSMutableArray alloc] initWithCapacity: 0];
@@ -172,6 +172,20 @@
 	}
 }
 
+- (void)NameIstEingesetztAktion:(NSNotification*)note
+{
+   NSLog(@"NameIstEingesetztNotificationAktion: %@",[note description]);
+   if ([[note userInfo]objectForKey:@"einsetzenOK"])
+   {
+      int EinsetzenOK=[[[note userInfo]objectForKey:@"einsetzenOK"]intValue];
+      if (EinsetzenOK)
+      {
+       //  [NamenArray addObject:]
+         //[self setAdminPlayer:AdminLeseboxPfad inProjekt:[AdminProjektPfad lastPathComponent]];
+      }//if 
+   }//note
+}
+
 - (IBAction)reportClose:(id)sender
 { 
   //NSLog(@"\n	  self.NamenListe reportClose");
@@ -336,8 +350,8 @@
 
 - (void)NameIstEingesetztNotificationAktion:(NSNotification*)note
 {
-	//NSLog(@"NameIstEingesetztNotificationAktion: %@",[[note userInfo] description]);
-	return;
+	NSLog(@"NameIstEingesetztNotificationAktion: %@",[[note userInfo] description]);
+
 	if ([[note userInfo]objectForKey:@"einsetzenOK"])
 	{
 		int EinsetzenOK=[[[note userInfo]objectForKey:@"einsetzenOK"]intValue];	
@@ -346,7 +360,9 @@
 			
 			if([[note userInfo]objectForKey:@"neuerName"])
 			{
+           
 				NSString* EinsetzenName=[[note userInfo]objectForKey:@"neuerName"];
+             NSLog(@"nur ein neuer Name: %@",EinsetzenName);
 				NSMutableDictionary*tempDic=[NSMutableDictionary dictionaryWithObject:EinsetzenName forKey:@"namen"];
 				[tempDic setObject:[NSNumber numberWithBool:YES] forKey:@"neuername"];
 
@@ -356,6 +372,22 @@
 					[NamenTable reloadData];
 				}
 			}//if
+         
+         if([[note userInfo]objectForKey:@"neueNamenArray"])
+         {
+            NSArray* tempNamenArray = [[note userInfo]objectForKey:@"neueNamenArray"];
+            NSLog(@"tempNamenArray: %@",[tempNamenArray description]);
+            for (int  index=0;index < [tempNamenArray count];index++)
+            {
+               NSMutableDictionary*tempDic=[NSMutableDictionary dictionaryWithObject:[tempNamenArray objectAtIndex:index] forKey:@"namen"];
+               [tempDic setObject:[NSNumber numberWithBool:YES] forKey:@"neuername"];
+
+               [NamenArray addObject: tempDic];
+               [NamenTable reloadData];
+            }
+         }
+
+         
 		}//if 
 	}//note
 	[UbernehmenTaste setEnabled:NO];

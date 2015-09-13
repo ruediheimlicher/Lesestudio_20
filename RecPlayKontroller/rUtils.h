@@ -46,6 +46,9 @@
 	NSTimer*							TimeoutTimer;
 	NSTimer*							TimeoutDialogTimer;
 	int									TimeoutCount;
+   
+   NSString*                  heuteDatumString;
+    long                        heuteTagDesJahres;
 //Flags
 }
 - (NSString*)ULeseboxPfad;
@@ -96,4 +99,7 @@
 - (BOOL)setKommentar:(NSString*)derKommentarString inAufnahmeAnPfad:(NSString*)derAufnahmePfad;
 - (NSString*)KommentarStringVonAufnahmeAnPfad:(NSString*)derAufnahmePfad;
 
+- (int)localTagvonDatumString:(NSString*)datumstring;
+- (int)localMonatvonDatumString:(NSString*)datumstring;
+- (int)localJahrvonDatumString:(NSString*)datumstring;
 @end

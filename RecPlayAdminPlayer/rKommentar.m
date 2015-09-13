@@ -57,6 +57,8 @@ typedef NS_ENUM(NSInteger, A)
    
    NamenArray=[[NSMutableArray alloc]initWithCapacity:0];
    [ProjektMatrix setDelegate:self];
+   heuteDatumString = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];//  12.09.2015 19:20:26
+
 }
 
 // Transfer von Kommentarkontroller
@@ -1849,11 +1851,9 @@ typedef NS_ENUM(NSInteger, A)
    NSFontManager *fontManager = [NSFontManager sharedFontManager];
    //NSLog(@"*KommentarFenster  setKommentar* %@",derKommentarString);
    
-   NSCalendarDate* heute=[NSCalendarDate date];
-   [heute setCalendarFormat:@"%d.%m.%Y    Zeit: %H:%M"];
    
    NSString* TitelString=@"Anmerkungen vom ";
-   NSString* KopfString=[NSString stringWithFormat:@"%@  %@%@",TitelString,[heute description],@"\r\r"];
+   NSString* KopfString=[NSString stringWithFormat:@"%@  %@%@",TitelString,heuteDatumString,@"\r\r"];
    
    //Font für Titelzeile
    NSFont* TitelFont;
@@ -2127,12 +2127,10 @@ typedef NS_ENUM(NSInteger, A)
    NSFontManager *fontManager = [NSFontManager sharedFontManager];
    //NSLog(@"*KommentarFenster  setKommentar* %@",derKommentarString);
    
-   NSCalendarDate* heute=[NSCalendarDate calendarDate];
-   [heute setCalendarFormat:@"%d.%m.%Y    Zeit: %H:%M"];
    
    //NSString* TitelString=NSLocalizedString(@"Comments from ",@"Anmerkungen vom ");
    NSString* TitelString=@"Anmerkungen vom ";
-   NSString* KopfString=[NSString stringWithFormat:@"%@  %@%@",TitelString,[heute description],@"\r\r"];
+   NSString* KopfString=[NSString stringWithFormat:@"%@  %@%@",TitelString,heuteDatumString,@"\r\r"];
    
    //Font für Titelzeile
    NSFont* TitelFont;
@@ -3247,13 +3245,11 @@ typedef NS_ENUM(NSInteger, A)
    NSFontManager *fontManager = [NSFontManager sharedFontManager];
    //NSLog(@"*KommentarFenster  setDruckKommentarMitKommentarDicArray* %@",[[derKommentarDicArray valueForKey:@"kommentarstring"]description]);
    
-   NSCalendarDate* heute=[NSCalendarDate date];
-   [heute setCalendarFormat:@"%d.%m.%Y    Zeit: %H:%M"];
-   
+    
    //NSString* TitelString=NSLocalizedString(@"Comments from ",@"Anmerkungen vom ");
    NSString* TitelString=@"Anmerkungen vom ";
    
-   NSString* KopfString=[NSString stringWithFormat:@"%@  %@%@",TitelString,[heute description],@"\r\r"];
+   NSString* KopfString=[NSString stringWithFormat:@"%@  %@%@",TitelString,heuteDatumString,@"\r\r"];
    
    //Font für Titelzeile
    NSFont* TitelFont;

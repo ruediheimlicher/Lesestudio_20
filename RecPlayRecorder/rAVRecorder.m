@@ -395,8 +395,8 @@
 
 - (void)setRecording:(BOOL)record mitLeserPfad:(NSString*)leserpfad
 {
-   NSDate *now = [[NSDate alloc] init];
-   long t1 = (int)now.timeIntervalSince1970 - startzeit;
+ //  NSDate *now = [[NSDate alloc] init];
+ //  long t1 = (int)now.timeIntervalSince1970 - startzeit;
    //NSLog(@"setRecording leserpfad: %@",leserpfad);
    LeserPfad = leserpfad;
    if (record)
@@ -412,8 +412,8 @@
       //NSLog(@"tempDirPfad: %@",tempDirPfad);
       tempfileURL = [NSURL fileURLWithPath:tempDirPfad isDirectory:YES];
       //NSLog(@"tempfileURL: %@",tempfileURL);
-      NSDate *now = [[NSDate alloc] init];
-      long t2 = (int)now.timeIntervalSince1970 - startzeit;
+     // NSDate *now = [[NSDate alloc] init];
+      //long t2 = (int)now.timeIntervalSince1970 - startzeit;
       //NSLog(@"setRecording t2: %ld",t2);
 
      // [self refreshDevices];
@@ -422,8 +422,8 @@
       NSString* tempPfad =[tempDirPfad  stringByAppendingPathExtension:@"mov"];
       
       NSURL* tempAufnahmeURL = [NSURL  fileURLWithPath:tempPfad];
-      now = [[NSDate alloc] init];
-      long t3 = (int)now.timeIntervalSince1970 - startzeit;
+     // now = [[NSDate alloc] init];
+     // long t3 = (int)now.timeIntervalSince1970 - startzeit;
      // NSLog(@"setRecording t3: %ld",t3);
 
       [[self movieFileOutput] startRecordingToOutputFileURL:tempAufnahmeURL  recordingDelegate:self];

@@ -79,7 +79,7 @@
 
 - (void)prepareAdminAufnahmeAnURL:(NSURL*)url
 {
-   NSLog(@"prepareAdminAufnahmeAnURL: %@",url.path);
+   //NSLog(@"prepareAdminAufnahmeAnURL: %@",url.path);
    if ([AVAbspielplayer isPlaying])
    {
       [AVAbspielplayer stop];
@@ -93,7 +93,7 @@
    [AVAbspielplayer prepareToPlay];
    double dur = AVAbspielplayer.duration;
    haltzeit=0;
-   NSLog(@"prepareAdminAufnahmeAnURL err: %@ dur: %f",err, dur);
+   //NSLog(@"prepareAdminAufnahmeAnURL err: %@ dur: %f",err, dur);
    
 }
 

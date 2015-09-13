@@ -329,7 +329,6 @@ vomStart=NO;
      [NotificationDic setObject:neuesProjektDic forKey:@"neuesprojektdic"];
      NSLog(@"***\n   ProjektListe reportNeuesProjekt");
      NSLog(@"neuesProjektDic: %@",[neuesProjektDic description]);
-     NSFileManager *Filemanager=[NSFileManager defaultManager];
      
      NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
      [nc postNotificationName:@"neuesProjekt" object:self userInfo:NotificationDic];
@@ -489,11 +488,11 @@ vomStart=NO;
 		  NSNumber* tempOK=[einProjektDic objectForKey:@"OK"];
 		  if (tempOK)
 		  {
-			  [tempDic setObject:tempOK forKey:@"OK"];
+			  [tempDic setObject:tempOK forKey:@"ok"];
 		  }
 		  else
 		  {
-			  [tempDic setObject:[NSNumber numberWithBool:YES] forKey:@"OK"];
+			  [tempDic setObject:[NSNumber numberWithBool:YES] forKey:@"ok"]; // default ist: Projekt aktiviert
 		  }
 		  [tempDic setObject:tempTitel forKey:@"projekt"];
 		  
@@ -504,7 +503,7 @@ vomStart=NO;
 		  }
 		  else
 		  {
-			  [tempDic setObject:[NSNumber numberWithBool:NO] forKey:@"fix"];
+			  [tempDic setObject:[NSNumber numberWithBool:NO] forKey:@"fix"]; // default ist: Titel sind nicht fixiert
 		  }
 
 		  NSNumber* tempMitUserPW=[einProjektDic objectForKey:@"mituserpw"];
@@ -514,7 +513,7 @@ vomStart=NO;
 		  }
 		  else
 		  {
-			  [tempDic setObject:[NSNumber numberWithBool:YES] forKey:@"mituserpw"];
+			  [tempDic setObject:[NSNumber numberWithBool:NO] forKey:@"mituserpw"];// default ist: userpasswort ist nicht aktiviert
 		  }
 		  
 		  [tempDic setObject:tempTitel forKey:@"projekt"];
@@ -526,7 +525,7 @@ vomStart=NO;
 		  }
 		  else
 		  {
-		  [tempDic setObject:[NSArray array] forKey:@"titelarray"];
+		  [tempDic setObject:[NSArray array] forKey:@"titelarray"]; // leerer Array
 
 		  }
 
@@ -537,18 +536,18 @@ vomStart=NO;
 		  }
 		  else
 		  {
-		  [tempDic setObject:[NSArray array] forKey:@"sessionleserarray"];
+		  [tempDic setObject:[NSArray array] forKey:@"sessionleserarray"];// leerer Array
 
 		  }
 
-		  NSDate* tempSessionDatum=[einProjektDic objectForKey:@"sessiondatum"];
+		  NSString* tempSessionDatum=[einProjektDic objectForKey:@"sessiondatum"];
 		  if (tempSessionDatum)
 		  {
-		  [tempDic setObject:tempSessionDatum forKey:@"sessiondatum"];
+           [tempDic setObject:tempSessionDatum forKey:@"sessiondatum"];
 		  }
 		  else
 		  {
-		  [tempDic setObject:[NSDate date] forKey:@"sessiondatum"];
+		  [tempDic setObject:[NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle] forKey:@"sessiondatum"]; // heute
 
 		  }
 

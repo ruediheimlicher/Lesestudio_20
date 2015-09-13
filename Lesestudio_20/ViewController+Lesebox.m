@@ -252,7 +252,7 @@ enum
       
       if (![self.PListDic objectForKey:@"lastdate"])
       {
-         [self.PListDic setObject:[NSCalendarDate calendarDate] forKey:@"lastdate"];
+         [self.PListDic setObject:[NSNumber numberWithLong:heuteTagDesJahres] forKey:@"lastdate"];
       }
       
       //NSLog(@"Leseboxvorbereiten ProjektArray aus PList: %@",[self.ProjektArray description]);
@@ -287,22 +287,29 @@ enum
       BOOL istOrdner=NO;
       NSFileManager *Filemanager = [NSFileManager defaultManager];
       //	while (Pfadsuchen)
+      
+      
+     // [self showProjektStart:nil];
+      int projektantwort = [self showProjektStartFenster];
+      
+      if (projektantwort == 1)
       {
-         
-         [self showProjektStart:nil];
-         
-         //NSLog(@"lb vorbereiten nach showProjektStart: %@",self.ProjektPfad);
-         
-         if ([Filemanager fileExistsAtPath:self.ProjektPfad isDirectory:&istOrdner]&&istOrdner)
-         {
-            //NSLog(@"ProjektPfad gefunden");
-            Pfadsuchen=NO;
-         }
-         else
-         {
-            NSLog(@"ProjektPfad nicht gefunden");
-         }
+         NSLog(@"Admin");
+     
       }
+      NSLog(@"lb vorbereiten nach showProjektStart: %@",self.ProjektPfad);
+      
+      if ([Filemanager fileExistsAtPath:self.ProjektPfad isDirectory:&istOrdner]&&istOrdner)
+      {
+         //NSLog(@"ProjektPfad gefunden");
+         Pfadsuchen=NO;
+      }
+      else
+      {
+         NSLog(@"ProjektPfad nicht gefunden");
+      }
+      
+      
       
       //NSLog(@"//Umgebung: %d  ProjektPfad: %@",Umgebung, ProjektPfad);
       
@@ -333,9 +340,9 @@ enum
    if ([Filemanager fileExistsAtPath:self.ProjektPfad])
    {
       NSDictionary* tempProjektDic;
-      int ProjektIndex=[[self.ProjektArray valueForKey:@"projekt"]indexOfObject:[self.ProjektPfad lastPathComponent]];
-      NSCalendarDate* ProjektSessionDatum;
-      if (ProjektIndex<(int)NSNotFound)
+      double ProjektIndex=[[self.ProjektArray valueForKey:@"projekt"]indexOfObject:[self.ProjektPfad lastPathComponent]];
+      NSString* ProjektSessionDatum;
+      if (ProjektIndex < NSNotFound)
       {
          tempProjektDic=[self.ProjektArray objectAtIndex:ProjektIndex];
          [self checkSessionDatumFor:[self.ProjektPfad lastPathComponent]];
@@ -346,7 +353,7 @@ enum
          }
          else
          {
-            ProjektSessionDatum=[NSCalendarDate date];
+            ProjektSessionDatum=heuteDatumString;
          }
          
       }
@@ -385,6 +392,7 @@ enum
    [[self.view window] makeKeyAndOrderFront:self];
    [[self.view window] setOrderedIndex:0];
    return YES;
+   
 }
 
 
@@ -610,7 +618,7 @@ enum
             //eventuell bei replace all irtuemlichauf gross umgestellt
             [neuesProjektDic setObject: [NSNumber numberWithInt:1] forKey:@"ok"];//Projekt ist aktiviert
 
-            [neuesProjektDic setObject:[NSCalendarDate date] forKey:@"sessiondatum"];
+            [neuesProjektDic setObject:heuteDatumString forKey:@"sessiondatum"];
             
             NSNumber* tempFix=[tempNeuesProjektDic objectForKey:@"fix"];//Titel fix?
             if (tempFix)
@@ -997,7 +1005,7 @@ enum
          NSArray*tempPListArray=[self.PListDic objectForKey:@"projektarray"];
          NSEnumerator* ProjektArrayEnum=[tempProjektArray objectEnumerator];//Array der vorhandenen Ordner im Archiv
          id einProjektDic;
-         while (einProjektDic=[ProjektArrayEnum nextObject])
+         while (einProjektDic=[ProjektArrayEnum nextObject]) // 
          {
             NSString* tempProjektName=[einProjektDic objectForKey:@"projekt"];
             NSEnumerator* PListArrayEnum=[tempPListArray objectEnumerator];
@@ -1026,22 +1034,22 @@ enum
                   
                   if ([einPListProjektDic objectForKey:@"sessiondatum"])//objekt für sessiondatum ist in plist
                   {
-                     //NSLog(@"sessiondatum da: %@",[einPListProjektDic objectForKey:@"sessiondatum"]);
+                     NSLog(@"sessiondatum da: %@",[einPListProjektDic objectForKey:@"sessiondatum"]);
                      
                      [einProjektDic setObject: [einPListProjektDic objectForKey:@"sessiondatum"] forKey:@"sessiondatum"];
                   }
                   else
                   {
-                     [einProjektDic setObject: [NSCalendarDate date] forKey:@"sessiondatum"];
-                     [einPListProjektDic setObject: [NSCalendarDate date] forKey:@"sessiondatum"];
-                     NSLog(@"neues Sessiondatum: %@",[NSCalendarDate date]);
-                     [self saveSessionDatum:[NSCalendarDate date] inProjekt:tempPListProjektName];
+                     [einProjektDic setObject: heuteDatumString forKey:@"sessiondatum"];
+                     [einPListProjektDic setObject: heuteDatumString forKey:@"sessiondatum"];
+                     NSLog(@"neues Sessiondatum: %@",heuteDatumString);
+                     [self saveSessionDatum:heuteDatumString inProjekt:tempPListProjektName];
                      
                   }
                   
                   if ([einPListProjektDic objectForKey:@"sessionleserarray"])//objekt für sessionleserarray ist in plist
                   {
-                     //NSLog(@"sessionleserarray da: %@",[[einPListProjektDic objectForKey:@"sessionleserarray"]description]);
+                     NSLog(@"Projekt: %@ sessionleserarray da: %@",tempProjektName,[[einPListProjektDic objectForKey:@"sessionleserarray"]description]);
                      
                      [einProjektDic setObject: [einPListProjektDic objectForKey:@"sessionleserarray"] forKey:@"sessionleserarray"];
                   }
@@ -1144,24 +1152,26 @@ enum
 {
    BOOL NamenListeValid=NO;
    BOOL erfolg=YES;
+   NSError* err;
    NSFileManager *Filemanager=[NSFileManager defaultManager];
    
    //Inhalt von Archiv prüfen
    // NSLog(@"ProjektPfad 7:retainCount %d",[ProjektPfad retainCount]);
    
-   NSArray* tempProjektNamenArray=[Filemanager contentsOfDirectoryAtPath:derProjektPfad error:NULL];
+   NSArray* tempProjektNamenArray=[Filemanager contentsOfDirectoryAtPath:derProjektPfad error:&err];
    //NSLog(@"ProjektPfad 8:retainCount %d",[ProjektPfad retainCount]);
    
    int anz=0;
    if ([tempProjektNamenArray count])
    {
       
-      NSEnumerator* enumerator=[tempProjektNamenArray objectEnumerator];
+//      NSEnumerator* enumerator=[tempProjektNamenArray objectEnumerator];
       NSString* tempObjekt;
       BOOL istOrdner=NO;
-      while (tempObjekt==[enumerator nextObject])
+//      while (tempObjekt==[enumerator nextObject])
+      for (int projektindex = 0;projektindex < [tempProjektNamenArray count]; projektindex++)
       {
-         NSString* tempPfad=[derProjektPfad stringByAppendingPathComponent:tempObjekt];
+         NSString* tempPfad=[derProjektPfad stringByAppendingPathComponent:[tempProjektNamenArray objectAtIndex:projektindex]];
          if ([Filemanager fileExistsAtPath:tempPfad isDirectory:&istOrdner] && istOrdner)
          {
             anz++;
@@ -1236,11 +1246,75 @@ enum
    [NSApp endModalSession:ProjektSession];
    [[ProjektStartPanel window] orderOut:NULL];
    
+   
    //[[NSApp mainWindow] makeKeyAndOrderFront:self];
    //[[self.view window]makeKeyAndOrderFront:self];
    //[[[self view ]window]orderFront:NULL];
    
    
+   
+}
+
+- (int)showProjektStartFenster
+{
+   [self restartAdminTimer];
+   if (!ProjektStartPanel)
+   {
+      ProjektStartPanel=[[rProjektStart alloc]init];
+   }
+   //NSLog(@"showProjektStartFenster: ProjektArray: %@",[self.ProjektArray description]);
+   
+   //[ProjektPanel showWindow:self];
+   NSModalSession ProjektSession=[NSApp beginModalSessionForWindow:[ProjektStartPanel window]];
+   
+   //NSLog(@"showProjektStartFenster LeseboxPfad: %@",LeseboxPfad);
+   //NSLog(@"showProjektStartFenster A: %@",[[Utils ProjektArrayAusPListAnPfad:self.LeseboxPfad] description]);
+   [self.ProjektArray setArray:[Utils ProjektArrayAusPListAnPfad:self.LeseboxPfad]];
+   NSArray*  tempProjektNamenArray = [NSArray arrayWithArray:[Utils ProjektNamenArrayVon:[self.LeseboxPfad stringByAppendingString:@"/Archiv"]]];
+   //NSLog(@"ProjektArray A: %@",[self.ProjektArray description]);
+   
+   //   [ProjektArray addObjectsFromArray:tempProjektNamenArray];
+   //NSLog(@"showProjektStartFenster ProjektArray B: %@",[self.ProjektArray description]);
+   if ([self.ProjektArray count])
+   {
+      [ProjektStartPanel  setProjektArray:self.ProjektArray];
+      [ProjektStartPanel  setRecorderTaste:YES];
+      
+   }
+   if ([self checkAdminPW])
+   {
+      //NSLog(@"showProjektStart setRecorderTaste: checkAdminPW OK");
+      [ProjektStartPanel  setRecorderTaste:YES];
+      
+   }
+   else
+   {
+      //NSLog(@"showProjektStart setRecorderTaste: Neue LB, noch kein checkAdminPW");
+      [ProjektStartPanel  setRecorderTaste:NO];//Neue LB, noch kein checkAdminPW
+      
+   }
+   
+   //NSLog(@"showProjektStart start PListDic: %@",[self.PListDic description]);
+   if ([self.PListDic objectForKey:@"lastprojekt"])
+   {
+      NSLog(@"showProjektStart start lastproject: %@",[self.PListDic objectForKey:@"lastprojekt"]);
+      [ProjektStartPanel selectProjekt:[self.PListDic objectForKey:@"lastprojekt"]];
+   }
+   
+   
+   int modalAntwort = [NSApp runModalForWindow:[ProjektStartPanel window]];
+   
+   NSLog(@"showProjektStart Antwort: %d",modalAntwort);
+   
+   [NSApp endModalSession:ProjektSession];
+   [[ProjektStartPanel window] orderOut:NULL];
+   
+   
+   //[[NSApp mainWindow] makeKeyAndOrderFront:self];
+   //[[self.view window]makeKeyAndOrderFront:self];
+   //[[[self view ]window]orderFront:NULL];
+   
+   return modalAntwort;
    
 }
 
@@ -1264,6 +1338,7 @@ enum
     NSLog(@"ArchivPfad :%@ * ProjektPfad: %@",self.ArchivPfad,self.ProjektPfad);
    NSString* UmgebungString=[[note userInfo] objectForKey:@"umgebunglabel"];
    int UmgebungZahl=[[[note userInfo] objectForKey:@"umgebung"]intValue];
+   
    self.Umgebung=UmgebungZahl;
    //self.mitUserPasswort=NO;
    NSString* MitUserPWString=[[note userInfo] objectForKey:@"mituserpw"];
@@ -1515,8 +1590,8 @@ enum
    //	[ProjektArray setArray:[Utils ProjektArrayAusPListAnPfad:LeseboxPfad]];
    
    NSDictionary* tempProjektDic;
-   int ProjektIndex=[[self.ProjektArray valueForKey:@"projekt"]indexOfObject:[self.ProjektPfad lastPathComponent]];
-   NSCalendarDate* ProjektSessionDatum;
+   double ProjektIndex=[[self.ProjektArray valueForKey:@"projekt"]indexOfObject:[self.ProjektPfad lastPathComponent]];
+   NSString* ProjektSessionDatum;
    if (ProjektIndex<NSNotFound)
    {
       //Dic des aktuellen Projekts im Projektarray
@@ -1528,7 +1603,7 @@ enum
       }
       else
       {
-         ProjektSessionDatum=[NSCalendarDate date];
+         ProjektSessionDatum=heuteDatumString;
       }
       
    }
@@ -1536,7 +1611,7 @@ enum
    
    
    NSMutableArray * tempProjektNamenArray=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:self.ProjektPfad error:NULL]];
-   int AnzNamen=[tempProjektNamenArray count];											//Anzahl Leser
+   double AnzNamen=[tempProjektNamenArray count];											//Anzahl Leser
    //Leserself.NamenListe=[tempProjektNamenArray description];
    
    if ([tempProjektNamenArray count])
@@ -1575,7 +1650,7 @@ enum
    //Sessioleserarray
    NSArray* tempSessionLeserArray=[tempProjektDic objectForKey:@"sessionleserarray"];
    
-   //NSLog(@"tempSessionLeserArray 1: %@",[tempSessionLeserArray description]);
+   NSLog(@"tempSessionLeserArray 1: %@",[tempSessionLeserArray description]);
    NSEnumerator* NamenEnum=[tempProjektNamenArray objectEnumerator];
    id einName;
    while (einName=[NamenEnum nextObject])
@@ -1592,7 +1667,7 @@ enum
    int ItemIndex=1;
    while (einSessionName=[SessionNamenEnum nextObject])
    {
-      //NSLog(@"tempProjektNamenArray index: %d: einSessionName: %@",ItemIndex,einSessionName);
+      NSLog(@"setArchivNamenPop tempProjektNamenArray index: %d: einSessionName: %@",ItemIndex,einSessionName);
       BOOL NameDa=NO;
       
       
@@ -1618,7 +1693,7 @@ enum
       
       NSDictionary* tempItemAttr=[NSDictionary dictionaryWithObjectsAndKeys:itemColor, NSForegroundColorAttributeName,[NSFont systemFontOfSize:13], NSFontAttributeName,nil];
       NSAttributedString* tempNamenItem=[[NSAttributedString alloc]initWithString:einSessionName attributes:tempItemAttr];
-      //		[[ArchivnamenPop itemAtIndex:[ArchivnamenPop numberOfItems]-1]setAttributedTitle:tempNamenItem];
+     // [[self.ArchivnamenPop itemAtIndex:[ArchivnamenPop numberOfItems]-1]setAttributedTitle:tempNamenItem];
       if ([self.ArchivnamenPop numberOfItems]>2)
       {
          [[self.ArchivnamenPop itemAtIndex:ItemIndex]setAttributedTitle:tempNamenItem];
@@ -1669,27 +1744,45 @@ enum
    if (ProjektIndex<NSNotFound)
    {
       NSMutableDictionary* tempProjektDic=(NSMutableDictionary*)[self.ProjektArray objectAtIndex:ProjektIndex];
-      NSCalendarDate* heute=[NSCalendarDate date];
-      NSUInteger heuteJahr=[heute yearOfCommonEra];
-      NSUInteger heuteTag=[heute dayOfYear];
-      //NSLog(@"checkSessionDatumFor: %@  heuteJahr: %d heuteTag: %d",dasProjekt,heuteJahr,heuteTag);
+      
+      int heuteTag=[Utils localTagvonDatumString: heuteDatumString];
+      int heuteMonat=[Utils localMonatvonDatumString: heuteDatumString];
+      int heuteJahr=[Utils localJahrvonDatumString: heuteDatumString];
+      
+     // NSUInteger heuteTag=[heute dayOfYear];
+      NSLog(@"checkSessionDatumFor: %@  heuteJahr: %d heuteMonat: %d heuteTag: %d",dasProjekt,heuteJahr,heuteMonat,heuteTag);
       if ([tempProjektDic objectForKey:@"sessiondatum"])
       {
-         NSCalendarDate* SessionDatum=[NSCalendarDate date];
-         NSTimeInterval SessionIntervall=[[tempProjektDic objectForKey:@"sessiondatum"]timeIntervalSinceReferenceDate];
-         SessionDatum=[NSCalendarDate dateWithTimeIntervalSinceReferenceDate:SessionIntervall];
+         NSString* SessionDatum=[tempProjektDic objectForKey:@"sessiondatum"];
          
-         NSUInteger SessionTag=[SessionDatum dayOfYear];
-         NSUInteger SessionJahr=[SessionDatum yearOfCommonEra];
+         NSLog(@"checkSessionDatumFor SessionDatum: %@",SessionDatum);
+        // NSTimeInterval SessionIntervall=[[tempProjektDic objectForKey:@"sessiondatum"]timeIntervalSinceReferenceDate];
+         // http://stackoverflow.com/questions/6214094/how-to-get-nsdate-day-month-and-year-in-integer-format
+         //SessionDatum=[NSCalendarDate dateWithTimeIntervalSinceReferenceDate:SessionIntervall];
+         
+         
+        // NSUInteger SessionTag=[SessionDatum dayOfYear];
+         //double SessionTag = [[NSCalendar currentCalendar] ordinalityOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:[NSDate date]];
+         //heuteTag = [[NSCalendar currentCalendar] ordinalityOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:[NSDate date]];
+         int SessionTag=[Utils localTagvonDatumString: [tempProjektDic objectForKey:@"sessiondatum"]];
+         int SessionJahr=[Utils localJahrvonDatumString: [tempProjektDic objectForKey:@"sessiondatum"]];
+         int SessionMonat=[Utils localMonatvonDatumString: [tempProjektDic objectForKey:@"sessiondatum"]];
+        
          //NSLog(@"checkSessionDatumFor: %@  SessionDatum: %@ SessionTag: %d",dasProjekt,SessionDatum,SessionTag);
          
          //		NSLog(@"SessionInterval: %f		heuteInterval: %f",SessionInterval,heuteInterval);
          //NSLog(@"lastJahr: %d		heuteJahr: %d",SessionJahr,heuteJahr);
          //int heuteTag=[heute dayOfYear];
-         if (SessionJahr<heuteJahr)//Datum vom letzten Jahr, Tag des Jahres kann höher sein)
+         if (SessionJahr<heuteJahr)//Datum vom letzten Jahr, Tag  kann höher sein)
          {
             SessionTag=0;
          }
+         
+         if (SessionMonat < heuteMonat)//Datum vom letzten Monat, Tag  kann höher sein)
+         {
+            SessionTag=0;
+         }
+         
          //NSLog(@"SessionTag: %d		heute: %d",SessionTag,heuteTag);
          if ([tempProjektDic objectForKey:@"sessionleserarray"]&&[[tempProjektDic objectForKey:@"sessionleserarray"]count])
          {
@@ -1721,8 +1814,8 @@ enum
                   {
                      //NSLog(@"Session behalten");
                      heuteTag=SessionTag;
-                     SessionDatum=[NSCalendarDate date];
-                     [tempProjektDic setObject:[NSCalendarDate date] forKey:@"sessiondatum"];
+                     SessionDatum=heuteDatumString;
+                     [tempProjektDic setObject:heuteDatumString forKey:@"sessiondatum"];
                      
                   }break;
                }//switch
@@ -1736,7 +1829,7 @@ enum
          }
          else
          {
-            [tempProjektDic setObject:[NSCalendarDate date] forKey:@"sessiondatum"];//Sessiondatum aktualisieren
+            [tempProjektDic setObject:heuteDatumString forKey:@"sessiondatum"];//Sessiondatum aktualisieren
          }
       }//if SessionDatum
       
@@ -1750,6 +1843,9 @@ enum
 - (IBAction)neueSession:(id)sender
 {
    [Utils stopTimeout];
+   //double heuteTag = [[NSCalendar currentCalendar] ordinalityOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:[NSDate date]];
+   
+
    switch (self.Umgebung)
    {
       case 0:
@@ -1765,15 +1861,16 @@ enum
             if (ProjektIndex<NSNotFound)
             {
                tempProjektDic=(NSMutableDictionary*)[self.ProjektArray objectAtIndex:ProjektIndex];
-               [tempProjektDic setObject:[NSCalendarDate date] forKey:@"sessiondatum"];
+                [tempProjektDic setObject:heuteDatumString forKey:@"sessiondatum"];
                
-               NSLog(@"neueSession: neues ProjektSessionDatum: %@",[NSCalendarDate calendarDate]);
+               NSLog(@"neueSession: neues ProjektSessionDatum: %@",heuteDatumString);
                
                NSArray* tempSessionLeserArray=[tempProjektDic objectForKey:@"sessionleserarray"];
                NSLog(@"alter SessionLeserArray: %@",[tempSessionLeserArray description]);
                
                [tempProjektDic setObject:[NSMutableArray array]forKey:@"sessionleserarray"];
-               [self saveSessionDatum:[NSDate date] inProjekt:[self.ProjektPfad lastPathComponent]];
+               
+               [self saveSessionDatum:heuteDatumString inProjekt:[self.ProjektPfad lastPathComponent]];
                [self clearSessionInProjekt:[self.ProjektPfad lastPathComponent]];
                
                [self setArchivNamenPop];
@@ -1813,15 +1910,15 @@ enum
                if (ProjektIndex<NSNotFound)
                {
                   tempProjektDic=(NSMutableDictionary*)[self.ProjektArray objectAtIndex:ProjektIndex];
-                  [tempProjektDic setObject:[NSCalendarDate date] forKey:@"sessiondatum"];
+                  [tempProjektDic setObject:heuteDatumString forKey:@"sessiondatum"];
                   
-                  NSLog(@"neueSession: neues ProjektSessionDatum: %@",[NSCalendarDate calendarDate]);
+                  NSLog(@"neueSession: neues ProjektSessionDatum: %@",heuteDatumString);
                   
                   NSArray* tempSessionLeserArray=[tempProjektDic objectForKey:@"sessionleserarray"];
                   NSLog(@"alter SessionLeserArray: %@",[tempSessionLeserArray description]);
                   
                   [tempProjektDic setObject:[NSMutableArray array]forKey:@"sessionleserarray"];
-                  [self saveSessionDatum:[NSDate date] inProjekt:[self.ProjektPfad lastPathComponent]];
+                  [self saveSessionDatum:heuteDatumString inProjekt:[self.ProjektPfad lastPathComponent]];
                   [self clearSessionInProjekt:[self.ProjektPfad lastPathComponent]];
                   
                   [self setArchivNamenPop];
@@ -1834,7 +1931,7 @@ enum
             case NSAlertSecondButtonReturn://Session weiterführen
             {
                NSLog(@"Session weiterfuehren");
-               [self saveSessionDatum:[NSDate date] inProjekt:[self.ProjektPfad lastPathComponent]];
+               [self saveSessionDatum:heuteDatumString inProjekt:[self.ProjektPfad lastPathComponent]];
             }break;
                
          }//switch
@@ -1927,10 +2024,10 @@ enum
       
       if ([tempProjektDic objectForKey:@"sessiondatum"])
       {
-         NSCalendarDate* SessionDatum=[tempProjektDic objectForKey:@"sessiondatum"];
+         NSString* SessionDatum=[tempProjektDic objectForKey:@"sessiondatum"];
          
          //NSLog(@"anderesProjektEinrichtenMit: %@  SessionDatum: %@",dasProjekt,SessionDatum);
-         if ([SessionDatum compare:[NSCalendarDate calendarDate]]==NSOrderedDescending)
+         if ([SessionDatum compare:heuteDatumString]==NSOrderedDescending)
          {
             //NSLog(@"anderesProjektEinrichten: alte Session");
          }
@@ -2129,11 +2226,25 @@ enum
       return;
    }
 
-   if (self.Umgebung==1)
+ //  if (self.Umgebung==1)
    {
       [Utils showNamenListe:sender];
    }
 }
+
+- (void)NameIstEingesetztAktion:(NSNotification*)note
+{
+   NSLog(@"NameIstEingesetztNotificationAktion: %@",[note description]);
+   if ([[note userInfo]objectForKey:@"einsetzenOK"])
+   {
+      int EinsetzenOK=[[[note userInfo]objectForKey:@"einsetzenOK"]intValue];
+      if (EinsetzenOK)
+      {
+         //[self setAdminPlayer:AdminLeseboxPfad inProjekt:[AdminProjektPfad lastPathComponent]];
+      }//if 
+   }//note
+}
+
 
 - (IBAction)showEinzelNamen
 {
@@ -2151,12 +2262,13 @@ enum
 
 - (void) Testknopf:(id)sender
 {
+   
 }
 
 
 - (void)savePListAktion:(NSNotification*)note
 {
-   //NSLog(@"savePListAktion: PList: %@",[PListDic  description]);
+   NSLog(@"savePListAktion: PList: %@",[self.PListDic  description]);
    //NSLog(@"savePListAktion adminpw aus PList: %@",[[PListDic objectForKey:@"adminpw"] description]);
    
    //	NSLog(@"savePListAktion projektarray aus PList: %@",[[PListDic objectForKey:@"projektarray"] description]);
@@ -2203,7 +2315,7 @@ enum
       
       if (![tempPListDic objectForKey:@"lastdate"])
       {
-         [tempPListDic setObject: [NSCalendarDate calendarDate] forKey:@"lastdate"];
+         [tempPListDic setObject: [NSNumber numberWithLong:heuteTagDesJahres] forKey:@"lastdate"];
       }
       
       if (![tempPListDic objectForKey:@"projektarray"])
@@ -2355,7 +2467,7 @@ enum
 }
 
 
-- (void)saveSessionDatum:(NSDate*)dasDatum inProjekt:(NSString*)dasProjekt
+- (void)saveSessionDatum:(NSString*)dasDatum inProjekt:(NSString*)dasProjekt
 {
    //NSLog(@"saveSessionForUser: PList: %@",[PListDic  description]);
    //NSLog(@"saveSessionDatum: Datum: %@  LeseboxPfad: %@",dasDatum,LeseboxPfad);
@@ -2384,8 +2496,8 @@ enum
       if ([tempPListDic objectForKey:@"projektarray"])
       {
          NSMutableArray* tempProjektArray=[tempPListDic objectForKey:@"projektarray"];
-         int ProjektIndex=[[tempProjektArray valueForKey:@"projekt"]indexOfObject:dasProjekt];
-         if (ProjektIndex<NSNotFound)
+         long ProjektIndex=[[tempProjektArray valueForKey:@"projekt"]indexOfObject:dasProjekt];
+         if (ProjektIndex < NSNotFound)
          {
             [[tempProjektArray objectAtIndex:ProjektIndex] setObject:dasDatum forKey:@"sessiondatum"];
          }//if <notFound
@@ -2444,8 +2556,8 @@ enum
 - (void)saveNeuesProjekt:(NSDictionary*)derProjektDic
 {
    NSString* ProjektName=[derProjektDic objectForKey:@"projekt"];
-   NSLog(@"				saveNeuesProjekt");
-   //NSLog(@"saveNeuesProjekt: derProjektDic: %@",[derProjektDic  description]);
+   //NSLog(@"				saveNeuesProjekt");
+   NSLog(@"saveNeuesProjekt: derProjektDic: %@",[derProjektDic  description]);
    //NSLog(@"saveNeuesProjekt: ProjektName: %@  LeseboxPfad: %@",ProjektName,LeseboxPfad);
    NSString* ArchivPath=[self.LeseboxPfad stringByAppendingPathComponent:@"Archiv"];
    self.ProjektPfad=(NSMutableString*)[ArchivPath stringByAppendingPathComponent:ProjektName];
@@ -2466,7 +2578,7 @@ enum
    
    PListPfad=[DataPath stringByAppendingPathComponent:PListName];
    
-   //NSLog(@"saveNeuesProjekt PListPfad: %@",PListPfad);
+   NSLog(@"saveNeuesProjekt PListPfad: %@",PListPfad);
    //NSLog(@"***\n                saveSessionForUser: %@",[PListDic description]);
    
    NSMutableDictionary* tempPListDic=[[NSMutableDictionary alloc]initWithContentsOfFile:PListPfad];
@@ -2477,7 +2589,7 @@ enum
       if ([tempPListDic objectForKey:@"projektarray"])
       {
          tempProjektArray=[tempPListDic objectForKey:@"projektarray"];
-         //NSLog(@"***	saveNeuesProjekt tempProjektArray: %@",[tempProjektArray description]);
+         NSLog(@"***	saveNeuesProjekt tempProjektArray: %@",[tempProjektArray description]);
       }//if projektarray
       else
       {
@@ -2494,6 +2606,7 @@ enum
       }
       [self.ProjektArray addObject:[derProjektDic copy]];
       //NSLog(@"saveNeuesProjekt: ProjektArray nach add: %@",[ProjektArray description]);
+      [tempPListDic setObject:tempProjektArray forKey:@"projektarray"];
       
       BOOL PListOK=[tempPListDic writeToFile:PListPfad atomically:YES];
       NSLog(@"PListOK: %d",PListOK);
@@ -2732,9 +2845,9 @@ enum
 
 - (void)saveSessionForUser:(NSString*)derUser inProjekt:(NSString*)dasProjekt
 {
-   //NSLog(@"saveSessionForUser: PList: %@",[PListDic  description]);
+   //NSLog(@"saveSessionForUser: PList: %@",[self.PListDic  description]);
    //NSLog(@"saveSessionForUser: LeseboxPfad: %@",LeseboxPfad);
-   //NSLog(@"saveSessionForUser: derUser: %@ dasProjekt: %@",derUser, dasProjekt);
+   NSLog(@"saveSessionForUser: derUser: %@ dasProjekt: %@",derUser, dasProjekt);
    
    //NSString* PListName=NSLocalizedString(@"Lecturebox.plist",@"Name Lesebox.plist");
    NSString* PListName=@"Lesebox.plist";
@@ -2789,6 +2902,12 @@ enum
    
    BOOL PListOK=[tempPListDic writeToFile:PListPfad atomically:YES];
    //NSLog(@"saveSessionForUser  PListOK: %d",PListOK);
+   
+   
+   
+   self.PListDic = tempPListDic;
+   
+   
    
    //[tempUserInfo release];
 }
@@ -2888,7 +3007,7 @@ enum
       
       if (![tempPListDic objectForKey:@"lastdate"])
       {
-         [tempPListDic setObject: [NSCalendarDate calendarDate] forKey:@"lastdate"];
+         [tempPListDic setObject: [NSNumber numberWithLong:heuteTagDesJahres] forKey:@"lastdate"];
       }
       
       if (![tempPListDic objectForKey:@"projektarray"])
@@ -3024,7 +3143,7 @@ enum
                
                if (![tempPListDic objectForKey:@"lastdate"])
                {
-                  [tempPListDic setObject: [NSCalendarDate calendarDate] forKey:@"lastdate"];
+                  [tempPListDic setObject: [NSNumber numberWithLong:heuteTagDesJahres] forKey:@"lastdate"];
                }
                NSLog(@"checkAdminZugang: tempPListDic mit lastDate: %@",[tempPListDic description]);
                

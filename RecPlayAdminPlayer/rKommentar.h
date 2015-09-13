@@ -46,7 +46,7 @@
 	
 	NSMutableArray*					NamenArray;
 	NSMutableArray*					TitelArray;
-   
+   NSString*               heuteDatumString;
    
    // aus AdminPlayer
    NSString*					AdminLeseboxPfad;

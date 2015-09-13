@@ -147,7 +147,8 @@
 	
       
       NSTimer*					posTimer;
-
+      NSString*            heuteDatumString;
+      long                 heuteTagDesJahres;
 // Player
       
 	

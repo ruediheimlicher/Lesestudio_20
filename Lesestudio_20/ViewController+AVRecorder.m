@@ -82,11 +82,11 @@
       
       return;
    }
-
+  [self.view  becomeFirstResponder];
    NSImage* StopRecordImg=[NSImage imageNamed:@"stopicon_w.gif"];
    //self.StartStopKnopf.image=StopRecordImg;
 
-   //NSLog(@"recording 1 %@",[NSDate date]);
+   //NSLog(@"recording Datum %@",heuteDatumString);
    NSDate *now = [[NSDate alloc] init];
    startzeit = (int)now.timeIntervalSince1970;
    //NSLog(@"setRecording startzeit: %ld",startzeit);
@@ -178,6 +178,13 @@
    NSLog(@"stopAVRecord");
 
   [AVRecorder setRecording:NO mitLeserPfad:self.LeserPfad];
+   
+
+//   [self.TitelPop selectItemAtIndex:0];
+ //  [self.TitelPop setEnabled:YES];
+//   [self.TitelPop setEditable:TitelEditOK];//Nur wenn Titel editierbar
+//   [self.TitelPop setSelectable:TitelEditOK];
+//   [self.TitelPop   becomeFirstResponder];
 
    /*
    [self.StartPlayQTKitKnopf setEnabled:YES];
@@ -591,6 +598,7 @@
    }
    
    [self.Abspieldauerfeld setStringValue:@""];
+   [self.Zeitfeld setStringValue:@""];
    [Abspielanzeige setLevel:0];
    [Abspielanzeige setNeedsDisplay:YES];
    
@@ -692,7 +700,8 @@
             if (Antwort==1)
             {
                [self.TitelPop setEnabled:YES];
-               [self.TitelPop selectItemWithObjectValue:[[self.TitelPop cell]stringValue]];
+             //  [self.TitelPop selectItemWithObjectValue:[[self.TitelPop cell]stringValue]];
+               
                return;
             }
          }
@@ -794,7 +803,7 @@
          } // if saveKommentarOK
          //SessionLeserArray aktualisieren
          
-         NSCalendarDate* creatingDatum=[NSCalendarDate calendarDate];
+         //NSCalendarDate* creatingDatum=[NSCalendarDate calendarDate];
          //NSLog(@"Projekt: %@ creatingDatum: %@",[ProjektPfad lastPathComponent],creatingDatum);
          
          NSString* tempLeser=[self.ArchivnamenPop titleOfSelectedItem];
@@ -830,6 +839,7 @@
             //SessionListe in der PList sichern
             
             [self saveSessionForUser:self.Leser inProjekt:[self.ProjektPfad lastPathComponent]];
+            
             
             if ([sender tag])
             {
@@ -890,6 +900,7 @@
    
    
    //NSLog(@" vor     SaveAufnahmeTimer");
+   
    switch  ([sender tag])
    {
       case 1:
@@ -924,6 +935,8 @@
          
       }break;
    }//switch
+   
+ 
 }
 
 -(void)onTick:(NSTimer *)timer {

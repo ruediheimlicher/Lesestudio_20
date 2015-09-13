@@ -1746,9 +1746,8 @@ return tempKommentarArray;
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
 	NSLog(@"heutigeKommentareVon: LeserPfad: %@",derLeser);
 	NSString* tempDatum=@"xxx";
-	NSCalendarDate* heute=[NSCalendarDate date];
-	[heute setCalendarFormat:@"%d.%m.%Y"];
-	NSLog(@"heutigeKommentareVon  heute: %@   LeserPfad: %@",heute,derLeser);
+
+   NSLog(@"heutigeKommentareVon  heute: %@   LeserPfad: %@",heuteDatumString,derLeser);
 
 	NSString* heutigerKommentarString=@"*";	
 	NSString* LeserPfad=[AdminProjektPfad stringByAppendingPathComponent:derLeser];//Leserordner im Archiv
@@ -1771,7 +1770,7 @@ return tempKommentarArray;
 					NSString* tempKommentarString=[NSString stringWithContentsOfFile:tempKommentarPfad encoding:NSMacOSRomanStringEncoding error:NULL];
 					  tempDatum=[self DatumVon:tempKommentarString];
 					  NSLog(@"tempDatum: %@",tempDatum);
-					  if ([tempDatum isEqualTo:[heute description]])
+					  if ([tempDatum isEqualTo:heuteDatumString])
 						  {
 						  NSLog(@"Heutiger Kommentar da: %@",tempKommentarString);
 						  heutigerKommentarString=tempKommentarString;
@@ -2727,7 +2726,6 @@ return tempTitelDicArray;
 - (NSString*)DatumVon:(NSString*) derKommentarString
 {
 	NSString* tempDatumString;
-	//[tempKommentarString release];
 	tempDatumString=[derKommentarString copy];
 	int AnzReturns=0;
 	int returnpos1=0,returnpos2=0;
@@ -2777,7 +2775,7 @@ return tempTitelDicArray;
 		  {
 		r=NSMakeRange(0,leerpos);
 		tempDatumString=[tempDatumString substringWithRange:r];
-		//NSLog(@"tempDatumString: %@", tempDatumString);
+		NSLog(@"DatumVon tempDatumString: %@", tempDatumString);
 		  }
 		else
 		  {

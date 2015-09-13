@@ -256,7 +256,7 @@ NSLog(@"tempName: %@",tempName);
    }//if Quelle==AufnahmenTable
 
    //NSLog(@"AufnahmenTable: %@",[[AufnahmenTable dataSource]description]);
-	NSLog(@"setAufnahmenVonLeser: AufnahmenDicArray: %@",[AufnahmenDicArray description]);
+	//NSLog(@"setAufnahmenVonLeser: AufnahmenDicArray: %@",[AufnahmenDicArray description]);
    [AufnahmenTable reloadData];
 	[AufnahmenTable selectRowIndexes:[NSIndexSet indexSetWithIndex:0]byExtendingSelection:NO];
 	BOOL OK;

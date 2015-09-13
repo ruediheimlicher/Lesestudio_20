@@ -70,7 +70,11 @@
    double startzeit;
    NSTimer *      AdminTimer;
    int AdminTimerCounter;
-
+   
+    int                          startcode; // 0: recorder 1: AdminPlayer
+   NSString*                     localDate;
+   NSString*                     heuteDatumString;
+   long                        heuteTagDesJahres;
 }
 
 // Menues
@@ -294,6 +298,7 @@
 - (IBAction)Logout:(id)sender;
 - (IBAction)setTitel:(id)sender;
 - (IBAction)showProjektStart:(id)sender;
+- (int)showProjektStart;
 - (IBAction)savePListAktion:(id)sender;
 
 - (NSString*)Initialen:(NSString*)derName;
@@ -332,7 +337,7 @@
 - (void)saveNeuenProjektArray:(NSArray*)derProjektArray;
 - (void)saveUserPasswortArray:(NSArray*)derPasswortArray;
 - (void)SessionListeAktualisieren;
-
+- (void)SaveAufnahmeTimerFunktion:(NSTimer*)derTimer;
 - (void)saveSessionForUser:(NSString*)derUser inProjekt:(NSString*)dasProjekt;
 - (BOOL)anderesProjektEinrichtenMit:(NSString*)dasProjekt;
 - (NSArray*)SessionLeserListeVonProjekt:(NSString*)dasProjekt;
