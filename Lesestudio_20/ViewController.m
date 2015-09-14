@@ -761,13 +761,18 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    if ([[segue identifier] isEqualToString:@"adminanzeigesegue"]) // erster kontakt
    {
       //NSLog(@"prepareForSegue adminanzeigesegue");
+      
        self.AdminPlayer = (rAdminPlayer*)segue.destinationController ;
-      [self.AdminPlayer setAdminProjektArray:self.ProjektArray];
+      NSLog(@"in beginAdminPlayer vor setAdminProjektArray: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
+   
       
       [self.AdminPlayer setAdminPlayer:self.LeseboxPfad inProjekt:[self.ProjektPfad lastPathComponent]];
+      
+      [self.AdminPlayer setAdminProjektArray:self.ProjektArray];
+
       //NSLog(@"beginAdminPlayer nach setAdminPlayer");
       self.Umgebung=3;
-      //NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[ProjektArray description]);
+     NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
       
       [self.AdminPlayer setProjektPopMenu:self.ProjektArray];
       
@@ -984,49 +989,13 @@ return YES;
    [self savePListAktion:nil];
    [Utils setPListBusy:NO anPfad:self.LeseboxPfad];
    BOOL BeendenOK=YES;
-   /*
-    if ([[RecordQTKitPlayer movie]rate])
-    [self stopPlay:nil];
-    
-    if ([AufnahmeGrabber isRecording])
-    {
-    NSAlert *RecorderWarnung = [[[NSAlert alloc] init] autorelease];
-    [RecorderWarnung addButtonWithTitle:@"OK"];
-    //[RecorderWarnung addButtonWithTitle:@"Cancel"];
-    [RecorderWarnung setMessageText:NSLocalizedString(@"Still Recording",@"Aufnahme läuft")];
-    [RecorderWarnung setInformativeText:NSLocalizedString(@"The window cannot be closed.",@"Fenster kann nicht geschlossen werden.")];
-    [RecorderWarnung setAlertStyle:NSWarningAlertStyle];
-    
-    //[alert beginSheetModalForWindow:[searchField window] modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
-    [RecorderWarnung beginSheetModalForWindow:RecPlayFenster
-    modalDelegate:nil
-    didEndSelector:nil
-    contextInfo:nil];
-    BeendenOK=NO;
-    }//is recording
-    
-    
-    
-    if (AufnahmeGrabber)
-    {
-    //[self saveSettings:NULL];
-    NSLog(@"Grabber lauft noch");
-    [AufnahmeGrabber stopRecord];
-    if (neueSettings)
-    {
-    [self saveSettings:NULL];
-    }
-    [AufnahmeGrabber GrabberSchliessen];
-    //[self saveSettings:NULL];
-    }
-    */
-   //NSLog(@"AufnahmeGrabber retain: %d",[AufnahmeGrabber retainCount]);
+
    NSFileManager *Filemanager=[NSFileManager defaultManager];
    //NSLog(@"neueAufnahmepfad: %@",neueAufnahmePfad);
    if (self.neueAufnahmePfad)
    {
       BOOL sauberOK=[Filemanager removeItemAtURL:[NSURL fileURLWithPath:self.neueAufnahmePfad] error:nil];
-      return BeendenOK;
+      return sauberOK;
    }
    return BeendenOK;
 }
@@ -3393,26 +3362,10 @@ QTMovie* qtMovie;
       [Warnung setAlertStyle:NSWarningAlertStyle];
       NSImage* RPImage = [NSImage imageNamed: @"MicroIcon"];
       [Warnung setIcon:RPImage];
-      /*
-       [Warnung beginSheetModalForWindow:[self.AdminPlayer window]
-       modalDelegate:nil
-       didEndSelector:nil
-       contextInfo:@"keineLeser"];
-       
-       //int Antwort=NSRunAlertPanel(@"Leeres Archiv", @"Es hat noch keine Aufnahmen im Archiv",locBeenden, NULL,NULL);
-       */
+      [Warnung runModal];
       return;
       
    }
-   /*
-    if(AdminPlayer)
-    {
-    [AdminPlayer backZurListe:nil];
-    [AdminPlayer resetAdminPlayer];
-    //[[AdminPlayer window] performClose:nil];
-    [[AdminPlayer window]close];
-    }
-    */
    [self.RecPlayFenster setIsVisible:YES];
    self.Umgebung=0;
    
@@ -4247,14 +4200,21 @@ QTMovie* qtMovie;
            [NamenWarnung setInformativeText:@"Du musst einen Namen auswählen, bevor du das Archiv anschauen kannst."];
            [NamenWarnung setAlertStyle:NSWarningAlertStyle];
            
-           
-           [NamenWarnung beginSheetModalForWindow:[[self view]window]
-                                    modalDelegate:nil
-                                   didEndSelector:nil
-                                      contextInfo:nil];
-           
-           
+           [NamenWarnung runModal];
            return NO;
+           //
+           // http://stackoverflow.com/questions/23251464/how-to-create-custom-nsalert-sheet-method-with-the-completion-handler-paradigm
+          /*
+           [NamenWarnung beginSheetModalForWindow:[[self view]window] completionHandler:^(NSModalResponse result)
+            {
+               NSNotificationCenter * nc;
+               nc=[NSNotificationCenter defaultCenter];
+               [nc postNotificationName:@"Pfeiltaste" object:@"NO"];
+
+             }];
+
+           */
+           //
         }
         [Utils stopTimeout];
         [AVAbspielplayer invalTimer];

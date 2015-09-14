@@ -424,11 +424,11 @@
 																	</object>
 																	<object class="NSButtonCell" key="NSDataCell" id="552996178">
 																		<int key="NSCellFlags">67108864</int>
-																		<int key="NSCellFlags2">0</int>
+																		<int key="NSCellFlags2">134217728</int>
 																		<string key="NSContents"/>
 																		<reference key="NSSupport" ref="808030366"/>
 																		<reference key="NSControlView" ref="86592896"/>
-																		<int key="NSButtonFlags">1211912448</int>
+																		<int key="NSButtonFlags">1215582464</int>
 																		<int key="NSButtonFlags2">2</int>
 																		<object class="NSCustomResource" key="NSNormalImage" id="169461393">
 																			<string key="NSClassName">NSImage</string>
@@ -494,7 +494,7 @@
 																		<string key="NSContents"/>
 																		<reference key="NSSupport" ref="808030366"/>
 																		<reference key="NSControlView" ref="86592896"/>
-																		<int key="NSButtonFlags">1211912448</int>
+																		<int key="NSButtonFlags">1215582464</int>
 																		<int key="NSButtonFlags2">2</int>
 																		<reference key="NSNormalImage" ref="169461393"/>
 																		<reference key="NSAlternateImage" ref="859577046"/>
@@ -526,7 +526,7 @@
 																		<string key="NSContents"/>
 																		<reference key="NSSupport" ref="808030366"/>
 																		<reference key="NSControlView" ref="86592896"/>
-																		<int key="NSButtonFlags">1211912448</int>
+																		<int key="NSButtonFlags">1215582464</int>
 																		<int key="NSButtonFlags2">2</int>
 																		<reference key="NSNormalImage" ref="169461393"/>
 																		<reference key="NSAlternateImage" ref="859577046"/>
@@ -620,6 +620,7 @@
 											<reference key="NSHScroller" ref="556876103"/>
 											<reference key="NSContentView" ref="213171295"/>
 											<reference key="NSHeaderClipView" ref="50967620"/>
+											<reference key="NSCornerView" ref="925242315"/>
 											<bytes key="NSScrollAmts">AAAAAAAAAABBmAAAQZgAAA</bytes>
 											<double key="NSMinMagnification">0.25</double>
 											<double key="NSMaxMagnification">4</double>
@@ -727,7 +728,7 @@
 					</array>
 					<string key="NSFrameSize">{599, 481}</string>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1680, 1027}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1280, 777}}</string>
 				<string key="NSMinSize">{477, 374}</string>
 				<string key="NSMaxSize">{478, 622}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
@@ -1274,7 +1275,7 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="MicroIcon">{128, 128}</string>
+			<string key="MicroIcon">{105, 105}</string>
 			<string key="NSSwitch">{15, 15}</string>
 		</dictionary>
 	</data>

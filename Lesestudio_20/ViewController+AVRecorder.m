@@ -65,19 +65,14 @@
    {
       [self.StartStopString setStringValue:@"START"];
       NSAlert *NamenWarnung = [[NSAlert alloc] init];
-      [NamenWarnung addButtonWithTitle:NSLocalizedString(@"Mache ich",@"Aufforderung Namen angeben")];
+      [NamenWarnung addButtonWithTitle:@"Mache ich"];
       //[RecorderWarnung addButtonWithTitle:@"Cancel"];
-      [NamenWarnung setMessageText:NSLocalizedString(@"Wer bist du?",@"Frage nach Namen")];
-      [NamenWarnung setInformativeText:NSLocalizedString(@"Du musst einen Namen auswählen, bevor du aufnehmen kannst.",@"Gib Namen ein")];
+      [NamenWarnung setMessageText:@"Wer bist du?"];
+      [NamenWarnung setInformativeText:@"Du musst einen Namen auswählen, bevor du aufnehmen kannst."];
       [NamenWarnung setAlertStyle:NSWarningAlertStyle];
       
+      [NamenWarnung runModal];
       
-      [NamenWarnung beginSheetModalForWindow:[[self view]window]
-                               modalDelegate:nil
-                              didEndSelector:nil
-                                 contextInfo:nil];
-      NSImage* StartRecordImg=[NSImage imageNamed:@"recordicon_w.gif"];
-      //self.StartStopKnopf.image=StartRecordImg;
       [self.StartStopKnopf setState:0];
       
       return;
@@ -787,16 +782,11 @@
                NSAlert *Warnung = [[NSAlert alloc] init];
                [Warnung addButtonWithTitle:@"OK"];
                //[Warnung addButtonWithTitle:@"Cancel"];
-               [Warnung setMessageText:NSLocalizedString(@"Error While Saving Record",@"Fehler beim Sichern:")];
-               [Warnung setInformativeText:NSLocalizedString(@"The record cannot be saved.",@"Die Aufnahme kann nicht gesichert werden")];
+               [Warnung setMessageText:@"Fehler beim Sichern:"];
+               [Warnung setInformativeText:@"Die Aufnahme konte nicht gesichert werden"];
                [Warnung setAlertStyle:NSWarningAlertStyle];
-               /*
-                [Warnung beginSheetModalForWindow:RecPlayFenster
-                modalDelegate:nil
-                didEndSelector:nil
-                contextInfo:nil];
-                */
-               [self resetRecPlay];
+               [Warnung runModal];
+                [self resetRecPlay];
                return;
                
             }
@@ -858,20 +848,11 @@
             NSAlert *Warnung = [[NSAlert alloc] init];
             [Warnung addButtonWithTitle:@"OK"];
             //[Warnung addButtonWithTitle:@"Cancel"];
-            [Warnung setMessageText:NSLocalizedString(@"Error While Saving Record",@"Fehler beim Sichern:")];
-            [Warnung setInformativeText:NSLocalizedString(@"The new record is still in folder 'Documents' and must be removed manually","Aufnahme noch in Docs")];
+            [Warnung setMessageText:@"Fehler beim Sichern:"];
+            [Warnung setInformativeText:@"Die Aufnahme noch im Ordner 'Archiv' in der Lesebox und muss manuell entfernt werden"];
             [Warnung setAlertStyle:NSWarningAlertStyle];
-            
-            /*
-             [Warnung beginSheetModalForWindow:RecPlayFenster
-             modalDelegate:nil
-             didEndSelector:nil
-             contextInfo:nil];
-             
-             //int Antwort=NSRunAlertPanel(@"", @"",@"OK", NULL,NULL);
-             //if (Antwort==1)
-             //return;
-             */
+            [Warnung runModal];
+            return;
          }
          
       }
@@ -880,18 +861,11 @@
          NSAlert *Warnung = [[NSAlert alloc] init];
          [Warnung addButtonWithTitle:@"OK"];
          //[Warnung addButtonWithTitle:@"Cancel"];
-         [Warnung setMessageText:NSLocalizedString(@"Error While Saving Record",@"Fehler beim Sichern:")];
-         NSString* s1=NSLocalizedString(@"The file for the new record could not be created.",@"Kein File für Aufnahme");
+         [Warnung setMessageText:@"Fehler beim Sichern:"];
+         NSString* s1=@"Das File  fuer die Aufnahme konnte nicht erstellt werden.";
          [Warnung setInformativeText:s1];
          [Warnung setAlertStyle:NSWarningAlertStyle];
-         /*
-          [Warnung beginSheetModalForWindow:RecPlayFenster
-          modalDelegate:nil
-          didEndSelector:nil
-          contextInfo:nil];
-          
-          //int Antwort=NSRunAlertPanel(@"", @"",@"OK",NULL,NULL);
-          */
+         [Warnung runModal];
          [self resetRecPlay];
          return;
       }
@@ -908,11 +882,9 @@
          NSTimer*	SaveAufnahmeTimer=[NSTimer scheduledTimerWithTimeInterval:0.5
                                                                      target:self
                                                                    selector:@selector(SaveAufnahmeTimerFunktion:)
-                                                                   userInfo:[NSNumber numberWithInt:[sender tag]]
+                                                                   userInfo:[NSNumber numberWithDouble:[sender tag]]
                                                                     repeats:NO];
-         //NSLog(@"                                    set        SaveAufnahmeTimer");
-         //[Utils startTimeout:TimeoutDelay];
-         //[hiddenAufnahmePfad release];
+         //NSLog(@"   set        SaveAufnahmeTimer");
       }break;
       case 0:
       {

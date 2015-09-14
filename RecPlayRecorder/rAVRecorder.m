@@ -525,12 +525,13 @@
 - (void)trim
 {
 
-   NSSavePanel *trimPanel = [NSOpenPanel openPanel];
+   NSOpenPanel *trimPanel = [NSOpenPanel openPanel];
+   
    
    [trimPanel beginSheetModalForWindow:[self RecorderFenster] completionHandler:^(NSInteger result)
     {
-       NSError *error = nil;
-       if (result == NSOKButton)
+      
+       if (result == NSModalResponseOK)
        {
           
           
@@ -559,14 +560,10 @@
    NSSavePanel *trimPanel = [NSOpenPanel openPanel];
    [trimPanel beginSheetModalForWindow:[self RecorderFenster] completionHandler:^(NSInteger result)
     {
-       NSError *error = nil;
-       if (result == NSOKButton)
+       
+       if (result == NSModalResponseOK)
        {
-          
-          
-          
-          NSString* testpfad = [[[NSHomeDirectory()stringByAppendingPathComponent:@"Documents/Lesebox"]stringByAppendingPathComponent:@"cut"]stringByAppendingPathExtension:@"m4a"];
-          
+           NSString* testpfad = [[[NSHomeDirectory()stringByAppendingPathComponent:@"Documents/Lesebox"]stringByAppendingPathComponent:@"cut"]stringByAppendingPathExtension:@"m4a"];
           
           [self  cutFileAtURL:[trimPanel URL] toURL:[NSURL fileURLWithPath:testpfad]];
        }
@@ -927,7 +924,7 @@ NSError *error = nil;
       [nc postNotificationName:@"recording" object:self userInfo:saveDic];
       
       return;
-      
+      /*
       [[NSFileManager defaultManager] removeItemAtURL:[NSURL  fileURLWithPath:LeserPfad] error:nil]; // attempt to remove file at the desired save location before moving the recorded file to that location
       
       NSError *error = nil;
@@ -944,7 +941,7 @@ NSError *error = nil;
          NSAlert *Warnung = [[NSAlert alloc] init];
          [Warnung addButtonWithTitle:@"OK"];
          // [Warnung setMessageText:NSLocalizedString(@"No Marked Records",@"Keine markierten Aufnahmen")];
-         [Warnung setMessageText:@"Fehler beim Sichern der Aufnahmen"];
+         [Warnung setMessageText:@"Fehler beim Sichern der Aufnahmen: Keine markierten Aufnahmen."];
          
          [Warnung setAlertStyle:NSWarningAlertStyle];
          
@@ -960,6 +957,7 @@ NSError *error = nil;
       savePanel.allowedFileTypes = [NSArray arrayWithObjects:@"m4a",@"mov",nil];
       [savePanel beginSheetModalForWindow:[self RecorderFenster] completionHandler:^(NSInteger result)
        {
+          NSLog(@"result: %ld",(long)result);
           NSError *error = nil;
           if (result == NSOKButton)
           {
@@ -992,7 +990,7 @@ NSError *error = nil;
              //            [[NSFileManager defaultManager] removeItemAtURL:[NSURL fileURLWithPath:tempAufnahmePfad] error:nil];
           }
        }];
-      
+      */
    }
    //AVCaptureInput* input = [[self session].inputs objectAtIndex:0];
    //[[self session] removeInput:input];

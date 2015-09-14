@@ -69,10 +69,7 @@ if ([[neuesPW1Feld stringValue]length]==0)
 	[Warnung setMessageText:NSLocalizedString(@"Input Error:",@"Eingabefehler:")];
 	[Warnung setInformativeText:NSLocalizedString(@"The password may not be empty",@"Das Passwort darf nicht leer sein.")];
 	[Warnung setAlertStyle:NSWarningAlertStyle];
-	[Warnung beginSheetModalForWindow:[self window] 
-						modalDelegate:self
-					   didEndSelector:nil						
-						  contextInfo:nil];
+	[Warnung runModal];
 	
 	return;
 	}

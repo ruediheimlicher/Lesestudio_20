@@ -23,20 +23,22 @@
 
 - (IBAction)OKSheet:(id)sender
 {
-    [NSApp stopModalWithCode:1];
-	int var=[[EntfernenVariante selectedCell]tag];
+   // [NSApp stopModalWithCode:1];
+	long var=[[EntfernenVariante selectedCell]tag];
 	//NSLog(@"OKSheet:  stopModalWithCode tag: %d",var);
-	NSNumber* VariantenNummer=[NSNumber numberWithInt:var];
+	NSNumber* VariantenNummer=[NSNumber numberWithLong:var];
 	NSMutableDictionary* VariantenDic=[NSMutableDictionary dictionaryWithObject:VariantenNummer forKey:@"EntfernenVariante"];
-	NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
-	[nc postNotificationName:@"EntfernenOption" object:self userInfo:VariantenDic];
+	//NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
+	//[nc postNotificationName:@"EntfernenOption" object:self userInfo:VariantenDic];
+   [NSApp stopModalWithCode:var];
 }
 
 - (IBAction)cancelSheet:(id)sender
 {
-	//NSLog(@"cancelSheet: stopModalWithCode");
+	NSLog(@"cancelSheet: stopModalWithCode 0");
 
     [NSApp stopModalWithCode:0];
+   [NSApp abortModal];
 }
 
 - (void)sheetDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo

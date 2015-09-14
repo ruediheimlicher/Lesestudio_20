@@ -190,7 +190,7 @@
 														<string key="NSContents"/>
 														<reference key="NSSupport" ref="69127785"/>
 														<reference key="NSControlView" ref="110868270"/>
-														<int key="NSButtonFlags">1211912448</int>
+														<int key="NSButtonFlags">1215582464</int>
 														<int key="NSButtonFlags2">2</int>
 														<object class="NSCustomResource" key="NSNormalImage">
 															<string key="NSClassName">NSImage</string>
@@ -318,6 +318,7 @@
 							<reference key="NSHScroller" ref="603631770"/>
 							<reference key="NSContentView" ref="235591105"/>
 							<reference key="NSHeaderClipView" ref="711993698"/>
+							<reference key="NSCornerView" ref="701299270"/>
 							<bytes key="NSScrollAmts">QSAAAEEgAABBmAAAQZgAAA</bytes>
 							<double key="NSMinMagnification">0.25</double>
 							<double key="NSMaxMagnification">4</double>
@@ -532,7 +533,7 @@
 					</array>
 					<string key="NSFrameSize">{481, 357}</string>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1680, 1027}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1280, 777}}</string>
 				<string key="NSMinSize">{477, 374}</string>
 				<string key="NSMaxSize">{478, 622}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
@@ -950,7 +951,7 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="MicroIcon">{128, 128}</string>
+			<string key="MicroIcon">{105, 105}</string>
 			<string key="NSSwitch">{15, 15}</string>
 			<string key="StartPlayImg">{6, 12}</string>
 		</dictionary>

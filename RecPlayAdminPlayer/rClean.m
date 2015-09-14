@@ -893,15 +893,10 @@ return tempTitelArray;
 			NSAlert *Warnung = [[NSAlert alloc] init];
 			[Warnung addButtonWithTitle:@"OK"];
 			//[Warnung addButtonWithTitle:@"Cancel"];
-			[Warnung setMessageText:NSLocalizedString(@"Error While Choosing",@"Fehler beim Auswählen")];
+			[Warnung setMessageText:@"Fehler beim Auswählen"];
 			[Warnung setInformativeText:FehlerString];
 			[Warnung setAlertStyle:NSWarningAlertStyle];
-			[Warnung beginSheetModalForWindow:[self window]
-								modalDelegate:nil
-							   didEndSelector:nil
-								  contextInfo:nil];
-			
-			//int Antwort=NSRunAlertPanel(@"", FehlerString,@"OK", NULL,NULL);
+         [Warnung runModal];
 			return;
 			
 		}
@@ -909,19 +904,15 @@ return tempTitelArray;
 	else
 	{
 		NSLog(@"reportClear: nichts angeklickt");
-		NSString* FehlerString=[NSString stringWithString:NSLocalizedString(@"At least one name must be clicked",@"Mindestens ein Name muss angeklickt sein.")];
+		NSString* FehlerString=@"Mindestens ein Name muss angeklickt sein.";
 		NSAlert *Warnung = [[NSAlert alloc] init];
 		[Warnung addButtonWithTitle:@"OK"];
 		//[Warnung addButtonWithTitle:@"Cancel"];
-		[Warnung setMessageText:NSLocalizedString(@"Error while Deleting",@"Fehler beim Löschen:")];
+		[Warnung setMessageText:@"Fehler beim Löschen:"];
 		[Warnung setInformativeText:FehlerString];
 		[Warnung setAlertStyle:NSWarningAlertStyle];
-		[Warnung beginSheetModalForWindow:[self window] 
-							modalDelegate:nil
-						   didEndSelector:nil
-							  contextInfo:nil];
+		[Warnung runModal];
 		
-		//int Antwort=NSRunAlertPanel(@"", FehlerString,@"OK", NULL,NULL);
 		return;
 		
 	}
@@ -979,12 +970,8 @@ return tempTitelArray;
 			[Warnung setMessageText:NSLocalizedString(@"Error While Choosing",@"Fehler beim Auswählen")];
 			[Warnung setInformativeText:FehlerString];
 			[Warnung setAlertStyle:NSWarningAlertStyle];
-			[Warnung beginSheetModalForWindow:[self window]
-								modalDelegate:nil
-							   didEndSelector:nil
-								  contextInfo:nil];
+			[Warnung runModal];
 			
-			//int Antwort=NSRunAlertPanel(@"", FehlerString,@"OK", NULL,NULL);
 			return;
 			
 		}
@@ -999,12 +986,8 @@ return tempTitelArray;
 		[Warnung setMessageText:NSLocalizedString(@"Error while Exporting",@"Fehler beim Exportieren:")];
 		[Warnung setInformativeText:FehlerString];
 		[Warnung setAlertStyle:NSWarningAlertStyle];
-		[Warnung beginSheetModalForWindow:[self window] 
-							modalDelegate:nil
-						   didEndSelector:nil
-							  contextInfo:nil];
+		[Warnung runModal];
 		
-		//int Antwort=NSRunAlertPanel(@"", FehlerString,@"OK", NULL,NULL);
 		return;
 		
 	}

@@ -477,7 +477,7 @@
 	
    [LeseboxDialog beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result)
     {
-       if (result == NSOKButton)
+       if (result == NSModalResponseOK)
        {
           
        }

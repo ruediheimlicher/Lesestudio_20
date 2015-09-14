@@ -1508,7 +1508,7 @@ enum
    
 	  //NSLog(@"beginAdminPlayer vor setAdminPlayer");
 	  
-   //NSLog(@"\n\n\n\n\n\n	in beginAdminPlayer vor setAdminProjektArray: AdminPlayer:      ProjektArray: \n%@",[ProjektArray description]);
+   NSLog(@"\n\n\n\n\n\n	in beginAdminPlayer vor setAdminProjektArray: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
    
    //Projektarray aktualisieren: Eventuell Aenderungen von anderen Usern auf dem Netz
    //NSLog(@"beginAdminPlayer PListDic lesen");
@@ -1517,10 +1517,11 @@ enum
    if ([tempAktuellePListDic objectForKey:@"projektarray"])//Es hat schon einen ProjektArray
    {
       //NSLog(@"beginAdminPlayer: Projektarray aus PList lastObject: %@",[[[tempAktuellePListDic objectForKey:@"projektarray"]lastObject]description]);
-      [self.ProjektArray setArray:[[tempAktuellePListDic objectForKey:@"projektarray"]copy]];
-      //NSLog(@"beginAdminPlayer: Projektarray neu: %@",[[ProjektArray lastObject]description]);
+  //    [self.ProjektArray setArray:[[tempAktuellePListDic objectForKey:@"projektarray"]copy]];
+      NSLog(@"beginAdminPlayer: Projektarray neu");
       
    }
+   NSLog(@"beginAdminPlayer: Projektarray: %@",[[self.ProjektArray lastObject]description]);
 
    // erster Aufruf
    NSStoryboardSegue* admindatasegue = [[NSStoryboardSegue alloc] initWithIdentifier:@"adminplayersegue" source:self destination:self.AdminPlayer];
