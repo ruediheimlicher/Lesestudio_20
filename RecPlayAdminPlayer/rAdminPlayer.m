@@ -78,10 +78,10 @@ const short kRecPlayUmgebung=0;
 
 - (void)viewDidLoad
 {
-   [super viewDidLoad];
+   //[super viewDidLoad];
    // Do view setup here.
    
-     // NSLog(@"AdminPlayer  viewDidLoad");
+    NSLog(@"AdminPlayer  viewDidLoad");
    //NSLog(@"NSModalResponseOK: %d  NSOKButton: %d",NSModalResponseOK , NSOKButton);
    heuteDatumString = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];//  12.09.2015 19:20:26
    heuteTagDesJahres = [[NSCalendar currentCalendar] ordinalityOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:[NSDate date]];
@@ -235,14 +235,14 @@ const short kRecPlayUmgebung=0;
    Textchanged=NO;
    NSLog(@"farbe");
    NSColor* FensterFarbe=[NSColor colorWithDeviceRed: 150.0/255 green:249.0/255 blue:150.0/255 alpha:1.0];
-   [self.view.window setBackgroundColor:FensterFarbe];
+   [[self window ] setBackgroundColor:FensterFarbe];
 }
 
 
 - (id)init
 {
-   //NSLog(@"AdminPlayer init");
-   self=[super init] ;//]WithWindowNibName:@"RPAdmin"];
+   NSLog(@"AdminPlayer init");
+   self=[super initWithWindowNibName:@"RPAdminPlayer"];
 	//AdminDaten = [[rAdminDS alloc] initWithRowCount: 10];
 	NSNotificationCenter * nc;
 	nc=[NSNotificationCenter defaultCenter];
@@ -423,7 +423,13 @@ OptionBString=[[NSString alloc]init];
    OptionBString=[NSString string];
    AdminProjektArray=[[NSMutableArray alloc]initWithCapacity:0];
    
+   // von viewdidload
+   heuteDatumString = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];//  12.09.2015 19:20:26
+   heuteTagDesJahres = [[NSCalendar currentCalendar] ordinalityOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:[NSDate date]];
+
    
+   
+   // end von viewdidload
    RPExportdaten=[[NSUserDefaults standardUserDefaults] objectForKey:@"RPExportdaten"];
    //NSLog(@"awake: RPExportdaten; %d",[RPExportdaten description]);
    //NSLog(@"awake: RPExportdaten; %d",[RPExportdaten length]);
@@ -436,8 +442,8 @@ OptionBString=[[NSString alloc]init];
    //	NSColor* FensterFarbe=[NSColor colorWithDeviceRed:94.0/255 green:249.0/255 blue:94.0/255 alpha:1.0];
    NSColor* FensterFarbe=[NSColor colorWithDeviceRed: 150.0/255 green:249.0/255 blue:150.0/255 alpha:1.0];
    
-   [self.view.window setBackgroundColor:FensterFarbe];
-   [self.view.window display];
+   [[self window] setBackgroundColor:FensterFarbe];
+   [[self window] display];
    AufnahmenDicArray=[[NSMutableArray alloc]initWithCapacity:0];
    [[[AufnahmenTable tableColumnWithIdentifier:@"usermark"]dataCell] setEnabled:NO];
    
@@ -447,7 +453,7 @@ OptionBString=[[NSString alloc]init];
    }
    if (AVAbspielplayer)
    {
-      AVAbspielplayer.PlayerFenster = [self.view window];
+      AVAbspielplayer.PlayerFenster = [self  window];
    }
    
    
@@ -492,7 +498,7 @@ OptionBString=[[NSString alloc]init];
    [AufnahmenTable setDataSource:self];
    NSLog(@"farbe");
    FensterFarbe=[NSColor colorWithDeviceRed: 150.0/255 green:249.0/255 blue:150.0/255 alpha:1.0];
-   [self.view.window setBackgroundColor:FensterFarbe];
+   [[self window ] setBackgroundColor:FensterFarbe];
 
 }
 
@@ -584,7 +590,7 @@ OptionBString=[[NSString alloc]init];
 		[Warnung setMessageText:@"Leerer Projektordner"];
 		[Warnung setInformativeText:@"Es hat noch keine Projekte im Projektordner. "];
 		[Warnung setAlertStyle:NSWarningAlertStyle];
-      [Warnung beginSheetModalForWindow:self.view.window
+      [Warnung beginSheetModalForWindow:[self window]
                       completionHandler:nil];
 		NSLog(@"!!! Es hat noch keine Projekte im Projektordner");
 		
@@ -958,7 +964,7 @@ OptionBString=[[NSString alloc]init];
 {
 NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArray description]);
    
-[self.view.window makeKeyAndOrderFront:nil];
+[[self window ] makeKeyAndOrderFront:nil];
 [AdminProjektArray removeAllObjects];
 [AdminProjektArray setArray:derProjektArray];
 //NSLog(@"setAdminProjektArray: AdminProjektArray: %@",[[AdminProjektArray lastObject]description]);
@@ -1105,7 +1111,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
 		self.AdminAktuellerLeser=[[AdminProjektNamenArray objectAtIndex:hitZeile]description];
 		
       NSLog(@"setLeser Zeile: %ld",[sender selectedRow]);
-		//NSLog(@"Leser: %@",[[AdminProjektNamenArray objectAtIndex:[sender selectedRow]]description]);
+		NSLog(@"Leser: %@",[[AdminProjektNamenArray objectAtIndex:[sender selectedRow]]description]);
 		//NSLog(@"setLeser:     Zeile: %d   hit:%d ",hitZeile,hit);
 		//NSLog(@"i:%d ",hitZeile);
 		
@@ -1123,7 +1129,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
 		  }
 		//NSLog(@"setLeser   Leser: %@  zeile: %d  hit: %d   File:  %@",Leser, hitZeile, hit, tempAufnahmePfad);
 		AdminAktuelleAufnahme=[[[AdminDaten AufnahmeFilesFuerZeile:hitZeile]objectAtIndex:hit]description];
-      //NSLog(@"setLeser   AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
+      NSLog(@"setLeser   AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
       
       
       
@@ -1510,8 +1516,12 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
 
 - (BOOL)saveKommentarFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme
 {
-	NSLog(@"saveKommentarFuerLeser Leser: %@ Aufnahme: %@",derLeser, dieAufnahme);
+	NSLog(@"saveKommentarFuerLeser Leser: %@ Aufnahme: %@ Textchanged: %d",derLeser, dieAufnahme, Textchanged);
 	
+   if (!Textchanged)
+   {
+      return 1;
+   }
 	BOOL erfolg;
 	BOOL istDirectory; 
 	NSFileManager *Filemanager=[NSFileManager defaultManager];
@@ -2113,7 +2123,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
 - (void)Aufnahmebereitstellen
 {
    NSLog(@"AdminProjektPfad: %@",AdminProjektPfad);
-	NSLog(@"\n\nAufnahmebereitstellen: AufnahmenTab tab: %d",[[[AufnahmenTab selectedTabViewItem]identifier]intValue]);
+	NSLog(@"\n\nAufnahmebereitstellen: AufnahmenTab tab: %d textchanged: %d",[[[AufnahmenTab selectedTabViewItem]identifier]intValue],Textchanged);
    if (Textchanged)
    {
       [self Aufnahmezuruecklegen];
@@ -2269,8 +2279,18 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
 
 - (void)Aufnahmezuruecklegen
 {
-   NSLog(@"\n\nAufnahmezuruecklegen start");
+   NSLog(@"\n\nAufnahmezuruecklegen start  URL: %@",[[AVAbspielplayer AufnahmeURL]path]);
    
+   if (AVAbspielplayer && [AVAbspielplayer AufnahmeURL])
+   {
+      NSLog(@"Aufnahmezuruecklegen start AVAbspielplayer belegt");
+   }
+   else
+   {
+       NSLog(@"Aufnahmezuruecklegen start AVAbspielplayer nicht belegt");
+      return;
+   }
+   NSLog(@"Aufnahmezuruecklegen start  belegt");
    [AVAbspielplayer toStartTempAufnahme];
    
    [self.BackKnopf setEnabled:NO];
@@ -2299,9 +2319,9 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
          //AdminAktuellerLeser=@"";//herausgenommen infolge KommentarfŸrLeser
         
         AdminAktuelleAufnahme=@"";
-        NSLog(@"backZurListe AdminMark: %ld UserMark: %ld",(long)[AdminMarkCheckbox state],(long)[UserMarkCheckbox state]);
-        [self saveMarksFuerLeser:self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: [LehrerMarkCheckbox state] mitUserMark:[UserMarkCheckbox state]];
-        
+        NSLog(@"Aufnahmezuruecklegen AdminMark: %ld UserMark: %ld",(long)[AdminMarkCheckbox state],(long)[UserMarkCheckbox state]);
+        BOOL saveKommentarOK = [self saveMarksFuerLeser:self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: [LehrerMarkCheckbox state] mitUserMark:[UserMarkCheckbox state]];
+        NSLog(@"Aufnahmezuruecklegen saveKommentarOK: &d",saveKommentarOK);
      }
    [self clearKommentarfelder];
    [AdminKommentarView setEditable:NO];
@@ -2396,7 +2416,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
 
 - (IBAction)startAVPlay:(id)sender
 {
-   NSLog(@"startAVPlay");
+   NSLog(@"startAVPlay URL: %@",[AVAbspielplayer AufnahmeURL]);
    // [AVRecorder setPlaying:YES];
    [self.BackKnopf setEnabled:YES];
    [self.StopPlayKnopf setEnabled:YES];
@@ -2420,7 +2440,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
                                             repeats:YES];
    
    NSRunLoop* runloop = [NSRunLoop currentRunLoop];
-   [runloop addTimer:posTimer forMode:NSRunLoopCommonModes];
+//   [runloop addTimer:posTimer forMode:NSRunLoopCommonModes];
  
 }
 
@@ -2438,7 +2458,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
    NSTimeInterval dur =AVAbspielplayer.duration;
    if (pos)
    {
-      //NSLog(@"AdminPlayer posAnzeigeFunktion pos: %f dur: %f",pos,dur);
+      NSLog(@"AdminPlayer posAnzeigeFunktion pos: %f dur: %f",pos,dur);
       [self setAbspielanzeigeAnPos:pos mitDur:dur];
       NSNotificationCenter * nc=[NSNotificationCenter defaultCenter];
       //[nc postNotificationName:@"abspielpos" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -4145,7 +4165,7 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
 	if ([note object]==AdminKommentarView)
 		
 	  {
-		//NSLog(@"rAdminPlayer: NSTextDidChangeNotification textchanged YES");
+		NSLog(@"rAdminPlayer: NSTextDidChangeNotification textchanged YES");
 		Textchanged=YES;
         Kommentarsaved=NO;
 	  }
@@ -4158,8 +4178,8 @@ NSLog(@"\n\n			--------setAdminProjektArray: derProjektArray: %@",[derProjektArr
 		
 	  {
         NSLog(@"rAdminPlayer: NSTableViewSelectionDidChangeNotification textchanged YES");
-        Textchanged=YES;
-        Kommentarsaved=NO;
+        //Textchanged=YES;
+        //Kommentarsaved=NO;
 	  }
 }
 
@@ -4488,8 +4508,8 @@ if (entfernenOK==0)//allesOK
 		//NSLog(@"rAdminPlayer: SelectionDidChangeAktion textchanged YES");
 		[self Aufnahmezuruecklegen];
 		[self->PlayTaste setEnabled:NO];
-		Textchanged=YES;
-      Kommentarsaved=NO;
+		//Textchanged=YES;
+      //Kommentarsaved=NO;
 	}
 }
 

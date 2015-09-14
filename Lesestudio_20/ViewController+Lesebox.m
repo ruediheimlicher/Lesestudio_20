@@ -1490,8 +1490,8 @@ enum
     if(!self.AdminPlayer)
     {
     self.AdminPlayer=[[rAdminPlayer alloc]init];
-    //[AdminPlayer showWindow:self];
-    //[AdminPlayer setLeseboxPfad:LeseboxPfad];
+    [self.AdminPlayer showWindow:self];
+   // [self setLeseb self.LeseboxPfad];
     }
    
 //   [self.AblaufMenu setDelegate:self.AdminPlayer];
@@ -1517,12 +1517,27 @@ enum
    if ([tempAktuellePListDic objectForKey:@"projektarray"])//Es hat schon einen ProjektArray
    {
       //NSLog(@"beginAdminPlayer: Projektarray aus PList lastObject: %@",[[[tempAktuellePListDic objectForKey:@"projektarray"]lastObject]description]);
-  //    [self.ProjektArray setArray:[[tempAktuellePListDic objectForKey:@"projektarray"]copy]];
+ //    [self.ProjektArray setArray:[[tempAktuellePListDic objectForKey:@"projektarray"]copy]];
       NSLog(@"beginAdminPlayer: Projektarray neu");
       
    }
+   
    NSLog(@"beginAdminPlayer: Projektarray: %@",[[self.ProjektArray lastObject]description]);
 
+   NSLog(@"in beginAdminPlayer vor setAdminProjektArray: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
+   
+   
+   [self.AdminPlayer setAdminPlayer:self.LeseboxPfad inProjekt:[self.ProjektPfad lastPathComponent]];
+   
+   [self.AdminPlayer setAdminProjektArray:self.ProjektArray];
+   
+   //NSLog(@"beginAdminPlayer nach setAdminPlayer");
+   self.Umgebung=3;
+   NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
+   
+   [self.AdminPlayer setProjektPopMenu:self.ProjektArray];
+
+   /*
    // erster Aufruf
    NSStoryboardSegue* admindatasegue = [[NSStoryboardSegue alloc] initWithIdentifier:@"adminplayersegue" source:self destination:self.AdminPlayer];
    [self prepareForSegue:admindatasegue sender:sender];
@@ -1534,7 +1549,7 @@ enum
    NSStoryboardSegue* adminanzeigesegue = [[NSStoryboardSegue alloc] initWithIdentifier:@"adminanzeigesegue" source:self destination:self.AdminPlayer];
    [self prepareForSegue:adminanzeigesegue sender:sender];
    [self performSegueWithIdentifier:@"adminanzeigesegue" sender:self];
-
+*/
    
 
    

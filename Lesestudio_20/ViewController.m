@@ -655,7 +655,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    self.EinstellungenFenster = [self.mainstoryboard instantiateControllerWithIdentifier:@"einstellungenfenster"];
 
    // Adminplayer init
-   self.AdminPlayer = [self.mainstoryboard instantiateControllerWithIdentifier:@"adminplayerfenster"];
+//   self.AdminPlayer = [self.mainstoryboard instantiateControllerWithIdentifier:@"adminplayerfenster"];
   
    //self.view.window = [[NSWindow alloc]initWithFrame:[self.view bounds] stylemask:NSBorderlessWindowMask];
    
@@ -958,7 +958,7 @@ return YES;
 {
    
    BOOL OK=[self beenden];
-   NSLog(@"BeendenAktion");
+   NSLog(@"BeendenAktion OK: %d",OK);
    if (OK)
    {
       [Utils setPListBusy:NO anPfad:self.LeseboxPfad];
@@ -971,7 +971,7 @@ return YES;
 -(IBAction)terminate:(id)sender
 {
    BOOL OK=[self beenden];
-   NSLog(@"terminate");
+   NSLog(@"terminate OK: %d",OK);
    if (OK)
    {
       [Utils setPListBusy:NO anPfad:self.LeseboxPfad];
@@ -995,7 +995,6 @@ return YES;
    if (self.neueAufnahmePfad)
    {
       BOOL sauberOK=[Filemanager removeItemAtURL:[NSURL fileURLWithPath:self.neueAufnahmePfad] error:nil];
-      return sauberOK;
    }
    return BeendenOK;
 }
@@ -2142,7 +2141,7 @@ QTMovie* qtMovie;
    [self.WeitereAufnahmeKnopf setEnabled:NO];
    [self.LogoutKnopf setEnabled:NO];
    
-   [self ArchivZurListe:nil];
+   //[self ArchivZurListe:nil];
    
    [Abspielanzeige setLevel:0];
    [Abspielanzeige setNeedsDisplay:YES];
@@ -4074,6 +4073,7 @@ QTMovie* qtMovie;
         {
            [self ArchivZurListe:nil];
            [self resetArchivPlayer:nil];
+           
         }
         
         
