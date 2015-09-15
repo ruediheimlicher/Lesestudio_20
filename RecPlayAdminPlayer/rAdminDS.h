@@ -25,6 +25,8 @@
 
 - (void)setAufnahmeFiles:(NSArray*)derArray forRow: (long)dieZeile;
 - (NSArray*)AufnahmeFilesFuerZeile:(long)dieZeile;
+- (NSArray*)AufnahmeFiles;
+- (void)deleteZeileMitAufnahme:(NSString*)aufnahme;
 
 - (void)setMarkArray:(NSArray*)derArray forRow:(long)dieZeile;
 - (void)setMark:(BOOL)derStatus forRow:(long)dieZeile forItem:(long)dasItem;
@@ -33,7 +35,6 @@
 
 - (void)setAuswahl:(long)dasItem forRow:(long) rowIndex;
 - (int)AuswahlFuerZeile:(long)dieZeile;
-
 
 
 

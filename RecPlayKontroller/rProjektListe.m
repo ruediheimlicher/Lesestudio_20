@@ -459,7 +459,7 @@ vomStart=NO;
   [ProjektArray removeAllObjects];
   NSEnumerator* ProjektEnum=[derArray objectEnumerator];
   id einProjektDic;
-  NSLog(@"setProjektListeArray: derArray: %@ \ndasProjekt: %@",[derArray description],dasProjekt);
+  //NSLog(@"setProjektListeArray: derArray: %@ \ndasProjekt: %@",[derArray description],dasProjekt);
   int index=0;
   NSMutableIndexSet* ProjektNameIndex=[NSMutableIndexSet indexSet];
   while (einProjektDic=[ProjektEnum nextObject])

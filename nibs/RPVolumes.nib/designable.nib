@@ -170,7 +170,7 @@
 											<int key="NSvFlags">256</int>
 											<string key="NSFrameSize">{361, 94}</string>
 											<reference key="NSSuperview" ref="75478902"/>
-											<reference key="NSNextKeyView" ref="820324914"/>
+											<reference key="NSNextKeyView" ref="46272337"/>
 											<bool key="NSEnabled">YES</bool>
 											<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 											<bool key="NSControlAllowsExpansionToolTips">YES</bool>
@@ -298,7 +298,6 @@
 													</object>
 													<int key="NSResizingMask">3</int>
 													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="204717184"/>
 												</object>
 											</array>
@@ -381,7 +380,7 @@
 							</array>
 							<string key="NSFrame">{{31, 41}, {363, 112}}</string>
 							<reference key="NSSuperview" ref="28190251"/>
-							<reference key="NSNextKeyView" ref="75478902"/>
+							<reference key="NSNextKeyView" ref="820324914"/>
 							<int key="NSsFlags">133650</int>
 							<reference key="NSVScroller" ref="836098620"/>
 							<reference key="NSHScroller" ref="820324914"/>
@@ -536,7 +535,7 @@
 					<string key="NSFrameSize">{533, 309}</string>
 					<reference key="NSNextKeyView" ref="597116104"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1280, 777}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1680, 1027}}</string>
 				<string key="NSMinSize">{94, 29}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>

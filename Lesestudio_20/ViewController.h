@@ -253,6 +253,7 @@
 @property (weak) IBOutlet NSTextField*				ArchivAufnahmedauerfeld;
 
 @property (weak) IBOutlet NSButton*					UserMarkCheckbox;
+@property (weak) IBOutlet NSButton*					AdminMarkCheckbox;
 @property (weak) IBOutlet NSTextField*				ArchivAbspieldauerFeld;
 
 @property (weak) IBOutlet NSTextField*				TimeoutFeld;
@@ -344,6 +345,7 @@
 - (NSArray*)SessionLeserListeVonProjekt:(NSString*)dasProjekt;
 
 - (void)startAdminTimer;
+- (void)AdminEntfernenNotificationAktion:(NSNotification*)note;
 @end // Lesebox
 
 // Category AVRecorder

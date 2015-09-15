@@ -304,7 +304,11 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
               name:@"NameIstEingesetzt"
             object:nil];
 
-   
+   [nc addObserver:self
+          selector:@selector(AdminEntfernenNotificationAktion:)
+              name:@"adminentfernen"
+            object:nil];
+
    
    NSArray* windowViewArray = [[self view] subviews];
    
@@ -665,7 +669,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    [self.view.window setIsVisible:YES];
    [self.view.window makeFirstResponder:nil];
    
-   NSLog(@"end nibname: %@ window: %@",self.nibName, [[self.view window]description]);
+   //NSLog(@"end nibname: %@ window: %@",self.nibName, [[self.view window]description]);
 
    
    if (startcode)
@@ -677,21 +681,21 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    NSMenu *modusMenu = [[mainMenu itemWithTitle:@"Modus"] submenu];
       for (NSMenuItem *item in [modusMenu itemArray])
       {
-          NSLog(@"Menuitem: %@",[item title]);
+          //NSLog(@"Menuitem: %@",[item title]);
          [item setTarget:self];
       }
 
    NSMenu *adminMenu = [[mainMenu itemWithTitle:@"Admin"]submenu];
    for (NSMenuItem *item in [adminMenu itemArray])
    {
-      NSLog(@"Menuitem: %@",[item title]);
+      //NSLog(@"Menuitem: %@",[item title]);
       [item setTarget:self];
       
    }
    NSMenu *recorderMenu = [[mainMenu itemWithTitle:@"Recorder"]submenu];
    for (NSMenuItem *item in [recorderMenu itemArray])
    {
-      NSLog(@"Menuitem: %@",[item title]);
+      //NSLog(@"Menuitem: %@",[item title]);
       [item setTarget:self];
       
    }
@@ -829,7 +833,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
 
       //NSLog(@"beginAdminPlayer nach setAdminPlayer");
       self.Umgebung=3;
-     NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
+     //NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
       
       [self.AdminPlayer setProjektPopMenu:self.ProjektArray];
       
@@ -3905,10 +3909,15 @@ QTMovie* qtMovie;
         [self.ArchivNotenfeld setStringValue:@"-"];
      }
    //NSLog(@"setArchivKommentarFuerAufnahmePfad 2");
-   BOOL MarkOK=[self UserMarkVon:tempKommentarString];
-   NSLog(@"setArchivKommentarFuerAufnahmePfad MarkOK: %d",MarkOK);
-   [self.UserMarkCheckbox setState:MarkOK];
+   BOOL userMarkOK=[self UserMarkVon:tempKommentarString];
+   NSLog(@"setArchivKommentarFuerAufnahmePfad MarkOK: %d",userMarkOK);
+   [self.UserMarkCheckbox setState:userMarkOK];
    //NSLog(@"setArchivKommentatFuerAufnahmepfad: MarkOK: %d",MarkOK);
+   BOOL adminMarkOK=[self AdminMarkVon:tempKommentarString];
+   NSLog(@"setArchivKommentarFuerAufnahmePfad MarkOK: %d",adminMarkOK);
+   [self.AdminMarkCheckbox setState:adminMarkOK];
+   //NSLog(@"setArchivKommentatFuerAufnahmepfad: MarkOK: %d",adminMarkOK);
+
    return ;
 }
 

@@ -77,7 +77,14 @@
 - (NSArray*)rowData
 {
 return rowData;
-};
+}
+
+- (NSArray*)AufnahmeFiles
+{
+   return AufnahmeFiles;
+}
+
+
 - (void)setData: (NSDictionary *)someData forRow: (int)rowIndex
 {
     NSMutableDictionary *aRow;
@@ -122,11 +129,13 @@ return index;
 
 - (void)setAufnahmeFiles:(NSArray*)derArray forRow: (int)dieZeile
 {
-	NSArray* tempArray=[derArray copy];
-	//tempArray=[derArray copy];
+   
+
+	//NSArray* tempArray=[derArray copy];
 	NSMutableArray* eineZeile;
 	eineZeile=[AufnahmeFiles objectAtIndex:dieZeile];
 	[eineZeile addObjectsFromArray:derArray];
+  
 }
 
 - (NSArray*)AufnahmeFilesFuerZeile:(int)dieZeile
@@ -135,6 +144,20 @@ return index;
 	NSMutableArray* eineZeile;
 	eineZeile=[AufnahmeFiles objectAtIndex:dieZeile];
 	return eineZeile;
+
+}
+
+- (void)deleteZeileMitAufnahme:(NSString*)aufnahme
+{
+   for (int paket=0;paket < [AufnahmeFiles count];paket++)
+   {
+      long zeilenindex = [[AufnahmeFiles objectAtIndex:paket]indexOfObject:aufnahme];
+      NSLog(@"aufnahme: %@ paket: %d zeilenindex: %ld",aufnahme, paket, zeilenindex);
+      if (zeilenindex < NSNotFound) // aufnahme ist da
+      {
+         
+      }
+   }
 }
 
 

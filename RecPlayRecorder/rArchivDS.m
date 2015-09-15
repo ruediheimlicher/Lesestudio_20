@@ -165,8 +165,6 @@
 
 - (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(long)row
 {
-  
-
 	if ([[tableColumn identifier] isEqualToString:@"aufnahmen"])
 	{
 			

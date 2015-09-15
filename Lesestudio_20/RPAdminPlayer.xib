@@ -28,6 +28,7 @@
                 <outlet property="ForewardKnopf" destination="0vt-oK-Lc7" id="vSD-6Q-kki"/>
                 <outlet property="LehrerMarkCheckbox" destination="qdh-OH-fN9" id="ANo-kZ-wDV"/>
                 <outlet property="LesernamenPop" destination="LPg-59-Yrx" id="VCS-TQ-pGD"/>
+                <outlet property="MarkAuswahlOption" destination="0Wg-JO-yQJ" id="h1z-pE-FTH"/>
                 <outlet property="NamenListe" destination="NXk-8F-8Gz" id="8Ix-yG-0nW"/>
                 <outlet property="RewindKnopf" destination="b69-sh-UVk" id="Xv5-cB-HON"/>
                 <outlet property="StartPlayKnopf" destination="m8Y-CM-fNf" id="5oH-Uk-9nR"/>
@@ -159,14 +160,6 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WeC-dY-y2R">
-                                    <rect key="frame" x="443" y="126" width="78" height="22"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="guk-KX-FOg">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" red="0.9098039269" green="1" blue="0.91372549530000002" alpha="1" colorSpace="deviceRGB"/>
-                                    </textFieldCell>
-                                </textField>
                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hdu-wO-jZe">
                                     <rect key="frame" x="395" y="95" width="24" height="22"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" drawsBackground="YES" id="TYM-XW-ZQ3">
@@ -249,22 +242,30 @@
                                     </connections>
                                 </button>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VZ5-gj-AiH">
-                                    <rect key="frame" x="459" y="140" width="52" height="26"/>
-                                    <buttonCell key="cell" type="check" title="Marker" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="6d8-v8-BDt">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="smallSystem"/>
-                                    </buttonCell>
-                                </button>
-                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qdh-OH-fN9">
-                                    <rect key="frame" x="447" y="94" width="69" height="24"/>
-                                    <buttonCell key="cell" type="check" title="Mark" bezelStyle="regularSquare" imagePosition="right" alignment="right" enabled="NO" inset="2" id="1B2-Ka-KG1">
+                                    <rect key="frame" x="447" y="137" width="64" height="26"/>
+                                    <buttonCell key="cell" type="check" title="AdminMark" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="6d8-v8-BDt">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="smallSystem"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="reportAdminMark:" target="-2" id="5W3-jX-emS"/>
+                                        <action selector="reportAdminMark:" target="-2" id="8Z2-kh-3cK"/>
                                     </connections>
                                 </button>
+                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qdh-OH-fN9">
+                                    <rect key="frame" x="425" y="94" width="91" height="24"/>
+                                    <buttonCell key="cell" type="check" title="LehrerMark" bezelStyle="regularSquare" imagePosition="right" alignment="right" enabled="NO" inset="2" id="1B2-Ka-KG1">
+                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                    </buttonCell>
+                                </button>
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WeC-dY-y2R">
+                                    <rect key="frame" x="443" y="120" width="78" height="22"/>
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="guk-KX-FOg">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" red="0.9098039269" green="1" blue="0.91372549530000002" alpha="1" colorSpace="deviceRGB"/>
+                                    </textFieldCell>
+                                </textField>
                             </subviews>
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
@@ -525,7 +526,7 @@
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
-                                                                            <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="2768F77E-5188-4727-9306-78B077C66AD7" id="FhE-g2-vUA"/>
+                                                                            <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="C0007B5A-A561-4781-A15C-F21746EBAEBE" id="FhE-g2-vUA"/>
                                                                         </tableColumn>
                                                                         <tableColumn identifier="aufnahme" editable="NO" width="272.51123046875" minWidth="40" maxWidth="1000" id="mPM-EI-2SR">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Aufnahme">
@@ -627,6 +628,9 @@
                                                             <font key="font" metaFont="system"/>
                                                             <string key="keyEquivalent"></string>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="reportDelete:" target="-2" id="adC-iQ-xfQ"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -652,7 +656,7 @@
         </window>
     </objects>
     <resources>
-        <image name="2768F77E-5188-4727-9306-78B077C66AD7" width="17" height="17">
+        <image name="C0007B5A-A561-4781-A15C-F21746EBAEBE" width="17" height="17">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGRkdYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8QDwcI
 ExQZHh8qKyw0NzpAQ1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5T

@@ -18,16 +18,45 @@
 
 - (IBAction)reportAuswahlOption:(id)sender;
 {
-//NSLog(@"reportAuswahlOption: row: %d",[sender selectedRow]);
+NSLog(@"reportAuswahlOption: row: %d",[sender selectedRow]);
 [self setAufnahmenVonLeser:[LesernamenPop titleOfSelectedItem]];
 
 }
 
 - (void)setAdminMark:(BOOL)derStatus fuerZeile:(int)dieZeile
 {
-	NSNumber* StatusNumber=[NSNumber numberWithBool:derStatus];
-	[[AufnahmenDicArray objectAtIndex:dieZeile]setObject:[StatusNumber stringValue] forKey:@"adminmark"];
-	[AufnahmenTable reloadData];
+   NSNumber* StatusNumber=[NSNumber numberWithBool:derStatus];
+   switch ([[[AufnahmenTab selectedTabViewItem]identifier]intValue])
+   {
+      case 1:
+      {
+         
+      //   [[AufnahmenDicArray objectAtIndex:dieZeile]setObject:[StatusNumber stringValue] forKey:@"adminmark"];
+      //   [AufnahmenTable reloadData];
+
+      }break;
+      case 2:
+      {
+         BOOL mark = [AdminDaten MarkForRow:[LesernamenPop indexOfSelectedItem] forItem:dieZeile ];
+         NSLog(@"mark vor row: %d zeile: %d mark: %d",[LesernamenPop indexOfSelectedItem],dieZeile,mark);
+        
+         [AdminDaten setMark:derStatus forRow:[LesernamenPop indexOfSelectedItem] forItem:dieZeile];
+         
+         mark = [AdminDaten MarkForRow:[LesernamenPop indexOfSelectedItem] forItem:dieZeile ];
+         NSLog(@"mark nach row: %d zeile: %d mark: %d",[LesernamenPop indexOfSelectedItem],dieZeile,mark);
+         [[AufnahmenDicArray objectAtIndex:dieZeile]setObject:[StatusNumber stringValue] forKey:@"adminmark"];
+         [self saveAdminMarkFuerLeser:[LesernamenPop titleOfSelectedItem] FuerAufnahme:AdminAktuelleAufnahme mitAdminMark:derStatus];
+
+         
+         [AufnahmenTable reloadData];
+
+      }break;
+         
+         
+         
+   }
+	
+   
 }
 
 
@@ -625,6 +654,16 @@ NSLog(@"tempName: %@",tempName);
       }
 		else
 		{
+         NSAlert *NamenWarnung = [[NSAlert alloc] init];
+         [NamenWarnung addButtonWithTitle:@"Mache ich"];
+         //[RecorderWarnung addButtonWithTitle:@"Cancel"];
+         [NamenWarnung setMessageText:@"Welchen Namen?"];
+         [NamenWarnung setInformativeText:@"Ein Name muss  ausgewählt sein, um die Aufnahmen zu sehen."];
+         [NamenWarnung setAlertStyle:NSWarningAlertStyle];
+         
+         [NamenWarnung runModal];
+         
+
 			[LesernamenPop selectItemAtIndex:0];
 			[PlayTaste setEnabled:NO];
 			[self clearKommentarfelder];

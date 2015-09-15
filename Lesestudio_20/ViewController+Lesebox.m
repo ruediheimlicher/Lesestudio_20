@@ -500,9 +500,9 @@ enum
      }
    
    
-   NSLog(@"showProjektListe");
+   //NSLog(@"showProjektListe");
    //[ProjektPanel showWindow:self];
-   NSLog(@"showProjektListe nach init:ProjektArray: %@  ",[self.ProjektArray description]);
+   //NSLog(@"showProjektListe nach init:ProjektArray: %@  ",[self.ProjektArray description]);
    //NSLog(@"showProjektListe nach init:ProjektArray: %@  \nProjektPfad: %@",[ProjektArray description],ProjektPfad);
    
    
@@ -534,14 +534,14 @@ enum
 - (void)showProjektListeVomStart
 {
    [self restartAdminTimer];
-   NSLog(@"showProjektListeVomStart:  Start mit neuem Projekt");
+   //NSLog(@"showProjektListeVomStart:  Start mit neuem Projekt");
    //NSLog(@"\n\nshowProjektListe start");
    if (!ProjektPanel)
 	  {
         ProjektPanel=[[rProjektListe alloc]init];
      }
    //NSLog(@"showProjektListe nach init:ProjektArray: %@  ",[ProjektArray description]);
-   NSLog(@"showProjektListe nach init:ProjektArray: %@  \nProjektPfad: %@",[self.ProjektArray description],self.ProjektPfad);
+   //NSLog(@"showProjektListe nach init:ProjektArray: %@  \nProjektPfad: %@",[self.ProjektArray description],self.ProjektPfad);
    
    //[ProjektPanel showWindow:self];
    NSModalSession ProjektSession=[NSApp beginModalSessionForWindow:[ProjektPanel window]];
@@ -576,13 +576,13 @@ enum
 - (void)ProjektListeAktion:(NSNotification*)note
 {
    //Note von Projektliste über neue Projekte und/oder Änderungen am bestehenden Projektarray
-   NSLog(@"*ProjektListeAktion startProjektarray aus Panel: %@",[[[note userInfo] objectForKey:@"projektarray"]description]);
+   //NSLog(@"*ProjektListeAktion startProjektarray aus Panel: %@",[[[note userInfo] objectForKey:@"projektarray"]description]);
    //ProjektArray
    NSMutableArray* tempProjektArray=[[[note userInfo] objectForKey:@"projektarray"]mutableCopy];
    //NSLog(@"\n****ProjektListeAktion projektarray: %@",[[[note userInfo] objectForKey:@"projektarray"]description]);
-   NSLog(@"****      ProjektListeAktion ArchivPfad: %@      tempProjektArray cont: %lu",self.ArchivPfad,(unsigned long)[tempProjektArray count]);
+   //NSLog(@"****      ProjektListeAktion ArchivPfad: %@      tempProjektArray cont: %lu",self.ArchivPfad,(unsigned long)[tempProjektArray count]);
    self.ProjektPfad=[self.ArchivPfad stringByAppendingPathComponent:[[[note userInfo] objectForKey:@"projekt"]copy]];
-   NSLog(@"\n****   ProjektListeAktion Projektpfad: %@",self.ProjektPfad);
+  // NSLog(@"\n****   ProjektListeAktion Projektpfad: %@",self.ProjektPfad);
    if (tempProjektArray)
    {
       [self.ProjektArray setArray: tempProjektArray];
@@ -599,7 +599,7 @@ enum
    //Note von Projektliste über neues Projekt: reportNeuesProjekt
    BOOL neuesProjektOK=NO;
    NSMutableDictionary* tempNeuesProjektDic=[[[note userInfo] objectForKey:@"neuesprojektdic"]mutableCopy];
-   NSLog(@"ViewController Lesebox neuesProjektAktion: userInfo: %@",[[note userInfo] description]);
+   //NSLog(@"ViewController Lesebox neuesProjektAktion: userInfo: %@",[[note userInfo] description]);
    
    //NSLog(@"RPC neuesProjektAktion: tempNeuesProjektDic: %@",[tempNeuesProjektDic description]);
    //NSString* neuesProjektName=[tempNeuesProjektDic objectForKey:projekt];
@@ -757,21 +757,21 @@ enum
 {
    //NSLog(@"updateProjektArray start: Leseboxpfad: %@ ProjektArray : %@",LeseboxPfad,[ProjektArray description]);
    
-   BOOL ProjektListeValid=NO;
-   BOOL erfolg=YES;
    NSMutableArray* tempProjektArray=[[NSMutableArray alloc]initWithCapacity:0];
    NSFileManager *Filemanager=[NSFileManager defaultManager];
-   int anzOrdnerImArchiv=0;
+   long anzOrdnerImArchiv=0;
+   
+   // Projektarray aus PList
    [self.ProjektArray setArray:[Utils ProjektArrayAusPListAnPfad:self.LeseboxPfad]];	//	Projektarray aus PList
    
    //NSLog(@"updateProjektArray ProjektArray aus PList: ProjektArray : %@",[ProjektArray description]);
    
-   int anzProjekte=[self.ProjektArray count];//Anzahl Projekte in ProjektArray
+   //long anzProjekte=[self.ProjektArray count];//Anzahl Projekte in ProjektArray
    
    //Inhalt von Archiv prüfen
    NSString* tempArchivPfad=[self.LeseboxPfad stringByAppendingPathComponent:@"Archiv"];
    NSMutableArray* tempArchivProjektNamenArray=(NSMutableArray*)[Filemanager contentsOfDirectoryAtPath:tempArchivPfad error:NULL];
-   NSLog(@"updateProjektArray: ArchivPfad: %@  tempArchivProjektNamenArray roh : %@",tempArchivPfad,[tempArchivProjektNamenArray description]);
+   //NSLog(@"updateProjektArray: ArchivPfad: %@  tempArchivProjektNamenArray roh : %@",tempArchivPfad,[tempArchivProjektNamenArray description]);
    
    if ([tempArchivProjektNamenArray count]&&[[tempArchivProjektNamenArray objectAtIndex:0] hasPrefix:@".DS"])					//Unsichtbare Ordner entfernen
    {
@@ -788,17 +788,17 @@ enum
    //NSLog(@"Projektnamen aus PList: tempProjektArrayNamenArray : %@",[tempProjektArrayNamenArray description]);
    
    //Enum über Namen der Projekte im Projektarray
-   NSEnumerator* enumerator=[tempProjektArrayNamenArray objectEnumerator];
    //NSString* tempProjekt;
-   BOOL istOrdner=NO;
    int index=0; //Index im Projektarray
-   //while (tempProjekt==[enumerator nextObject])
+   
+   // Check, ob Projektordern wirklich in der Lesebox vorhanden sind
+   
    for (index=0;index<[tempProjektArrayNamenArray  count];index++)
    {
       NSString* tempProjekt =[tempProjektArrayNamenArray  objectAtIndex:index] ;
       //NSLog(@"tempProjekt: %@  index: %d",tempProjekt,index);
       //Ist der Name von tempProjekt im Archiv vorhanden?
-      int ArchivPosition=[tempArchivProjektNamenArray indexOfObject:tempProjekt];
+      long ArchivPosition=[tempArchivProjektNamenArray indexOfObject:tempProjekt];
       //NSLog(@"tempProjekt: %@  ArchivPosition: %d",tempProjekt,ArchivPosition);
       
       if (ArchivPosition < NSNotFound)//Objekt ist im Archiv
@@ -821,13 +821,9 @@ enum
 - (void)updatePasswortListe
 {
    //NSLog(@"updateNamenListe start:");
-   
-   BOOL ProjektListeValid=NO;
-   BOOL erfolg=YES;
-   
+
    NSFileManager *Filemanager=[NSFileManager defaultManager];
-   int anzOrdnerImArchiv=0;
-   NSArray* tempProjektArray;
+   long anzOrdnerImArchiv=0;
    
    NSString* tempArchivPfad=[self.LeseboxPfad stringByAppendingPathComponent:@"Archiv"];
    NSMutableArray* tempArchivProjektOrdnerArray=(NSMutableArray*)[Filemanager contentsOfDirectoryAtPath:tempArchivPfad error:NULL];
@@ -1508,7 +1504,7 @@ enum
    
 	  //NSLog(@"beginAdminPlayer vor setAdminPlayer");
 	  
-   NSLog(@"\n\n\n\n\n\n	in beginAdminPlayer vor setAdminProjektArray: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
+   //NSLog(@"\n\n\n\n\n\n	in beginAdminPlayer vor setAdminProjektArray: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
    
    //Projektarray aktualisieren: Eventuell Aenderungen von anderen Usern auf dem Netz
    //NSLog(@"beginAdminPlayer PListDic lesen");
@@ -1518,13 +1514,13 @@ enum
    {
       //NSLog(@"beginAdminPlayer: Projektarray aus PList lastObject: %@",[[[tempAktuellePListDic objectForKey:@"projektarray"]lastObject]description]);
  //    [self.ProjektArray setArray:[[tempAktuellePListDic objectForKey:@"projektarray"]copy]];
-      NSLog(@"beginAdminPlayer: Projektarray neu");
+      //NSLog(@"beginAdminPlayer: Projektarray neu");
       
    }
    
-   NSLog(@"beginAdminPlayer: Projektarray: %@",[[self.ProjektArray lastObject]description]);
+   NSLog(@"beginAdminPlayer: Projektarray LAST object: %@",[[self.ProjektArray lastObject]description]);
 
-   NSLog(@"in beginAdminPlayer vor setAdminProjektArray: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
+   //NSLog(@"in beginAdminPlayer vor setAdminProjektArray: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
    
    
    [self.AdminPlayer setAdminPlayer:self.LeseboxPfad inProjekt:[self.ProjektPfad lastPathComponent]];
@@ -1533,7 +1529,7 @@ enum
    
    //NSLog(@"beginAdminPlayer nach setAdminPlayer");
    self.Umgebung=3;
-   NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
+  // NSLog(@"in beginAdminPlayer vor setProjektPop: AdminPlayer:      ProjektArray: \n%@",[self.ProjektArray description]);
    
    [self.AdminPlayer setProjektPopMenu:self.ProjektArray];
 
@@ -3512,6 +3508,12 @@ enum
       NSLog(@"TitellisteAktion: noch kein Titelarray");
    }
    
+   
+}
+
+- (void)AdminEntfernenNotificationAktion:(NSNotification*)note
+{
+   NSLog(@"AdminEntfernenNotificationAktion note: %@",[[note userInfo] description]);
    
 }
 
