@@ -471,6 +471,23 @@ NSLog(@"tempName: %@",tempName);
 	
 }
 
+- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
+{
+   NSLog(@"tabView didSelectTabViewItem");
+   if ([[tabViewItem identifier]intValue]==1)//zurück zu 'alle Aufnahmen'
+   {
+      long zeile=[NamenListe selectedRow];
+      NSLog(@"tabView didSelectTabViewItem zeile: %d",zeile);
+       [self setLeserFuerZeile:zeile];
+      if ([NamenListe numberOfSelectedRows])
+      {
+         [PlayTaste setEnabled:YES];
+      }
+
+   }
+   
+}
+
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
 	NSLog(@"tabView shouldSelectTabViewItem: %@",[[tabViewItem identifier]description]);
@@ -480,98 +497,129 @@ NSLog(@"tempName: %@",tempName);
 		//[zurListeTaste setEnabled:NO];
 		
 	if ([[tabViewItem identifier]intValue]==1)//zurück zu 'alle Aufnahmen'
-	{
-		
-		NSLog(@"zu 'alle Aufnahmen'");
+   {
+      
+      NSLog(@"zu 'alle Aufnahmen'");
+      
+      // Aufräumen
       if ([AufnahmenTable selectedRow]>=0)
       {
          [self Aufnahmezuruecklegen];
       }
-
-		NSLog(@"nach Namen vor : AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
-
-		long Zeile=[AufnahmenTable selectedRow];
-      if (Zeile>=0)
+      
+      NSLog(@"nach Namen vor : AdminAktuelleAufnahme: %@",AdminAktuelleAufnahme);
+      
+      long Zeile=[AufnahmenTable selectedRow];
+      if (Zeile>=0) // eine Zeile aktiviert
       {
-		AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:Zeile]objectForKey:@"aufnahme"];
-		NSLog(@"Tab nach Namen: Zeile: %ld AdminAktuelleAufnahme: %@",Zeile,AdminAktuelleAufnahme);
+         AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:Zeile]objectForKey:@"aufnahme"];
+         
+ //        AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:0]objectForKey:@"aufnahme"];
 
-		NSNumber* ZeilenNummer=[NSNumber numberWithDouble:Zeile];
-		NSMutableDictionary* tempZeilenDic=[NSMutableDictionary dictionaryWithObject:ZeilenNummer forKey:@"AufnahmenZeilenNummer"];
-		[tempZeilenDic setObject:@"AufnahmenTable" forKey:@"Quelle"];
-		NSNotificationCenter * nc;
-		nc=[NSNotificationCenter defaultCenter];
-		[nc postNotificationName:@"AdminChangeTab" object:tempZeilenDic];
+         
+         NSLog(@"Tab nach Namen: Zeile: %ld AdminAktuelleAufnahme: %@",Zeile,AdminAktuelleAufnahme);
+         
+         // NSNumber* ZeilenNummer=[NSNumber numberWithDouble:Zeile];
+         //NSMutableDictionary* tempZeilenDic=[NSMutableDictionary dictionaryWithObject:ZeilenNummer forKey:@"AufnahmenZeilenNummer"];
+         //[tempZeilenDic setObject:@"AufnahmenTable" forKey:@"Quelle"];
+         //NSNotificationCenter * nc;
+         //nc=[NSNotificationCenter defaultCenter];
+         //[nc postNotificationName:@"AdminChangeTab" object:tempZeilenDic];
+         //NSLog(@"AdminTabNotifikationAktion:  AdminView  Quelle: %@",Quelle);
+         [AdminMarkCheckbox setState:NO];
+         [LehrerMarkCheckbox setState:NO];
+         [ExportierenTaste setEnabled:NO];
+         [LoeschenTaste setEnabled:NO];
+         Textchanged=NO;
+         
+         [self clearKommentarfelder];
+         
+         NSString* Lesername=[LesernamenPop titleOfSelectedItem];
+         int LesernamenIndex=[AdminDaten ZeileVonLeser:Lesername];
+         //NSLog(@"Alle Namen: Lesername: %@, LesernamenIndex: %d",Lesername,LesernamenIndex);
+         [NamenListe selectRowIndexes:[NSIndexSet indexSetWithIndex:LesernamenIndex]byExtendingSelection:NO];
+         
+       //  [[[AdminDaten dataForRow:LesernamenIndex]objectForKey:@"aufnahmen"]setIntValue:Zeile];
+      //   [AufnahmenTable reloadData];
+  /*
+         long zeile = [NamenListe selectedRow];
+         long col =[NamenListe columnWithIdentifier:@"aufnahmen"];
+         NSLog(@"dataCell: %@",[[[NamenListe tableColumnWithIdentifier:@"aufnahmen"]dataCell]description]);
+          //[[[NamenListe tableColumnWithIdentifier:@"aufnahmen"]dataCellForRow:1]selectItemAtIndex:zeile];
+*/
+         
+         
+        // [self setLeserFuerZeile:LesernamenIndex];
+         
+  //        [self setLeserFuerZeile:LesernamenIndex];
+         
+         if ([NamenListe numberOfSelectedRows])
+         {
+          //  [PlayTaste setEnabled:YES];
+         }
       }
-		[self clearKommentarfelder];
-
-		if ([LesernamenPop indexOfSelectedItem])
-		{
-			NSString* Lesername=[LesernamenPop titleOfSelectedItem];
-			int LesernamenIndex=[AdminDaten ZeileVonLeser:Lesername];
-			//NSLog(@"Alle Namen: Lesername: %@, LesernamenIndex: %d",Lesername,LesernamenIndex);
-			[self->NamenListe selectRowIndexes:[NSIndexSet indexSetWithIndex:LesernamenIndex]byExtendingSelection:NO];
-			[self setLeserFuerZeile:LesernamenIndex];
-			if ([NamenListe numberOfSelectedRows])
-			{
-			[PlayTaste setEnabled:YES];
-			}
-		}
-		else
-		{
-		[NamenListe deselectAll:NULL];
-		[PlayTaste setEnabled:NO];
-		}
-	}
+      else
+      {
+         // alles deaktivieren
+         [AufnahmenTable deselectAll:nil];
+         [NamenListe deselectAll:NULL];
+         [PlayTaste setEnabled:NO];
+      }
+   }
 	
 	if ([[tabViewItem identifier]intValue]==2)//zu 'Nach Namen'
 	{
-		NSLog(@"Tab zu 'nach Namen'");
+		NSLog(@"Tab von 'Alle Aufnahmen' zu 'nach Namen'");
+      
       
       if ([NamenListe selectedRow]>=0)
       {
          [self Aufnahmezuruecklegen];
       }
+      else
+      {
+         NSLog(@"Tab von 'Alle Aufnahmen' zu 'nach Namen': Kein Name ausgewaehlt");
+      }
 
       NSLog(@"AufnahmenDicArray: %@",[AufnahmenDicArray description]);
-		if ([NamenListe numberOfSelectedRows])//es ist eine zeile in der self.NamenListe selektiert
-		{
-			
-			int  Zeile;
-         Zeile=[NamenListe selectedRow];//selektierte Zeile in der self.NamenListe
-			//NSLog(@"nach Namen: Zeile: %d AdminAktuelleAufnahme: %@",Zeile,AdminAktuelleAufnahme);
-			
-			if (Zeile >=0)
-         {
-			NSNumber* ZeilenNumber=[NSNumber numberWithInt:Zeile];
-			
-			NSMutableDictionary* AdminZeilenDic=[NSMutableDictionary dictionaryWithObject:ZeilenNumber forKey:@"zeilennummer"];
-			[AdminZeilenDic setObject:@"AdminView" forKey:@"Quelle"];
-			
-			NSString* Lesername=[[AdminDaten dataForRow:Zeile] objectForKey:@"namen"];
-			//NSLog(@"Nach Namen: Lesername: %@",Lesername);
-			[AdminZeilenDic setObject:[Lesername copy] forKey:@"leser"];
-			
-						
-			NSNotificationCenter * nc;
-			nc=[NSNotificationCenter defaultCenter];
-			[nc postNotificationName:@"AdminChangeTab" object:AdminZeilenDic];
+		if ([NamenListe numberOfSelectedRows])//es ist eine zeile in der NamenListe selektiert
+      {
          
-			[PlayTaste setEnabled:AufnahmeDa];
-			
-			
-			[LesernamenPop selectItemWithTitle:Lesername];
-			[self setAufnahmenVonLeser:Lesername];
-			}
-			[[self window]makeFirstResponder:AufnahmenTable];
-		//	NSString* KeineAufnahmenString=NSLocalizedString(@"No Records",@"Keine Aufnahmen");
-			
-			//NSNotificationCenter * nc;
-			//nc=[NSNotificationCenter defaultCenter];
-			//[nc postNotificationName:@"AdminselektierteZeile" object:AdminZeilenDic];
-			
-			
-		}
+         
+         long  Zeile=[NamenListe selectedRow];//selektierte Zeile in der NamenListe
+         //NSLog(@"nach Namen: Zeile: %d AdminAktuelleAufnahme: %@",Zeile,AdminAktuelleAufnahme);
+         
+         if (Zeile >=0)
+         {
+            NSNumber* ZeilenNumber=[NSNumber numberWithLong:Zeile];
+            
+            NSMutableDictionary* AdminZeilenDic=[NSMutableDictionary dictionaryWithObject:ZeilenNumber forKey:@"zeilennummer"];
+            [AdminZeilenDic setObject:@"AdminView" forKey:@"Quelle"];
+            
+            NSString* Lesername=[[AdminDaten dataForRow:Zeile] objectForKey:@"namen"];
+            //NSLog(@"Nach Namen: Lesername: %@",Lesername);
+            [AdminZeilenDic setObject:[Lesername copy] forKey:@"leser"];
+            
+            NSNotificationCenter * nc;
+            nc=[NSNotificationCenter defaultCenter];
+            //[nc postNotificationName:@"AdminChangeTab" object:AdminZeilenDic];
+            
+            [PlayTaste setEnabled:AufnahmeDa];
+            
+            // von notific
+            
+            [AdminMarkCheckbox setState:NO];
+            [LehrerMarkCheckbox setState:NO];
+            [ExportierenTaste setEnabled:NO];
+            [LoeschenTaste setEnabled:NO];
+            Textchanged=NO;
+
+            [LesernamenPop selectItemWithTitle:Lesername];
+            [self setAufnahmenVonLeser:Lesername];
+         }
+         [[self window]makeFirstResponder:AufnahmenTable];
+         
+      }
 		else
 		{
 			[LesernamenPop selectItemAtIndex:0];
@@ -580,8 +628,6 @@ NSLog(@"tempName: %@",tempName);
 			return NO; // nicht umschalten
 		}
 	}
-	
-
 	return YES;
 }
 

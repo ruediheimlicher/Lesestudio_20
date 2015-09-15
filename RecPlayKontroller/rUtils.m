@@ -982,11 +982,11 @@ return versionOK;
 	[NamenDialog setCanChooseDirectories:NO];
 	[NamenDialog setCanChooseFiles:YES];
 	[NamenDialog setAllowsMultipleSelection:NO];
-	[NamenDialog setMessage:NSLocalizedString(@"Where is the list of names? It must have the format 'doc', 'txt', or 'rtf'", @"Wo ist self.NamenListe?")];
+	[NamenDialog setMessage:@"Wo ist die NamenListe?\nSie muss das Format 'doc' oder 'txt' haben."];
 	[NamenDialog 	setCanCreateDirectories:NO];
    [NamenDialog 	setDirectoryURL:[NSURL URLWithString:NSHomeDirectory()]];
 	
-   int NamenHit=0;
+   long NamenHit=0;
 	{
 		NSArray* TypesArray=[NSArray arrayWithObjects:@"doc",@"rtf",@"txt",nil];
 		//LeseboxHit=[LeseboxDialog runModalForDirectory:DocumentsPfad file:@"Lesebox" types:nil];
@@ -1114,9 +1114,9 @@ return versionOK;
   [NamenDialog setCanChooseDirectories:NO];
   [NamenDialog setCanChooseFiles:YES];
   [NamenDialog setAllowsMultipleSelection:NO];
-  [NamenDialog setMessage:NSLocalizedString(@"Where is the List of Names?",@"Wo ist die self.NamenListe?")];
+  [NamenDialog setMessage:@"Wo ist die NamenListe?\nSie muss das Format 'doc' oder 'txt' haben."];
   [NamenDialog 	setCanCreateDirectories:NO];
-  int NamenHit=0;
+  long NamenHit=0;
   {
 	//LeseboxHit=[LeseboxDialog runModalForDirectory:DocumentsPfad file:@"Lesebox" types:nil];
      NamenHit=[NamenDialog runModal];// file:@"Documents" types:nil];
@@ -1508,12 +1508,12 @@ return versionOK;
   NSFileManager *Filemanager=[NSFileManager defaultManager];
 
   NSMutableArray* tempNamenArray=[NSMutableArray arrayWithArray:derArray];
-  //NSLog(@"showProjektself.NamenListe start");
+  //NSLog(@"showProjektNamenListe start");
   if (!UProjektNamenPanel)
 	{
 	UProjektNamenPanel=[[rProjektNamen alloc]init];
 	}
- // NSLog(@"Utils                      showProjektself.NamenListe nach init:UProjektArray: %@",[UProjektArray description]);
+ // NSLog(@"Utils                      showProjekNamenListe nach init:UProjektArray: %@",[UProjektArray description]);
   
   //[ProjektPanel showWindow:self];
   NSModalSession ProjektSession=[NSApp beginModalSessionForWindow:[UProjektNamenPanel window]];
@@ -1526,7 +1526,7 @@ return versionOK;
   
   //Rückgabe wird von UKopierOrdnerWahlAktion gesetzt: -> UProjektName 
   //int modalAntwort = [NSApp runModalSession:ProjektSession];
-  //NSLog(@"showProjektself.NamenListe Antwort: %d",modalAntwort);
+  //NSLog(@"showProjektNamenListe Antwort: %d",modalAntwort);
   [NSApp endModalSession:ProjektSession];
   //[[ProjektPanel window] orderOut:NULL];   
   
@@ -1595,7 +1595,7 @@ return versionOK;
 			//[Warnung addButtonWithTitle:NSLocalizedString(@"Particular Names",@"Taste: Einzelne Namen")];
 		}
 		
-		[Warnung addButtonWithTitle:@"Taste: Aus self.NamenListe"];
+		[Warnung addButtonWithTitle:@"Taste: Aus NamenListe"];
 		[Warnung addButtonWithTitle:@"Taste: Einzelne Namen"];
 		
 		NSString* TitelString=@"Projektordner %@ ist leer";
@@ -1615,12 +1615,12 @@ return versionOK;
 		{
 			switch (antwort)
 			{
-				case NSAlertFirstButtonReturn://Namen aus self.NamenListe
+				case NSAlertFirstButtonReturn://Namen aus NamenListe
 				{ 
-					//NSLog(@"Archiv leer: Aus self.NamenListe");
+					//NSLog(@"Archiv leer: Aus NamenListe");
 					tempProjektNamenListe=[[self UOrdnernamenArrayVonKlassenliste]mutableCopy];
-					//tempProjektself.NamenListe=[[self OrdnernamenArrayVonKlassenliste]mutableCopy];
-					//NSLog(@"OrdnernamenArrayVonKlassenliste: %@",[tempProjektself.NamenListe description]);
+					//tempProjektNamenListe=[[self OrdnernamenArrayVonKlassenliste]mutableCopy];
+					//NSLog(@"OrdnernamenArrayVonKlassenliste: %@",[tempProjektNamenListe description]);
 					
 				}break;
 					
@@ -1673,8 +1673,8 @@ return versionOK;
 						}
 					} 
 					
-					//NSLog(@"tempProjektself.NamenListe: %@",[tempProjektself.NamenListe description]);
-					//ProjektName wird von Notifikation von showProjektself.NamenListe für den Kopiernamen gebraucht
+					//NSLog(@"tempProjektNamenListe: %@",[tempProjektNamenListe description]);
+					//ProjektName wird von Notifikation von showProjektNamenListe für den Kopiernamen gebraucht
 					[self showProjektNamenListe:tempProjektNamenListe];
 					
 					//NSLog(@"Direkt: KopierOrdnerName: %@",[UProjektNamenPanel KopierOrdnerName]);//zum kopieren ausgew. Name im Panel
@@ -1698,7 +1698,7 @@ return versionOK;
 								{
 									[tempProjektNamenListe removeObjectAtIndex:0];
 								}
-								//NSLog(@"tempProjektself.NamenListe: %@",[tempProjektself.NamenListe description]);
+								//NSLog(@"tempProjektNamenListe: %@",[tempProjektNamenListe description]);
 							}//if
 						}
 						//NSLog(@"tempKopierOrdnerPfad: %@",tempKopierOrdnerPfad);
@@ -1712,10 +1712,10 @@ return versionOK;
 					
 				case NSAlertSecondButtonReturn://Namen aus Nammenliste lesen
 				{
-					NSLog(@"self.NamenListe");
+					NSLog(@"NamenListe");
 					tempProjektNamenListe=[[self UOrdnernamenArrayVonKlassenliste]mutableCopy];
-					//tempProjektself.NamenListe=[[self OrdnernamenArrayVonKlassenliste]mutableCopy];
-					//NSLog(@"OrdnernamenArrayVonKlassenliste: %@",[tempProjektself.NamenListe description]);
+					//tempProjektNamenListe=[[self OrdnernamenArrayVonKlassenliste]mutableCopy];
+					//NSLog(@"OrdnernamenArrayVonKlassenliste: %@",[tempProjektNamenListe description]);
 					
 					
 					
@@ -1732,9 +1732,9 @@ return versionOK;
 			
 		}//Archiv ist nicht leer
 		
-		if ([tempProjektNamenListe count])//Die self.NamenListe ist nicht leer
+		if ([tempProjektNamenListe count])//Die NamenListe ist nicht leer
 		{
-			//NSLog(@"Nach Archiv ist nicht leer: tempProjektself.NamenListe: %@",[tempProjektself.NamenListe description]);
+			//NSLog(@"Nach Archiv ist nicht leer: tempProjektNamenListe: %@",[tempProjektNamenListe description]);
 			NSEnumerator *enumerator = [tempProjektNamenListe objectEnumerator];
 			id tempNamenObjekt;
 			int erfolg=1;
@@ -1744,7 +1744,7 @@ return versionOK;
 			while((tempNamenObjekt=[enumerator nextObject]))
 			{
 				NSString* tempName=[tempNamenObjekt description];
-				//NSLog(@"neueself.NamenListe: %@ ",tempName);
+				//NSLog(@"neueNamenListe: %@ ",tempName);
 				if ([tempName length])
 				{
 					anzZeilen++;
@@ -1769,7 +1769,7 @@ return versionOK;
 				}
 			}//while
 			
-			//NSLog(@"anzOrdner: %d [tempProjektself.NamenListe count]: %d",anzOrdner,[tempProjektself.NamenListe count]);
+			//NSLog(@"anzOrdner: %d [tempProjektNamenListe count]: %d",anzOrdner,[tempProjektNamenListe count]);
 			if (anzOrdner<anzZeilen)
 			{
 				//NSLog(@"vor alert");
@@ -1797,7 +1797,7 @@ return versionOK;
 						
 				}//switch antwort
 			}//if anz<
-		}//tempProjektself.NamenListe count>0
+		}//tempProjektNamenListe count>0
 		else
 		{
 			NSAlert *Warnung = [[NSAlert alloc] init];
@@ -1805,7 +1805,7 @@ return versionOK;
 			//[Warnung addButtonWithTitle:@""];
 			//[Warnung addButtonWithTitle:@""];
 			//[Warnung addButtonWithTitle:@"Abbrechen"];
-			[Warnung setMessageText:[NSString stringWithFormat:@"%@",@"Leere self.NamenListe"]];
+			[Warnung setMessageText:[NSString stringWithFormat:@"%@",@"Leere NamenListe"]];
 			NSString* s1=NSLocalizedString(@"The project","Das Projekt");
 			NSString* s2=NSLocalizedString(@"No valid Names","Keine gültigen Namen.");
 			
@@ -1840,7 +1840,7 @@ return versionOK;
 			//NSLog(@"Keine Namen, remove Projektordner");
 			[Filemanager removeItemAtURL:[NSURL fileURLWithPath:derProjektPfad] error:nil];
 			OrdnereinrichtenOK=NO;
-			//tempProjektself.NamenListe leer
+			//tempProjektNamenListe leer
 			
 		}
 	}//OrdnereinrichtenOK
@@ -1873,9 +1873,9 @@ return versionOK;
 	  {
         UNamenListePanel=[[rNamenListe alloc]init];
      }
-   //NSLog(@"showself.NamenListe nach init:ProjektArray: %@  ",[ProjektArray description]);
-   //NSLog(@"showself.NamenListe nach init:ProjektArray: %@  \nProjektPfad: %@",[UProjektArray description],UProjektPfad);
-   //NSLog(@"showself.NamenListe nach init:ProjektPfad: %@",UProjektPfad);
+   //NSLog(@"showNamenListe nach init:ProjektArray: %@  ",[ProjektArray description]);
+   //NSLog(@"showNamenListe nach init:ProjektArray: %@  \nProjektPfad: %@",[UProjektArray description],UProjektPfad);
+   //NSLog(@"showNamenListe nach init:ProjektPfad: %@",UProjektPfad);
    
    //[ProjektPanel showWindow:self];
    NSModalSession NamenSession=[NSApp beginModalSessionForWindow:[UNamenListePanel window]];
@@ -1887,7 +1887,7 @@ return versionOK;
         NSMutableArray* tempNamenListeArray=[[NSMutableArray alloc]initWithCapacity:0];
         
         NSArray* tempNamenArray=[Filemanager contentsOfDirectoryAtPath:UProjektPfad error:NULL];
-        //NSLog(@"showself.NamenListe tempNamenArray: %@  ",[tempNamenArray description]);
+        //NSLog(@"showNamenListe tempNamenArray: %@  ",[tempNamenArray description]);
         if (tempNamenArray&&[tempNamenArray count])
         {
            NSEnumerator* NamenEnum=[tempNamenArray objectEnumerator];
@@ -1925,9 +1925,9 @@ return versionOK;
 	  {
 		UEinzelNamenPanel=[[rEinzelNamen alloc]init];
 	  }
-	//NSLog(@"showself.NamenListe nach init:ProjektArray: %@  ",[ProjektArray description]);
-	//NSLog(@"showself.NamenListe nach init:ProjektArray: %@  \nProjektPfad: %@",[UProjektArray description],UProjektPfad);
-	//NSLog(@"showself.NamenListe nach init:ProjektPfad: %@",UProjektPfad);
+	//NSLog(@"showNamenListe nach init:ProjektArray: %@  ",[ProjektArray description]);
+	//NSLog(@"showNamenListe nach init:ProjektArray: %@  \nProjektPfad: %@",[UProjektArray description],UProjektPfad);
+	//NSLog(@"showNamenListe nach init:ProjektPfad: %@",UProjektPfad);
 
 	//[ProjektPanel showWindow:self];
 	NSModalSession NamenSession=[NSApp beginModalSessionForWindow:[UEinzelNamenPanel window]];
@@ -2126,7 +2126,7 @@ return versionOK;
 {
 	NSLog(@"insMagazinMitPfad: %@",derNamenPfad);
 	NSString* tempNamenPfad=[derNamenPfad copy];//Pfad akt. Aufn.
-	int fehler=0;
+	long fehler=0;
 	BOOL istDirectory;
 	NSFileManager* Filemanager=[NSFileManager defaultManager];
 	NSString* tempMagazinPfad=[[UArchivPfad stringByDeletingLastPathComponent]stringByAppendingPathComponent:@"Magazin"]; 
@@ -2146,8 +2146,14 @@ return versionOK;
 			NSString* MagazinString=[NSString stringWithFormat:@"%@%@%@%@",s1,@"\r",s2,[tempNamenPfad lastPathComponent]];
 			NSLog(@"MagazinString: %@",MagazinString);
 			NSString* TitelString=@"Magazin einrichten";
-			fehler=NSRunAlertPanel(TitelString, MagazinString,@"OK", NULL,NULL);
 			
+         NSAlert *Warnung = [[NSAlert alloc] init];
+         [Warnung addButtonWithTitle:@"OK"];
+         [Warnung setMessageText:TitelString];
+         [Warnung setInformativeText:MagazinString];
+         [Warnung setAlertStyle:NSWarningAlertStyle];
+         [Warnung runModal];
+         return 1;
 		}
 	}
    

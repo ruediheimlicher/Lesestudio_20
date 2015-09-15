@@ -325,8 +325,9 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    NSString*HomeLeseboxPfad=[NSHomeDirectory() stringByAppendingFormat:@"%@%@",@"/Documents/",lb];
    //NSLog(@"cb: %@  Lesebox: %@ HomeLeseboxPfad: %@",cb,lb,HomeLeseboxPfad);
    NSString* locBeenden=@"Beenden";
-   
-   NSColor* HintergrundFarbe=[NSColor colorWithDeviceRed:80.0/255.0 green:230.0/255.0 blue:140.0/255.0 alpha:1.0];
+   NSColor* HintergrundFarbe=[NSColor colorWithDeviceRed: 150.0/255 green:249.0/255 blue:150.0/255 alpha:1.0];
+
+   //NSColor* HintergrundFarbe=[NSColor colorWithDeviceRed:80.0/255.0 green:230.0/255.0 blue:140.0/255.0 alpha:1.0];
    NSColor * TitelFarbe=[NSColor purpleColor];
    NSFont* TitelFont;
    TitelFont=[NSFont fontWithName:@"Helvetica" size: 36];
@@ -340,7 +341,9 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    //BOOL istOrdner;
    //   [self.RecPlayFenster setDelegate:self];
    //   [self.RecPlayFenster setBackgroundColor:HintergrundFarbe];
-   NSColor* FensterFarbe=[NSColor colorWithDeviceRed: 194.0/255 green:249.0/255 blue:194.0/255 alpha:1.0];
+ //  NSColor* FensterFarbe=[NSColor colorWithDeviceRed: 194.0/255 green:249.0/255 blue:194.0/255 alpha:1.0];
+   NSColor* FensterFarbe=[NSColor colorWithDeviceRed: 150.0/255 green:249.0/255 blue:150.0/255 alpha:1.0];
+
    //  self.view.backgroundColor=FensterFarbe;
    //[[self view]window].backgroundColor=FensterFarbe;
    
@@ -2565,7 +2568,7 @@ QTMovie* qtMovie;
 	  {
         NSMutableArray * tempProjektNamenArray=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:derProjektPfad error:NULL]];
         int AnzAdminProjektNamenArray=[tempProjektNamenArray count];											//Anzahl Leser
-        //Leserself.NamenListe=[ProjektNamenArray description];
+        //LeserNamenListe=[ProjektNamenArray description];
         
         if ([[tempProjektNamenArray objectAtIndex:0] hasPrefix:@".DS"])					//Unsichtbare Ordner entfernen
         {
@@ -3768,7 +3771,7 @@ QTMovie* qtMovie;
    
    
    NSFileManager* Filemanager=[NSFileManager defaultManager];
-   if ([Filemanager fileExistsAtPath:[self.ArchivPlayPfad stringByAppendingPathExtension:@"m4a"]])
+   if ([Filemanager fileExistsAtPath:[self.ArchivPlayPfad stringByAppendingPathExtension:@"m4a"]] || [Filemanager fileExistsAtPath:self.ArchivPlayPfad ])
 	  {
         
         [self.ArchivInPlayerTaste setEnabled:YES];
@@ -3966,7 +3969,7 @@ QTMovie* qtMovie;
    NSMutableArray* AufnahmenArray;
    AufnahmenArray=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:self.LeserPfad error:NULL]];
    //NSLog(@"Archiv AufnahmenArray: %@",[AufnahmenArray description]);
-   SEL DoppelSelektor;
+   //SEL DoppelSelektor;
 //   DoppelSelektor=@selector(ArchivaufnahmeInPlayer:);
    
 //   [self.ArchivView setDoubleAction:DoppelSelektor];
@@ -4032,11 +4035,11 @@ QTMovie* qtMovie;
 - (void) KeyNotifikationAktion:(NSNotification*)note
 {
    NSLog(@"KeyNotifikationAktion: note: %@",[note object]);
-   NSNumber* KeyNummer=[note object];
+   //NSNumber* KeyNummer=[note object];
    //int keyNr=(int)[KeyNummer floatValue];
    //NSLog(@"keyDown KeyNotifikationAktion description: %@",[KeyNummer description]);
    //NSLog(@"keyDown KeyNotifikationAktion keyNr: %d",keyNr);
-   //[self setLeser:self.NamenListe ];
+   //[self setLself.NamenListe ];
    //[self startAdminPlayer:AdminQTPlayer];
 }
 
@@ -4117,7 +4120,7 @@ QTMovie* qtMovie;
         
      }
    //NSTableColumn* tempKolonne;
-   //tempKolonne=[self.NamenListe tableColumnWithIdentifier:@"neu"];
+   //tempKolonne=[NamenListe tableColumnWithIdentifier:@"neu"];
    //[[tempKolonne dataCellForRow:selektierteZeile]setTitle:@"Los"];
 }
 
@@ -4126,14 +4129,7 @@ QTMovie* qtMovie;
    //NSLog(@"RecPlay    EnterKeyNotifikationAktion: note: %@",[note object]);
    NSString* Quelle=[[note object]description];
    //NSLog(@"RecPlay EnterKeyNotifikationAktion: Quelle: %@",Quelle);
-   BOOL erfolg;
-   if ([Quelle isEqualToString:@"MovieView"])
-	  {
-        //erfolg=[RecPlayFenster makeFirstResponder:ArchivView];
-        //NSLog(@"		Quelle: MovieView->self.NamenListe: erfolg: %d",erfolg);
-        [self.ArchivInListeTaste setEnabled:NO];
-        [self.ArchivPlayTaste setEnabled:YES];
-     }
+   //BOOL erfolg;
    
    if ([Quelle isEqualToString:@"ArchivListe"])
 	  {

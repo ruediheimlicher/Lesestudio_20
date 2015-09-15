@@ -57,7 +57,7 @@
 
 - (IBAction)reportOK:(id)sender
 {
-  //NSLog(@"\n	  self.NamenListe reportClose");
+  //NSLog(@"\n	  NamenListe reportClose");
   NSMutableDictionary* NotificationDic=[[NSMutableDictionary alloc]initWithCapacity:0];
 
 	

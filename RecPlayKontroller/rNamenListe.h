@@ -1,4 +1,4 @@
-/* rself.NamenListe */
+/* rNamenListe */
 
 #import <Cocoa/Cocoa.h>
 #import "rEingabeFeld.h"

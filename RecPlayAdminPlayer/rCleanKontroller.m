@@ -406,7 +406,7 @@ enum
 					NSLog(@"CleanTitelDicArray null: %@",[CleanTitelDicArray description]);
 					[CleanFenster deselectNamenListe];
 									  }
-				//[CleanFenster deselectself.NamenListe];
+				//[CleanFenster deselectNamenListe];
 
 				
 			}break;//NamenViewTag

@@ -316,7 +316,7 @@ enum
       NamenListeOK=[self NamenListeValidAnPfad:self.ProjektPfad];
       if (!NamenListeOK)//keine Namen im Projektordner
       {
-         //NSLog(@"self.NamenListeOK=NO: Umgebung: %d  ProjektPfad: %@",Umgebung, ProjektPfad);
+         //NSLog(@"NamenListeOK=NO: Umgebung: %d  ProjektPfad: %@",Umgebung, ProjektPfad);
       }
       
    }//if ProjektListeOK
@@ -329,13 +329,13 @@ enum
    
    NSFileManager *Filemanager=[NSFileManager defaultManager];
    
-   //NSLog(@"LeseboxOK: %d ArchivOK: %d  self.NamenListeOK: %d",LeseboxOK, ArchivOK, self.NamenListeOK);
+   //NSLog(@"LeseboxOK: %d ArchivOK: %d  NamenListeOK: %d",LeseboxOK, ArchivOK, NamenListeOK);
    
    //NSLog(@"vor ProjektMenu: ProjektListeValidAnPfad: ProjektArray : \n%@ \n@",[ProjektArray description],ProjektPfad);
    
    [self setProjektMenu];
    
-   //NSString* Leserself.NamenListe;
+   //NSString* LeserNamenListe;
    
    if ([Filemanager fileExistsAtPath:self.ProjektPfad])
    {
@@ -377,7 +377,7 @@ enum
       
       NSMutableArray * tempProjektNamenArray=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:self.ProjektPfad error:NULL]];
       long AnzNamen=[tempProjektNamenArray count];											//Anzahl Leser
-      //Leserself.NamenListe=[tempProjektNamenArray description];
+      //LeserNamenListe=[tempProjektNamenArray description];
       
       if ([tempProjektNamenArray count])
       {
@@ -820,7 +820,7 @@ enum
 
 - (void)updatePasswortListe
 {
-   //NSLog(@"updateself.NamenListe start:");
+   //NSLog(@"updateNamenListe start:");
    
    BOOL ProjektListeValid=NO;
    BOOL erfolg=YES;
@@ -907,7 +907,7 @@ enum
    [tempPListDic setObject:[tempneuerUserPWArray copy] forKey:@"userpasswortarray"];
    BOOL PListOK=[tempPListDic writeToFile:tempPListPfad atomically:YES];
    
-}//updateself.NamenListe
+}//updateNamenListe
 
 - (BOOL)ArchivValidAnPfad:(NSString*)derLeseboxPfad
 {
@@ -1061,7 +1061,7 @@ enum
                   
                   if ([einPListProjektDic objectForKey:@"sessiondatum"])//objekt für sessiondatum ist in plist
                   {
-                     NSLog(@"sessiondatum da: %@",[einPListProjektDic objectForKey:@"sessiondatum"]);
+                     //NSLog(@"sessiondatum da: %@",[einPListProjektDic objectForKey:@"sessiondatum"]);
                      
                      [einProjektDic setObject: [einPListProjektDic objectForKey:@"sessiondatum"] forKey:@"sessiondatum"];
                   }
@@ -1204,7 +1204,7 @@ enum
             anz++;
          }
       }
-      //NSLog(@"self.NamenListeValidAnPfad: anz Ordner: %d\n tempAdminProjektNamenArray: %@",anz,[tempProjektNamenArray description]);
+      //NSLog(@"NamenListeValidAnPfad: anz Ordner: %d\n tempAdminProjektNamenArray: %@",anz,[tempProjektNamenArray description]);
       
    }
    if (anz)
@@ -1655,7 +1655,7 @@ enum
    
    NSMutableArray * tempProjektNamenArray=[[NSMutableArray alloc] initWithArray:[Filemanager contentsOfDirectoryAtPath:self.ProjektPfad error:NULL]];
    double AnzNamen=[tempProjektNamenArray count];											//Anzahl Leser
-   //Leserself.NamenListe=[tempProjektNamenArray description];
+   //LeserNamenListe=[tempProjektNamenArray description];
    
    if ([tempProjektNamenArray count])
    {

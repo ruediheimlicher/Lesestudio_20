@@ -44,7 +44,7 @@
 {
   int nr=[theEvent keyCode];
   NSString* Taste=[theEvent characters];
-  NSLog(@"self.NamenListe endlich keyDown: %@   %@",[theEvent characters],Taste);	
+  NSLog(@"NamenListe endlich keyDown: %@   %@",[theEvent characters],Taste);
   [super keyDown:theEvent];
 }
 */
@@ -74,23 +74,20 @@
 	//[NamenTable selectRowIndexes: [NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
 	[SchliessenTaste setKeyEquivalent:@"\r"];
 	
-	[VornameFeld setToolTip:NSLocalizedString(@"First name of new reader. One word only, no space.",@"Vorname des neuen Lesers. Nur ein Wort, kein Leerschlag")];
-	[NameFeld setToolTip:NSLocalizedString(@"Last name of new reader. One word only, no space.",@"Nachname des neuen Lesers. Nur ein Wort, kein Leerschlag")];
-	[ImportTaste setToolTip:NSLocalizedString(@"Look for list of names in finder",@"self.NamenListe im Finder suchen")];
-	[EinsetzenVariante setToolTip:NSLocalizedString(@"Options for importing new names.",@"Varianten für den Import neuer Namen.")];
-	[NameInListeTaste setToolTip:NSLocalizedString(@"Put new name into the list.",@"Neue Namen in die Liste einsetzen.")];
-	[UbernehmenTaste setToolTip:NSLocalizedString(@"Import new names into the list.\nDoubled names are ignored.",@"Neue Namen in die Liste übernehmen.\nDoppelte Namen werden ignoriert.")];
+	[VornameFeld setToolTip:@"Vorname des neuen Lesers. Nur ein Wort, kein Leerschlag"];
+	[NameFeld setToolTip:@"Nachname des neuen Lesers. Nur ein Wort, kein Leerschlag"];
+	[ImportTaste setToolTip:@"NamenListe im Finder suchen"];
+	[EinsetzenVariante setToolTip:@"Varianten für den Import neuer Namen."];
+	[NameInListeTaste setToolTip:@"Neue Namen in die Liste einsetzen."];
+	[UbernehmenTaste setToolTip:@"Neue Namen in die Liste übernehmen.\nDoppelte Namen werden ignoriert."];
 }
+
 - (void)EnterKeyNotifikationAktion:(NSNotification*)note
 {
-	NSLog(@"self.NamenListe    EnterKeyNotifikationAktion: note: %@",[note object]);
+	NSLog(@"NamenListe    EnterKeyNotifikationAktion: note: %@",[note object]);
 	NSString* Quelle=[[note object]description];
 	NSLog(@"EnterKeyNotifikationAktion: Quelle: %@",Quelle);
-	BOOL erfolg;
 	[self reportEinsetzenVariante:NULL];
-	
-	  
-	
 	
 }
 
@@ -188,7 +185,7 @@
 
 - (IBAction)reportClose:(id)sender
 { 
-  //NSLog(@"\n	  self.NamenListe reportClose");
+  //NSLog(@"\n	  NamenListe reportClose");
   NSMutableDictionary* NotificationDic=[[NSMutableDictionary alloc]initWithCapacity:0];
 
 	[NotificationDic setObject:NamenArray forKey:@"namenarray"];//eventuell sind Namen geändert
@@ -324,7 +321,7 @@
 	NSMutableDictionary* NotificationDic=[[NSMutableDictionary alloc]initWithCapacity:0];
 	NSNumber* EinsetzenVarianteNumber=[NSNumber numberWithInt:tempEinsetzenVariante];
 	[NotificationDic setObject:EinsetzenVarianteNumber forKey: @"einsetzenVariante"];
-	[NotificationDic setObject:neueNamenArray forKey:@"neueNamenArray"];//Namen aus der self.NamenListe
+	[NotificationDic setObject:neueNamenArray forKey:@"neueNamenArray"]; //Namen aus der NamenListe
 	//NSLog(@"*reportNamenUbernehmen	neueNamenArray: %@",[neueNamenArray description]);
 	NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
 	[nc postNotificationName:@"NamenEinsetzen" object:self userInfo:NotificationDic];
@@ -528,7 +525,7 @@ case 2://alle Projekte
   [NamenArray removeAllObjects];
   NSEnumerator* NamenEnum=[derArray objectEnumerator];
   id einName;
-  //NSLog(@"setself.NamenListeArray: derArray: \n%@ \ndasProjekt: %@",[derArray description],dasProjekt);
+  //NSLog(@"setNamenListeArray: derArray: \n%@ \ndasProjekt: %@",[derArray description],dasProjekt);
   
   NSMutableIndexSet* NamenIndex=[NSMutableIndexSet indexSet];
   while (einName=[NamenEnum nextObject])

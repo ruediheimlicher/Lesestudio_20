@@ -223,9 +223,9 @@ return index;
 }
 
 
-- (void)setAuswahl:(int)dasItem forRow:(int) rowIndex
+- (void)setAuswahl:(long)dasItem forRow:(long) rowIndex
 {
-	NSNumber* tempItem=[NSNumber numberWithInt:dasItem];
+	NSNumber* tempItem=[NSNumber numberWithLong:dasItem];
 	[AuswahlArray replaceObjectAtIndex:rowIndex withObject:tempItem];
 }
 
@@ -491,7 +491,7 @@ return index;
 	//NSLog(@"[AuswahlArray: %@",[[AuswahlArray objectAtIndex:row]description]);
 	NSNotificationCenter * nc;
 	nc=[NSNotificationCenter defaultCenter];
-	[nc postNotificationName:@"AdminselektierteZeile" object:AdminZeilenDic];
+	[nc postNotificationName:@"AdminselektierteZeile" object:AdminZeilenDic]; // AdminZeilenNotifikationAktion
 	//NSLog(@"AdmintableView  shouldSelectRow ende: %d",row);
 	//[[[tableView tableColumnWithIdentifier:@"aufnahmen"]dataCellForRow:row]action];
 	
