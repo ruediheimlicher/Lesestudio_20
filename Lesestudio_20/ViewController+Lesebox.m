@@ -1885,6 +1885,7 @@ enum
 
 - (IBAction)neueSession:(id)sender
 {
+   NSLog(@"neueSession Umbebung: %d",self.Umgebung);
    [Utils stopTimeout];
    //double heuteTag = [[NSCalendar currentCalendar] ordinalityOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:[NSDate date]];
    

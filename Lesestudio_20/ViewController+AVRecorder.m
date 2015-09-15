@@ -563,6 +563,21 @@
    [AVAbspielplayer invalTimer];
    [Utils stopTimeout];
    BOOL erfolg=YES;
+   NSMenu *mainMenu = [[NSApplication sharedApplication] mainMenu];
+   [mainMenu setDelegate:self];
+   NSMenu *appMenu = [[mainMenu itemWithTitle:@"Modus"] submenu];
+  //[appMenu setAutoenablesItems:NO];
+   NSLog(@"saveRecord MenuItem: Modus: %@",[[appMenu itemWithTitle:@"Admin"]title]);
+   [appMenu setDelegate:self];
+   
+   for (NSMenuItem *item in [appMenu itemArray])
+   {
+      [item setEnabled:YES];
+   }
+   //NSLog(@"view: %@",[self.view.window description]);
+  //[self.view.window makeKeyAndOrderFront:nil];
+  
+
    NSLog(@"saveRecord tag: %ld Leser: %@ ",(long)[sender tag],self.Leser);
    
    NSLog(@"anzProjekte vor: %d",[[self.ProjektArray valueForKey:@"projekt"]count]);

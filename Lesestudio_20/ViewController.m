@@ -672,6 +672,60 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    {
     //  [self beginAdminPlayer:nil];
    }
+   NSMenu *mainMenu = [[NSApplication sharedApplication] mainMenu];
+   
+   NSMenu *modusMenu = [[mainMenu itemWithTitle:@"Modus"] submenu];
+      for (NSMenuItem *item in [modusMenu itemArray])
+      {
+          NSLog(@"Menuitem: %@",[item title]);
+         [item setTarget:self];
+      }
+
+   NSMenu *adminMenu = [[mainMenu itemWithTitle:@"Admin"]submenu];
+   for (NSMenuItem *item in [adminMenu itemArray])
+   {
+      NSLog(@"Menuitem: %@",[item title]);
+      [item setTarget:self];
+      
+   }
+   NSMenu *recorderMenu = [[mainMenu itemWithTitle:@"Recorder"]submenu];
+   for (NSMenuItem *item in [recorderMenu itemArray])
+   {
+      NSLog(@"Menuitem: %@",[item title]);
+      [item setTarget:self];
+      
+   }
+ 
+
+  
+
+   
+   
+   
+   
+   
+   
+   NSMenu *appMenu = [[mainMenu itemWithTitle:@"Modus"] submenu];
+   
+   [[mainMenu itemWithTitle:@"Modus"]setTarget:self];
+   for (NSMenuItem *item in [appMenu itemArray])
+   {
+      [item setTarget:self];
+   }
+
+ //  [[appMenu itemWithTitle:@"Admin"]setTarget:self];
+ //  [[appMenu itemWithTitle:@"Anmerkungen"]setTarget:self];
+   [appMenu setAutoenablesItems:NO];
+   //NSLog(@"viewDidLoad MenuItem: Modus: %@",[[appMenu itemWithTitle:@"Admin"]title]);
+   [[mainMenu itemWithTitle:@"Modus"]setEnabled:YES];
+   [[appMenu itemWithTitle:@"Admin"]setEnabled:YES];
+   
+
+   for (NSMenuItem *item in [appMenu itemArray])
+   {
+      [item setEnabled:YES];
+   }
+   //NSLog(@"MenuItem: Modus: %@",[[appMenu itemWithTitle:@"Admin"]title]);
 }
 
 
@@ -903,7 +957,8 @@ return YES;
             [self saveRecord:NULL];
             [self resetRecPlay];
             [Utils stopTimeout];
-            [self.view.window makeFirstResponder:self.view];
+            //[self.view.window makeFirstResponder:self.view.window];
+            //[self.view.window makeKeyAndOrderFront:nil];
          }break;
             
          case 0://Timeout abbrechen

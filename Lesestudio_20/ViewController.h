@@ -95,6 +95,7 @@
 @property (weak) IBOutlet AVAudioPlayer *_audioPlayer;
 
 @property (weak) IBOutlet NSButton* StartKnopf;
+@property (weak) IBOutlet NSButton* XKnopf;
 
 
 @property (retain) IBOutlet rAbspielanzeige*	ArchivAbspielanzeige;

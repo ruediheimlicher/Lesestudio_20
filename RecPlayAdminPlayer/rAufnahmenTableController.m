@@ -478,11 +478,14 @@ NSLog(@"tempName: %@",tempName);
    {
       long zeile=[NamenListe selectedRow];
       NSLog(@"tabView didSelectTabViewItem zeile: %d",zeile);
+      AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:zeile]objectForKey:@"aufnahme"];
+
        [self setLeserFuerZeile:zeile];
       if ([NamenListe numberOfSelectedRows])
       {
          [PlayTaste setEnabled:YES];
       }
+      
 
    }
    
