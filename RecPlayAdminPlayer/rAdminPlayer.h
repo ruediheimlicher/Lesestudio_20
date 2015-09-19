@@ -185,15 +185,15 @@
 - (IBAction)setLeser:(id)sender;
 - (IBAction)setZeilenAufnahme:(id)sender;
 
-- (void)setLeserFuerZeile:(int)dieZeile;
+- (void)setLeserFuerZeile:(long)dieZeile;
 - (BOOL)setPfadFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme;
 - (BOOL)setKommentarFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme;
 - (BOOL)saveKommentarFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme;
 - (BOOL)saveAdminMarkFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme 
-			  mitAdminMark:(int)dieAdminMark;
+			  mitAdminMark:(long)dieAdminMark;
 - (BOOL)saveMarksFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme 
-			  mitAdminMark:(int)dieAdminMark
-			   mitUserMark:(int)dieUserMark;
+			  mitAdminMark:(long)dieAdminMark
+			   mitUserMark:(long)dieUserMark;
 
 
 
@@ -218,15 +218,15 @@
 - (BOOL)AufnahmeIstVomUserMarkiertAnPfad:(NSString*)derAufnahmePfad;
 - (BOOL)AufnahmeIstMarkiertAnAnmerkungPfad:(NSString*)derAnmerkungPfad;
 - (void)setMark:(BOOL)derStatus;
-- (void)MarkierungEntfernenFuerZeile:(int)dieZeile;
+- (void)MarkierungEntfernenFuerZeile:(long)dieZeile;
 - (void)MarkierungenEntfernen;
 - (void)AlleMarkierungenEntfernen;
 - (IBAction)reportAktualisieren:(id)sender;
 - (IBAction)reportUserMark:(id)sender;
 - (IBAction)reportAdminMark:(id)sender;
 - (IBAction)reportFensterschliessen:(id)sender;
-- (NSString*)neuerNameVonAufnahme:(NSString*)dieAufnahme mitNummer:(int)dieNummer;
-- (void)alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (NSString*)neuerNameVonAufnahme:(NSString*)dieAufnahme mitNummer:(long)dieNummer;
+- (void)alertDidEnd:(NSAlert *)alert returnCode:(long)returnCode contextInfo:(void *)contextInfo;
 
 - (void)AdminKeyNotifikationAktion:(NSNotification*)note;
 - (void)AdminZeilenNotifikationAktion:(NSNotification*)note;
@@ -245,8 +245,8 @@
 - (BOOL)FensterschliessenOK;
 - (void)AdminBeenden;
 - (BOOL)windowShouldClose:(id)sender;
-- (IBAction)showCleanFenster:(int)tab;
-- (void)setCleanTask:(int)dieTask;
+- (IBAction)showCleanFenster:(long)tab;
+- (void)setCleanTask:(long)dieTask;
 
 
 
@@ -276,16 +276,16 @@
 - (BOOL)mitMarkierungAufnehmenOptionAnPfad:(NSString*)derAufnahmePfad;
 - (NSArray*)KommentareVonLeser:(NSString*)derLeser 
 					  mitTitel:(NSString*)derTitel 
-					   maximal:(int)dieAnzahl 
+					   maximal:(long)dieAnzahl
 				 anProjektPfad:(NSString*)derProjektPfad;
 - (NSArray*)KommentareMitTitel:(NSString*)derTitel
 					  vonLeser:(NSString*)derLeser 
 				 anProjektPfad:(NSString*)derProjektPfad
-					   maximal:(int)dieAnzahl;
+					   maximal:(long)dieAnzahl;
 
 - (NSArray*)alleKommentareZuTitel:(NSString*)derTitel
 					anProjektPfad:(NSString*)derProjektPfad
-						  maximal:(int)dieAnzahl;
+						  maximal:(long)dieAnzahl;
 - (NSString*)KommentarZuAufnahme:(NSString*)dieAufnahme 
 					  vonLeser:(NSString*)derLeser 
 				 anProjektPfad:(NSString*)derProjektPfad;
@@ -295,7 +295,7 @@
 - (void)KommentarDrucken;
 - (void)SaveKommentarVonProjekt:(NSString*)dasProjekt;
 - (void)KommentarSichern;
-- (NSArray*)alleKommentareNachTitelAnProjektPfad:(NSString*)derProjektPfad bisAnzahl:(int)dieAnzahl;
+- (NSArray*)alleKommentareNachTitelAnProjektPfad:(NSString*)derProjektPfad bisAnzahl:(long)dieAnzahl;
 - (IBAction)showKommentar:(id)sender;
 - (NSArray*)createKommentarStringArrayWithProjektPfadArray:(NSArray*)derProjektPfadArray;
 - (NSArray*)createDruckKommentarStringDicArrayWithProjektPfadArray:(NSArray*)derProjektPfadArray;
@@ -310,13 +310,13 @@
 - (NSString*)heutigeKommentareVon:(NSString*)derLeser;
 - (NSArray*)alleKommentareVonLeser:(NSString*)derLeser
 					  anProjektPfad:(NSString*)derProjektPfad 
-						  bisAnzahl:(int)dieAnzahl;
+						  bisAnzahl:(long)dieAnzahl;
 
-- (NSArray*)alleKommentareNachNamenAnProjektPfad:(NSString*)derProjektPfad bisAnzahl:(int)dieAnzahl;
+- (NSArray*)alleKommentareNachNamenAnProjektPfad:(NSString*)derProjektPfad bisAnzahl:(long)dieAnzahl;
 - (NSArray*)TitelArrayVon:(NSString*)derLeser anProjektPfad:(NSString*)derProjektPfad;
 - (NSArray*)TitelMitKommentarArrayVon:(NSString*)derLeser anProjektPfad:(NSString*)derProjektPfad;
 - (NSArray*)TitelArrayVonAllenAnProjektPfad:(NSString*)derProjektPfad
-						  bisAnzahlProLeser:(int)dieAnzahl;
+						  bisAnzahlProLeser:(long)dieAnzahl;
 - (NSArray*)LeserArrayAnProjektPfad:(NSString*)derProjektPfad;
 - (NSArray*)LeserArrayVonTitel:(NSString*)derTitel anProjektPfad:(NSString*)derProjektPfad;
 - (NSArray*)TitelMitAnzahlArrayVon:(NSString*)derLeser;
@@ -329,8 +329,8 @@
 - (NSString*)BewertungVon:(NSString*) derKommentarString;
 - (BOOL)AdminMarkVon:(NSString*) derKommentarString;
 - (NSString*)NoteVon:(NSString*) derKommentarString;
-- (int)UserMarkVon:(NSString*)derKommentarString;
-- (int)AufnahmeNummerVon:(NSString*) dieAufnahme;
+- (long)UserMarkVon:(NSString*)derKommentarString;
+- (long)AufnahmeNummerVon:(NSString*) dieAufnahme;
 - (NSString*)InitialenVon:(NSString*)derName;
 - (void)Markierungenreset;
 @end
@@ -339,9 +339,9 @@
 - (void)setNamenPop:(NSArray*)derNamenArray;
 - (IBAction)reportAuswahlOption:(id)sender;
 - (IBAction)reportDelete:(id)sender;
-- (void)setAdminMark:(BOOL)derStatus fuerZeile:(int)dieZeile;
-- (void)setUserMark:(BOOL)derStatus fuerZeile:(int)dieZeile;
-- (void)setAufnahmenVonLeser:(NSString*)derLeser;
+- (void)setAdminMark:(BOOL)derStatus fuerZeile:(long)dieZeile;
+- (void)setUserMark:(BOOL)derStatus fuerZeile:(long)dieZeile;
+- (long)setAufnahmenVonLeser:(NSString*)derLeser;
 - (void)setAufnahmenTable:(NSArray*)derAufnahmenArray fuerLeser:(NSString*)derLeser;
 
 @end
@@ -360,12 +360,12 @@
  @end
 #pragma mark -
  @interface rAdminPlayer(rExportKontroller)
-- (int)ExportPrefsLesen;
-- (int)ExportPrefsSchreiben;
+- (long)ExportPrefsLesen;
+- (long)ExportPrefsSchreiben;
 - (OSErr)getExportEinstellungenvonAufnahme:(NSString*)derAufnahmePfad;
 - (OSErr)getExportEinstellungen;
 - (IBAction) AufnahmeExportieren:(id)sender;
-- (int) AufnahmeExportierenMitPfad:(NSString*)derAufnahmePfad 
+- (long) AufnahmeExportierenMitPfad:(NSString*)derAufnahmePfad
 					 mitUserDialog:(BOOL)userDialogOK
 				 mitSettingsDialog:(BOOL)settingsDialogOK;
 - (void) AufnahmenArrayExportieren:(NSArray*)derAufnahmenArray mitUserDialog:(BOOL)userDialogOK;
@@ -390,7 +390,7 @@
 
 //- (NSSize)windowContentSizeForMovie:(Movie)qtMovie;
 //- (void)releaseThreadData:(ThreadData *)threadData;
-//- (int)AufnahmeInThreadExportierenMitPfad:(NSString*)derAufnahmePfad 
+//- (long)AufnahmeInThreadExportierenMitPfad:(NSString*)derAufnahmePfad
 //					 mitUserDialog:(BOOL)userDialogOK
 //				 mitSettingsDialog:(BOOL)settingsDialogOK;
 

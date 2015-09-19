@@ -215,26 +215,26 @@ return index;
 
 - (void)deleteDataZuName:(NSString*)derName
 {
-		//NSLog(@"deleteDataZuName: %@  ",derName);
-	NSEnumerator* rowEnum=[rowData objectEnumerator];
-	id einObject;
-	int deleteIndex=-1;
-	int index=0;
-	while(einObject=[rowEnum nextObject])
-	{
-		if ([[einObject objectForKey:@"namen"] isEqualToString:derName])
-		{
-		//NSLog(@"einObject: *%@* derName: +%@+ ",[einObject objectForKey:@"namen"],derName);
-			deleteIndex=index;
-		}
-		index++;
-	}//while
-	//NSLog(@"deleteDataZuName: %@   deleteIndex: %d",derName,deleteIndex);
-	if (deleteIndex>=0)
-	{
-	[self deleteRowAt:deleteIndex];
-	}
-	}
+   //NSLog(@"deleteDataZuName: %@  ",derName);
+   NSEnumerator* rowEnum=[rowData objectEnumerator];
+   id einObject;
+   int deleteIndex=-1;
+   int index=0;
+   while(einObject=[rowEnum nextObject])
+   {
+      if ([[einObject objectForKey:@"namen"] isEqualToString:derName])
+      {
+         //NSLog(@"einObject: *%@* derName: +%@+ ",[einObject objectForKey:@"namen"],derName);
+         deleteIndex=index;
+      }
+      index++;
+   }//while
+   //NSLog(@"deleteDataZuName: %@   deleteIndex: %d",derName,deleteIndex);
+   if (deleteIndex>=0)
+   {
+      [self deleteRowAt:deleteIndex];
+   }
+}
 
 
 - (void) deleteAllData
@@ -515,7 +515,7 @@ return index;
 	NSNotificationCenter * nc;
 	nc=[NSNotificationCenter defaultCenter];
 	[nc postNotificationName:@"AdminselektierteZeile" object:AdminZeilenDic]; // AdminZeilenNotifikationAktion
-	//NSLog(@"AdmintableView  shouldSelectRow ende: %d",row);
+	NSLog(@"AdmintableView  shouldSelectRow ende: %d",row);
 	//[[[tableView tableColumnWithIdentifier:@"aufnahmen"]dataCellForRow:row]action];
 	
 	return YES;

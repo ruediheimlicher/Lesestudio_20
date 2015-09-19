@@ -1573,7 +1573,7 @@ return KommentareMitTitelVonLeserArray;
 				  {
 					NSLog(@"Keine Aufnahmen von: %@",derLeser);
 				//NSLog(@"alleKommentareZuTitel: Kommentarordner von %@ ist leer",tempLeser);
-				NSString* keineAufnahmeString=NSLocalizedString(@"There are no records for this user",@"FŸr dieses Leser hat es keine Aufnahmen");
+				NSString* keineAufnahmeString=@"FŸr dieses Leser hat es keine Aufnahmen";
 				lastKommentarString=keineAufnahmeString;
 				  }
 			}//[tempAufnahmen count]

@@ -173,7 +173,7 @@ const short kRecPlayUmgebung=0;
 		   selector:@selector(ProjektArrayNotificationAktion:)
 			   name:@"ProjektArray"
 			 object:nil];
-/*
+
 	[nc addObserver:self
 		   selector:@selector(NameIstEntferntAktion:)
 			   name:@"NameIstEntfernt"
@@ -183,7 +183,7 @@ const short kRecPlayUmgebung=0;
 		   selector:@selector(NameIstEingesetztAktion:)
 			   name:@"NameIstEingesetzt"
 			 object:nil];
-*/
+
 	[nc addObserver:self
 		   selector:@selector(SelectionDidChangeAktion:)
 			   name:@"NSTableViewSelectionDidChangeNotification"
@@ -295,7 +295,7 @@ const short kRecPlayUmgebung=0;
    [ExportFormatString setString:@"AIFF"];
 
    
-   [NamenListe setToolTip:@"Liste der Leser im aktuellen Projekt.\nKann im MenŸ 'Admin->NamenListe bearbeiten' verŠndert werden."];
+   [NamenListe setToolTip:@"Liste der Leser im aktuellen Projekt.\nKann im Menue 'Admin->NamenListe bearbeiten' veraendert werden."];
    [ExportierenTaste setToolTip:@"Exportieren der aktuellen Aufnahme in verschiedenen Formaten."];
    [LoeschenTaste setToolTip:@"Aktuelle Aufnahme mit verschiedenen Optionen entfernen."];
    //[AdminMarkCheckbox setToolTip:@"Aktuelle Aufnahme markieren"];
@@ -322,6 +322,7 @@ const short kRecPlayUmgebung=0;
    [AufnahmenTab setDelegate:self];
    // [[self view]addSubview:self.MarkCheckbox ];
    [LehrerMarkCheckbox setEnabled:YES];
+   [AdminMarkCheckbox setEnabled:YES];
    //NSLog(@"AdminPlayer awake end \nAdminMarkCheckbox: %@ \nUserMarkCheckbox: %@\nsubviews: %@", [LehrerMarkCheckbox description],[UserMarkCheckbox description], [[[self view]subviews]description]);
    
    [[NSNotificationCenter defaultCenter] addObserver:self
@@ -377,7 +378,7 @@ const short kRecPlayUmgebung=0;
 		AdminLeseboxHit=[AdminLeseboxDialog runModal] ;//]ForDirectory:NSHomeDirectory() file:@"Volumes" types:nil];
       [AdminLeseboxDialog setDirectoryURL:[NSURL URLWithString:NSHomeDirectory()]];
    }
-	if (AdminLeseboxHit==NSOKButton)
+	if (AdminLeseboxHit==NSModalResponseOK)
 	  {
         
 		tempLeseboxPfad=[[AdminLeseboxDialog URL]path ]; //"home"
@@ -466,10 +467,10 @@ const short kRecPlayUmgebung=0;
 	[AufnahmenPop setImagePosition:NSImageRight];
 	[AufnahmenPop synchronizeTitleAndSelectedItem];
 	NSFont* Popfont;
-	Popfont=[NSFont fontWithName:@"Lucida Grande" size: 10];
+	Popfont=[NSFont fontWithName:@"Helvetica" size: 10];
 	[AufnahmenPop setFont:Popfont];
 	NSFont* Tablefont;
-	Tablefont=[NSFont fontWithName:@"Lucida Grande" size: 12];
+	Tablefont=[NSFont fontWithName:@"Helvetica" size: 12];
 	
 	
 	
@@ -608,8 +609,8 @@ const short kRecPlayUmgebung=0;
 			{
 				indexString=[NSString stringWithString:[tempAufnahmenliste objectAtIndex:m]];
 				nextIndexString=[NSString stringWithString:[tempAufnahmenliste objectAtIndex:m+1]];
-				int n1=[self AufnahmeNummerVon:indexString];
-				int n2=[self AufnahmeNummerVon:nextIndexString];
+				long n1=[self AufnahmeNummerVon:indexString];
+				long n2=[self AufnahmeNummerVon:nextIndexString];
 				//NSLog(@"indexTitelString: %@  Nr:%d",indexTitelString,n1);
 				//NSLog(@"nextindexTitelString: %@  Nr:%d",nextindexTitelString,n2);
 				if(n2<n1)
@@ -893,7 +894,7 @@ const short kRecPlayUmgebung=0;
         OK = [self saveAdminMarkFuerLeser:AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme
                            mitAdminMark:(int)[AdminMarkCheckbox state]];
          */
-        OK = [self saveMarksFuerLeser:self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: (int)[LehrerMarkCheckbox state] mitUserMark:(int)[UserMarkCheckbox state]];
+        OK = [self saveMarksFuerLeser:self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: (int)[AdminMarkCheckbox state] mitUserMark:(int)[UserMarkCheckbox state]];
 
   
         
@@ -1019,7 +1020,7 @@ const short kRecPlayUmgebung=0;
 {
    //	*********************************** wird von Aufnahmetable aufgerufen: Lšst Aktion des PopMenues aus !!!
    double hitZeile=[sender selectedRow];
-   NSLog(@"hitZeile: %d ",hitZeile);
+   NSLog(@"hitZeile: %f ",hitZeile);
    if (hitZeile<0)
       return;
    [self clearAVPlay];
@@ -1086,7 +1087,7 @@ const short kRecPlayUmgebung=0;
    }
    else
    {
-      NSLog(@"SetLeser        Keine Aufnahme");
+      NSLog(@"SetZeilenaufnahme       Keine Aufnahme");
       NSBeep();
       [PlayTaste setEnabled:NO];
       [ExportierenTaste setEnabled:NO];
@@ -1118,10 +1119,10 @@ const short kRecPlayUmgebung=0;
 	else
 		return NO;
 }
-- (void)setLeserFuerZeile:(int)dieZeile
+- (void)setLeserFuerZeile:(long)dieZeile
 {
-	int hitZeile=dieZeile;
-	NSLog(@"setLeserFuerZeile: hitZeile: %d ",hitZeile);
+	long hitZeile=dieZeile;
+	NSLog(@"setLeserFuerZeile: hitZeile: %ld ",hitZeile);
 
 	if (hitZeile<0) return;
 	
@@ -1220,19 +1221,6 @@ const short kRecPlayUmgebung=0;
 				//NSLog(@"File da: %@",ZielPfad);
 				AdminPlayPfad = [NSString stringWithString:ZielPfad];
 //            [AVAbspielplayer prepareAdminAufnahmeAnURL:[NSURL fileURLWithPath:AdminPlayPfad]];
-            
-            /*
-				if (AdminPlayerMovie)
-				{
-					SetMovieActive(AdminPlayerMovie,false);
-				}
-				[AdminQTKitPlayer pause:NULL];
-				[AdminQTKitPlayer  gotoBeginning:NULL];
-				[AdminQTKitPlayer setMovie:NULL];
-				*/
-            
-            
-				
 			}
 			else
 			{
@@ -1288,14 +1276,14 @@ const short kRecPlayUmgebung=0;
 								  
 								  [AdminKommentarView setString:[self KommentarVon:KommentarString]];
 								  [AdminDatumfeld setStringValue:[self DatumVon:KommentarString]];
-								  int index=[AdminBewertungfeld indexOfItemWithTitle:[self BewertungVon:KommentarString]];
+								  long index=[AdminBewertungfeld indexOfItemWithTitle:[self BewertungVon:KommentarString]];
 								  if (index>=0)
 								  {
                              [AdminBewertungfeld selectItemAtIndex:index];
 								  }
 								  else
 								  {
-                             int index=[AdminBewertungfeld indexOfItemWithTitle:@"+"];
+                             //long index=[AdminBewertungfeld indexOfItemWithTitle:@"+"];
 								  }
 								  [AdminNotenfeld setStringValue:[self NoteVon:KommentarString]];
 								  //NSLog(@"UserMarkCheckbox Mark: %d",[self UserMarkVon:KommentarString]);
@@ -1316,7 +1304,7 @@ const short kRecPlayUmgebung=0;
                            
                            NSMutableDictionary* NotificationDic=[[NSMutableDictionary alloc]initWithCapacity:0];
                            [NotificationDic setObject:[NSNumber numberWithInt:tempmark] forKey:@"adminstate"];
-                           NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
+                           //NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
                           // [nc postNotificationName:@"markcheckbox" object:self userInfo:NotificationDic];
 
                             
@@ -1443,7 +1431,7 @@ const short kRecPlayUmgebung=0;
 			NSDictionary *AufnahmeAttrs = [Filemanager attributesOfItemAtPath:tempAdminAufnahmePfad error:NULL];
 			if (AufnahmeAttrs) 
 			{
-				NSDate* CreationDate = [AufnahmeAttrs objectForKey:NSFileCreationDate];
+				//NSDate* CreationDate = [AufnahmeAttrs objectForKey:NSFileCreationDate];
 			}
 			else
 			{
@@ -1564,7 +1552,7 @@ const short kRecPlayUmgebung=0;
                
             NSUInteger position = [tempKommentarViewString rangeOfString:@"*0"].location;
             NSLog(@"position: %lul",(unsigned long)position);
-            unichar textCharacter = '*';
+            //unichar textCharacter = '*';
             NSLog(@"tempKommentarViewString: 0: %C",[tempKommentarViewString characterAtIndex:0]);
             
             while ([tempKommentarViewString length] && (!([s characterIsMember:[tempKommentarViewString characterAtIndex:0]])))
@@ -1609,7 +1597,7 @@ const short kRecPlayUmgebung=0;
 
 
 - (BOOL)saveAdminMarkFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme 
-			  mitAdminMark:(int)dieAdminMark
+			  mitAdminMark:(long)dieAdminMark
 			  
 {
 	NSLog(@"in saveAdminMarkFuerLeser Anfang Leser: %@ Aufnahme: %@ AdminMark: %d",derLeser,dieAufnahme,dieAdminMark);
@@ -1632,8 +1620,6 @@ const short kRecPlayUmgebung=0;
 	
 	NSString* KommentarOrdnerString=@"Anmerkungen";
 	NSString* tempAdminKommentarPfad=[[AdminProjektPfad copy] stringByAppendingPathComponent:tempLeser];
-	NSString* tempKommentarString;
-	NSString* tempKopfString;
 	NSLog(@"in saveAdminMarkFuerLeser tempAdminKommentarPfad: %@",tempAdminKommentarPfad);
 	if ([Filemanager fileExistsAtPath:tempAdminKommentarPfad isDirectory:&istDirectory])//Ordner des Lesers ist da
 	{
@@ -1682,10 +1668,10 @@ const short kRecPlayUmgebung=0;
 }
 
 - (BOOL)saveMarksFuerLeser:(NSString*) derLeser FuerAufnahme:(NSString*)dieAufnahme 
-			  mitAdminMark:(int)dieAdminMark
-			   mitUserMark:(int)dieUserMark
+			  mitAdminMark:(long)dieAdminMark
+			   mitUserMark:(long)dieUserMark
 {
-	NSLog(@"in saveMarksFuerLeser Anfang Leser: %@ Aufnahme: %@ AdminMark: %d UserMark: %d",derLeser,dieAufnahme,dieAdminMark,dieUserMark);
+	NSLog(@"in saveMarksFuerLeser Anfang Leser: %@ Aufnahme: %@ AdminMark: %ld UserMark: %ld",derLeser,dieAufnahme,dieAdminMark,dieUserMark);
 	
 	BOOL erfolg;
 	BOOL istDirectory; 
@@ -1709,8 +1695,6 @@ const short kRecPlayUmgebung=0;
 	}
 	NSString* KommentarOrdnerString=@"Anmerkungen";
 	NSString* tempAdminKommentarPfad=[[AdminProjektPfad copy] stringByAppendingPathComponent:tempLeser];
-	NSString* tempKommentarString;
-	NSString* tempKopfString;
 	//NSLog(@"in saveKommentarFuerLeser 1");
 	if ([Filemanager fileExistsAtPath:tempAdminKommentarPfad isDirectory:&istDirectory])//Ordner des Lesers ist da
 	{
@@ -1727,12 +1711,12 @@ const short kRecPlayUmgebung=0;
 				{
 					if ([tempKommentarArrary count]==8)//Zeile fŸr Mark ist da
 					{
-						NSNumber* AdminMarkNumber=[NSNumber numberWithInt:dieAdminMark];
+						NSNumber* AdminMarkNumber=[NSNumber numberWithLong:dieAdminMark];
 						NSLog(@"saveMark		replaceObjectAtIndex1");
 						[tempKommentarArrary replaceObjectAtIndex:kAdminMark withObject:[AdminMarkNumber stringValue]];
 						NSLog(@"tempKommentarArrary nach: %@ AdminMark:%@",[tempKommentarArrary description],[AdminMarkNumber stringValue]);
 
-						NSNumber* UserMarkNumber=[NSNumber numberWithInt:dieUserMark];
+						NSNumber* UserMarkNumber=[NSNumber numberWithLong:dieUserMark];
 						NSLog(@"saveMark		replaceObjectAtIndex1");
 						[tempKommentarArrary replaceObjectAtIndex:kUserMark withObject:[UserMarkNumber stringValue]];
 						NSLog(@"tempKommentarArrary nach: %@ UserMark:%@",[tempKommentarArrary description],[UserMarkNumber stringValue]);
@@ -1740,7 +1724,7 @@ const short kRecPlayUmgebung=0;
 					}
 					else if([tempKommentarArrary count]==6)//Zeile fŸr Mark ist noch nicht da
 					{
-						NSNumber* UserMarkNumber=[NSNumber numberWithInt:dieUserMark];
+						NSNumber* UserMarkNumber=[NSNumber numberWithLong:dieUserMark];
 						[tempKommentarArrary insertObject:[UserMarkNumber stringValue] atIndex:5];
 
 }
@@ -1905,7 +1889,7 @@ const short kRecPlayUmgebung=0;
          }
          else
          {
-            NSBeep;
+            NSBeep();
             [self Aufnahmezuruecklegen];
             [PlayTaste setEnabled:NO];
          }
@@ -1918,7 +1902,7 @@ const short kRecPlayUmgebung=0;
             [AdminKommentarView setEditable:YES];
             [AdminKommentarView setSelectable:YES];
             
-            int AufnahmenIndex=[AufnahmenTable selectedRow];
+            long AufnahmenIndex=[AufnahmenTable selectedRow];
             AdminAktuelleAufnahme=[[AufnahmenDicArray objectAtIndex:AufnahmenIndex]objectForKey:@"aufnahme"];
             self.AdminAktuellerLeser=[LesernamenPop titleOfSelectedItem];
             [self setPfadFuerLeser: self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme];
@@ -1948,7 +1932,7 @@ const short kRecPlayUmgebung=0;
          }
          else
          {
-            NSBeep;
+            NSBeep();
             [self Aufnahmezuruecklegen];
             [PlayTaste setEnabled:NO];
             self.AdminAktuellerLeser=@"";
@@ -2227,7 +2211,7 @@ const short kRecPlayUmgebung=0;
 		//AdminAktuellerLeser=@"";//herausgenommen infolge KommentarfŸrLeser
 		
 		AdminAktuelleAufnahme=@"";
-		NSLog(@"backZurListe AdminMark: %d UserMark: %d",[AdminMarkCheckbox state],[UserMarkCheckbox state]);
+		NSLog(@"backZurListe AdminMark: %ld UserMark: %ld",(long)[AdminMarkCheckbox state],(long)[UserMarkCheckbox state]);
 		[self saveMarksFuerLeser:self.AdminAktuellerLeser FuerAufnahme:AdminAktuelleAufnahme mitAdminMark: [AdminMarkCheckbox state] mitUserMark:[UserMarkCheckbox state]];
 
 	  }
@@ -2258,14 +2242,10 @@ const short kRecPlayUmgebung=0;
 
 - (void)setPlayerURL:(NSURL*)dieURL
 {
-   NSError* err;
-
    
-   
-    
    [AVAbspielplayer prepareAdminAufnahmeAnURL:dieURL];
    
-   double dur = AVAbspielplayer.duration;
+   //double dur = AVAbspielplayer.duration;
    
 
 //   NSLog(@"setPlayerURL prepareAdminAufnahmeAnURL err: %@ dur: %f",err, dur);
@@ -2297,7 +2277,7 @@ const short kRecPlayUmgebung=0;
                                            userInfo:nil
                                             repeats:YES];
    
-   NSRunLoop* runloop = [NSRunLoop currentRunLoop];
+   //NSRunLoop* runloop = [NSRunLoop currentRunLoop];
 //   [runloop addTimer:posTimer forMode:NSRunLoopCommonModes];
  
 }
@@ -2318,7 +2298,7 @@ const short kRecPlayUmgebung=0;
    {
       //NSLog(@"AdminPlayer posAnzeigeFunktion pos: %f dur: %f",pos,dur);
       [self setAbspielanzeigeAnPos:pos mitDur:dur];
-      NSNotificationCenter * nc=[NSNotificationCenter defaultCenter];
+     // NSNotificationCenter * nc=[NSNotificationCenter defaultCenter];
       //[nc postNotificationName:@"abspielpos" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
        //                                                            [NSNumber numberWithDouble:pos] ,@"pos",
         //                                                           [NSNumber numberWithDouble:dur] ,@"dur",nil]];
@@ -2436,7 +2416,7 @@ const short kRecPlayUmgebung=0;
    
    double pos;
    double dur;
-   int posint;
+   int posint=0;
    if ([[note userInfo]objectForKey:@"pos"])
    {
       NSNumber* posNumber=[[note userInfo]objectForKey:@"pos"];
@@ -2506,7 +2486,7 @@ const short kRecPlayUmgebung=0;
 	[AdminMarkCheckbox setState:derStatus];
 }
 
-- (int)Mark
+- (long)Mark
 {
 	return [AdminMarkCheckbox state];
 }
@@ -2514,12 +2494,12 @@ const short kRecPlayUmgebung=0;
 - (void)AufnahmeMarkieren:(id)sender
 {
 
-	NSLog(@"Aufnahmemarkieren: setMark: %d zeile: %d",[sender state],[NamenListe selectedRow]);
+	NSLog(@"Aufnahmemarkieren: setMark: %ld zeile: %ld",(long)[sender state],(long)[NamenListe selectedRow]);
 		switch ([[[AufnahmenTab selectedTabViewItem]identifier]intValue])
 		{
 		case 1://Alle Aufnahmen
 		{
-			int tempZeile=[NamenListe selectedRow];
+			long tempZeile=[NamenListe selectedRow];
 			if(tempZeile>=0)
 			{
 				int tempItem=[[[AdminDaten dataForRow:tempZeile]objectForKey:@"aufnahmen"]intValue];
@@ -2544,7 +2524,7 @@ const short kRecPlayUmgebung=0;
 		{
 		NSString* tempLeser=[LesernamenPop titleOfSelectedItem];
 		int LeserZeile=[AdminDaten ZeileVonLeser:tempLeser];//Zeile von tempLeser in AdminDaten
-		int AufnahmenZeile=[AufnahmenTable selectedRow];		//Zeile in der AufnahmenTable, 
+		long AufnahmenZeile=[AufnahmenTable selectedRow];		//Zeile in der AufnahmenTable,
 		// ist auch Zeile der Aufnahme fŸr tempLeser im AufnahmenArray in AdminDaten
 		//NSLog(@"AufnahmeMarkieren tempLeser: %@ LeserZeile: %d AufnahmenZeile: %d",tempLeser,LeserZeile,AufnahmenZeile);
 		[AdminDaten setMark:[sender state] forRow:LeserZeile forItem:AufnahmenZeile];
@@ -2684,7 +2664,7 @@ const short kRecPlayUmgebung=0;
 }
 
 
-- (void)MarkierungEntfernenFuerZeile:(int)dieZeile
+- (void)MarkierungEntfernenFuerZeile:(long)dieZeile
 {
 	NSDictionary* tempZeilenDic=[AdminDaten dataForRow:dieZeile];
 	NSLog(@"tempZeilenDic: %@",[tempZeilenDic description]);
@@ -2785,13 +2765,13 @@ const short kRecPlayUmgebung=0;
 
 - (void)MarkierungenEntfernen
 {
-	int tempZeile=[NamenListe selectedRow];
+	long tempZeile=[NamenListe selectedRow];
 	if(tempZeile>=0)
 	  {
 		NSString* tempLeser=[[AdminDaten dataForRow:tempZeile]objectForKey:@"namen"];
 		
 		MarkierungFenster=[[rMarkierung alloc]init];
-	    int modalAntwort;
+	    long modalAntwort;
 		SEL MarkierungSelektor;
 		MarkierungSelektor=@selector(sheetDidEnd: returnCode: contextInfo:);
 		NSLog(@"MarkierungenWeg: tempLeser: %@",tempLeser);
@@ -2809,7 +2789,7 @@ const short kRecPlayUmgebung=0;
 		[NSApp endSheet:[MarkierungFenster window]];
 		
 		[[MarkierungFenster window] orderOut:NULL];   
-		NSLog(@"endSheet: Antwort: %d",modalAntwort);
+		NSLog(@"endSheet: Antwort: %ld",modalAntwort);
 		
 	  }//tempZeile>=0
 
@@ -2819,13 +2799,13 @@ const short kRecPlayUmgebung=0;
 
 - (void)reportUserMark:(id)sender
 {
-    NSLog(@"reportUserMark state: %d tab: %d",[sender state],[[[AufnahmenTab selectedTabViewItem]identifier]intValue] );
+    NSLog(@"reportUserMark state: %ld tab: %d",(long)[sender state],[[[AufnahmenTab selectedTabViewItem]identifier]intValue] );
    Textchanged = YES;
 	switch ([[[AufnahmenTab selectedTabViewItem]identifier]intValue])
 	{
 		case 2:// Aufnahmen nach Namen
 		{
-			int ZeilenIndex=[AufnahmenTable selectedRow];
+			long ZeilenIndex=[AufnahmenTable selectedRow];
          
 			[self setUserMark:[sender state] fuerZeile:ZeilenIndex];
 		}break;
@@ -2834,7 +2814,7 @@ const short kRecPlayUmgebung=0;
 
 - (void)reportAdminMark:(id)sender
 {
-   NSLog(@"reportAdminMark state: %d tab: %d row: %d",(long)[sender state],[[[AufnahmenTab selectedTabViewItem]identifier]intValue],[self selektierteZeile] );
+   NSLog(@"reportAdminMark state: %ld tab: %d row: %f",(long)[sender state],[[[AufnahmenTab selectedTabViewItem]identifier]intValue],[self selektierteZeile] );
    Textchanged = YES;
    
    switch ([[[AufnahmenTab selectedTabViewItem]identifier]intValue])
@@ -4345,6 +4325,7 @@ NSNumber* UmgebungNumber=[[note userInfo]objectForKey:@"Umgebung"];
 
 - (void)NameIstEntferntAktion:(NSNotification*)note
 {
+   NSLog(@"NameIstEntferntAktion: %@",[[note userInfo]description]);
 	NSString* tempEntfernenName;
 	int entfernenOK=-1;
 	if ([[note userInfo] objectForKey:@"namen"])
@@ -4360,12 +4341,14 @@ NSNumber* UmgebungNumber=[[note userInfo]objectForKey:@"Umgebung"];
 	}	
 if (entfernenOK==0)//allesOK
 	{
-	[self setAdminPlayer:AdminLeseboxPfad inProjekt:[AdminProjektPfad lastPathComponent]];
+     // [self setAdminPlayer:AdminLeseboxPfad inProjekt:[AdminProjektPfad lastPathComponent]];
 
-	//[AdminDaten deleteDataZuName:tempEntfernenName];
+	[AdminDaten deleteDataZuName:tempEntfernenName];
 	//[self.NamenListe reloadData];
 	}
 }
+
+
 - (void)NameIstEingesetztAktion:(NSNotification*)note
 {
 	NSLog(@"NameIstEingesetztNotificationAktion: %@",[note description]);

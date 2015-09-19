@@ -91,7 +91,7 @@
                                                             error: &err];
    
    [AVAbspielplayer prepareToPlay];
-   double dur = AVAbspielplayer.duration;
+   //double dur = AVAbspielplayer.duration;
    haltzeit=0;
    //NSLog(@"prepareAdminAufnahmeAnURL err: %@ dur: %f",err, dur);
    
@@ -111,7 +111,7 @@
    {
       NSLog(@"playAdminAufnahme: %@", AVAbspielplayer.url.path);
       // http://stackoverflow.com/questions/1605846/avaudioplayer-with-external-url-to-m4p
-      double dur = AVAbspielplayer.duration;
+      //double dur = AVAbspielplayer.duration;
       haltzeit = 0;
       [AVAbspielplayer play];
       
@@ -157,7 +157,7 @@
    {
       NSLog(@"playAdminAufnahme: %@", AVAbspielplayer.url.path);
       // http://stackoverflow.com/questions/1605846/avaudioplayer-with-external-url-to-m4p
-      double dur = AVAbspielplayer.duration;
+      //double dur = AVAbspielplayer.duration;
       haltzeit = 0;
       [AVAbspielplayer play];
       
@@ -207,7 +207,7 @@
       //NSLog(@"playAufnahme err: %@",err);
       NSLog(@"playAufnahme: %@", AVAbspielplayer.url.path);
       [AVAbspielplayer prepareToPlay];
-      double dur = AVAbspielplayer.duration;
+     // double dur = AVAbspielplayer.duration;
       
       haltzeit = 0;
       
@@ -315,13 +315,13 @@
    
    [playPanel beginSheetModalForWindow:[self PlayerFenster] completionHandler:^(NSInteger result)
     {
-       NSError *error = nil;
-       if (result == NSOKButton)
+       //NSError *error = nil;
+       if (result == NSModalResponseOK)
        {
           
           
           
-          NSString* testpfad = [[[NSHomeDirectory()stringByAppendingPathComponent:@"Documents/Lesebox"]stringByAppendingPathComponent:@"trimm"]stringByAppendingPathExtension:@"m4a"];
+         // NSString* testpfad = [[[NSHomeDirectory()stringByAppendingPathComponent:@"Documents/Lesebox"]stringByAppendingPathComponent:@"trimm"]stringByAppendingPathExtension:@"m4a"];
           
           [self setURL:[playPanel URL]];
           
@@ -354,7 +354,7 @@
       AVAbspielplayer.currentTime = 0;
       [AVAbspielplayer stop];
    }
-   NSTimeInterval pos =AVAbspielplayer.currentTime;
+//   NSTimeInterval pos =AVAbspielplayer.currentTime;
    NSTimeInterval dur =AVAbspielplayer.duration;
 
    [[NSNotificationCenter defaultCenter] postNotificationName:@"abspielpos" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:

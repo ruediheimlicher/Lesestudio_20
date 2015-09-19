@@ -346,6 +346,7 @@
 
 - (void)startAdminTimer;
 - (void)AdminEntfernenNotificationAktion:(NSNotification*)note;
+- (void)NameIstEntferntAktion:(NSNotification*)note;
 @end // Lesebox
 
 // Category AVRecorder

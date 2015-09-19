@@ -1524,7 +1524,6 @@ enum
    
    
    [self.AdminPlayer setAdminPlayer:self.LeseboxPfad inProjekt:[self.ProjektPfad lastPathComponent]];
-   
    [self.AdminPlayer setAdminProjektArray:self.ProjektArray];
    
    //NSLog(@"beginAdminPlayer nach setAdminPlayer");
@@ -2285,16 +2284,34 @@ enum
 
 - (void)NameIstEingesetztAktion:(NSNotification*)note
 {
-   NSLog(@"NameIstEingesetztNotificationAktion: %@",[note description]);
+   NSLog(@"View NameIstEingesetztNotificationAktion: %@",[note description]);
+   
    if ([[note userInfo]objectForKey:@"einsetzenOK"])
    {
       int EinsetzenOK=[[[note userInfo]objectForKey:@"einsetzenOK"]intValue];
       if (EinsetzenOK)
       {
-         //[self setAdminPlayer:AdminLeseboxPfad inProjekt:[AdminProjektPfad lastPathComponent]];
+         [self setArchivNamenPop];
+         //[self setAdminPlayer:self.LeseboxPfad inProjekt:[AdminProjektPfad lastPathComponent]];
       }//if 
    }//note
 }
+
+- (void)NameIstEntferntAktion:(NSNotification*)note
+{
+   NSLog(@"View NameIstEntferntAktion: %@",[note description]);
+   
+   if ([[note userInfo]objectForKey:@"einsetzenOK"])
+   {
+      int EinsetzenOK=[[[note userInfo]objectForKey:@"einsetzenOK"]intValue];
+      if (EinsetzenOK==0)// Erfolg ist 0
+      {
+         [self setArchivNamenPop];
+         //[self setAdminPlayer:self.LeseboxPfad inProjekt:[AdminProjektPfad lastPathComponent]];
+      }//if
+   }//note
+}
+
 
 
 - (IBAction)showEinzelNamen

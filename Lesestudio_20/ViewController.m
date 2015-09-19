@@ -87,6 +87,8 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
    [super viewDidLoad];
       NSLog(@"nibname: %@ window: %@",self.nibName, [[self.view window]description]);
    
+
+   
 //   [self initWithNibName:self.nibName bundle:nil];
    startcode=0;
    RPAufnahmenDirIDKey		=	@"RPAufnahmenDirID";
@@ -293,7 +295,7 @@ NSString*	RPDevicedatenKey=	@"RPDevicedaten";
           selector:@selector(AdminStartAktion:)
               name:@"adminstart"
             object:nil];
-  
+ 
    [nc addObserver:self
           selector:@selector(NameIstEntferntAktion:)
               name:@"NameIstEntfernt"
