@@ -1619,7 +1619,6 @@ enum
 }
 
 - (void)setArchivNamenPop
-
 {
    NSFileManager *Filemanager=[NSFileManager defaultManager];
    //NSLog(@"setArchivNamenPop: ProjektArray: %@",[ProjektArray description]);
@@ -2301,11 +2300,13 @@ enum
 {
    NSLog(@"View NameIstEntferntAktion: %@",[note description]);
    
-   if ([[note userInfo]objectForKey:@"einsetzenOK"])
+   if ([[note userInfo]objectForKey:@"entfernenOK"])
    {
-      int EinsetzenOK=[[[note userInfo]objectForKey:@"einsetzenOK"]intValue];
-      if (EinsetzenOK==0)// Erfolg ist 0
+      int EntfernenOK=[[[note userInfo]objectForKey:@"entfernenOK"]intValue];
+      if (EntfernenOK==0)// Erfolg ist 0
       {
+         NSArray* EntfernenPfadArray = [[note userInfo]objectForKey:@"entfernenpfadarray"];
+         
          [self setArchivNamenPop];
          //[self setAdminPlayer:self.LeseboxPfad inProjekt:[AdminProjektPfad lastPathComponent]];
       }//if

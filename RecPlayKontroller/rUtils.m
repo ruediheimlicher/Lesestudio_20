@@ -2175,6 +2175,7 @@ return versionOK;
 				NSMutableDictionary* NotificationDic=[[NSMutableDictionary alloc]initWithCapacity:0];
 				[NotificationDic setObject:tempEntfernenName forKey:@"namen"];
 				[NotificationDic setObject:[NSNumber numberWithInt:fehler] forKey:@"entfernenOK"];
+            [NotificationDic setObject:EntfernenPfadArray forKey:@"entfernenpfadarray"];
 				NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
 				[nc postNotificationName:@"NameIstEntfernt" object:self userInfo:NotificationDic];
 			}
@@ -2481,7 +2482,9 @@ return versionOK;
       }
       else
       {
+         // betroffene Projekte
          [eingesetzteNamenArray addObject:[[einPfad stringByDeletingLastPathComponent]lastPathComponent]];
+         
          // Anmerkungen-Ordner einsetzen
          erfolg=[Filemanager createDirectoryAtPath:[einPfad stringByAppendingPathComponent:@"Anmerkungen"]  withIntermediateDirectories:NO attributes:NULL error:NULL];
          
