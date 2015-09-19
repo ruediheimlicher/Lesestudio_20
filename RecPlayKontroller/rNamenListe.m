@@ -150,7 +150,7 @@
 - (void)NameIstEntferntNotificationAktion:(NSNotification*)note
 {
 	NSLog(@"NameIstEntferntNotificationAktion: %@",[[note userInfo]description]);
-	NSLog(@"NamenArray: %@",[NamenArray description]);
+	//NSLog(@"NamenArray: %@",[NamenArray description]);
 	int EntfernenOK=[[[note userInfo]objectForKey:@"entfernenOK"]intValue];	
 	if (EntfernenOK==0)
 	{
