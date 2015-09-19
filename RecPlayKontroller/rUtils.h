@@ -102,4 +102,11 @@
 - (int)localTagvonDatumString:(NSString*)datumstring;
 - (int)localMonatvonDatumString:(NSString*)datumstring;
 - (int)localJahrvonDatumString:(NSString*)datumstring;
+
+#pragma mark regex
+- (NSString *)stringTrimmedForLeadingAndTrailingWhiteSpacesFromString:(NSString *)string;
+- (NSString *)stringByTrimmingLeadingCharactersInString:(NSString*)checkString InSet:(NSCharacterSet *)characterSet;
+- (NSString *)stringByTrimmingTrailingCharactersInString:(NSString*)checkString InSet:(NSCharacterSet *)characterSet;
+- (NSString *)stringByTrimmingLeadingAndTrailingWhiteSpacesInString:(NSString*)checkString
+;
 @end

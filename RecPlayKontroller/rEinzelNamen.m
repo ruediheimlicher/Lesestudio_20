@@ -201,7 +201,7 @@ if (index>=0)
 	[NotificationDic setObject:[NamenArray copy] forKey:@"namenarray"];//
 
 	NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
-	//[nc postNotificationName:@"EinzelNamen" object:self userInfo:NotificationDic];
+	[nc postNotificationName:@"EinzelNamen" object:self userInfo:NotificationDic];
 
 
 	[NSApp stopModalWithCode:1];
@@ -224,6 +224,15 @@ if (index>=0)
 	
 - (IBAction)reportUbernehmen:(id)sender
 {
+   NSMutableDictionary* NotificationDic=[[NSMutableDictionary alloc]initWithCapacity:0];
+   NSNumber* EinsetzenVarianteNumber=[NSNumber numberWithInt:0];
+   [NotificationDic setObject:EinsetzenVarianteNumber forKey: @"einsetzenVariante"];
+   [NotificationDic setObject:NamenArray forKey:@"neueNamenArray"]; //Namen aus der NamenListe
+   //NSLog(@"*reportNamenUbernehmen	neueNamenArray: %@",[neueNamenArray description]);
+   NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
+   [nc postNotificationName:@"NamenEinsetzen" object:self userInfo:NotificationDic];
+
+   
 }
 
 

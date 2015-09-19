@@ -14,6 +14,7 @@
     IBOutlet id NameInListeTaste;
     IBOutlet id NameAusListeTaste;
 	IBOutlet id NamenTable;
+   IBOutlet NSTabView* NamenTab;
 	IBOutlet id neueNamenTable;
     IBOutlet id window;
 	IBOutlet id TitelString;

@@ -252,7 +252,7 @@
 	int selektierteZeile=[NamenTable selectedRow];
 	if ([[[NamenArray objectAtIndex:selektierteZeile]objectForKey:@"neuername"]boolValue])
 	{
-	NSString* tempString=[[NamenArray objectAtIndex:selektierteZeile]objectForKey:@"namen"];
+      NSString* tempString=[[NamenArray objectAtIndex:selektierteZeile]objectForKey:@"namen"];
 		//neuer Name, noch nicht eingesetzt, nur aus Namenarray löschen
 		[NamenArray removeObjectAtIndex:selektierteZeile];
 		[NamenTable reloadData];
@@ -260,6 +260,7 @@
 		{
 		//NSLog(@"neueNamenArray enthält tempString");
 		[neueNamenArray removeObject:tempString];
+         
 		}
 	}
 	
@@ -350,25 +351,25 @@
 	NSLog(@"NameIstEingesetztNotificationAktion: %@",[[note userInfo] description]);
 
 	if ([[note userInfo]objectForKey:@"einsetzenOK"])
-	{
-		int EinsetzenOK=[[[note userInfo]objectForKey:@"einsetzenOK"]intValue];	
-		if (EinsetzenOK)
-		{
-			
-			if([[note userInfo]objectForKey:@"neuerName"])
-			{
-           
-				NSString* EinsetzenName=[[note userInfo]objectForKey:@"neuerName"];
-             NSLog(@"nur ein neuer Name: %@",EinsetzenName);
-				NSMutableDictionary*tempDic=[NSMutableDictionary dictionaryWithObject:EinsetzenName forKey:@"namen"];
-				[tempDic setObject:[NSNumber numberWithBool:YES] forKey:@"neuername"];
-
-				if (![NamenArray containsObject: tempDic])
-				{
-					[NamenArray addObject: tempDic];
-					[NamenTable reloadData];
-				}
-			}//if
+   {
+      int EinsetzenOK=[[[note userInfo]objectForKey:@"einsetzenOK"]intValue];
+      if (EinsetzenOK)
+      {
+         
+         if([[note userInfo]objectForKey:@"neuerName"])
+         {
+            
+            NSString* EinsetzenName=[[note userInfo]objectForKey:@"neuerName"];
+            NSLog(@"nur ein neuer Name: %@",EinsetzenName);
+            NSMutableDictionary*tempDic=[NSMutableDictionary dictionaryWithObject:EinsetzenName forKey:@"namen"];
+            [tempDic setObject:[NSNumber numberWithBool:YES] forKey:@"neuername"];
+            
+            if (![NamenArray containsObject: tempDic])
+            {
+               [NamenArray addObject: tempDic];
+               [NamenTable reloadData];
+            }
+         }//if
          
          if([[note userInfo]objectForKey:@"neueNamenArray"])
          {
@@ -378,15 +379,17 @@
             {
                NSMutableDictionary*tempDic=[NSMutableDictionary dictionaryWithObject:[tempNamenArray objectAtIndex:index] forKey:@"namen"];
                [tempDic setObject:[NSNumber numberWithBool:YES] forKey:@"neuername"];
-
-               [NamenArray addObject: tempDic];
-               [NamenTable reloadData];
+               if (![NamenArray containsObject: tempDic])
+               {
+                  [NamenArray addObject: tempDic];
+                  [NamenTable reloadData];
+               }
             }
          }
-
          
-		}//if 
-	}//note
+         
+      }//if 
+   }//note
 	[UbernehmenTaste setEnabled:NO];
 //NSLog(@"NameIstEingesetztNotificationAktion:			ende");
 }
@@ -403,7 +406,7 @@
 
 - (void)NamenAusKlassenlisteNotificationAktion:(NSNotification*)note
 {
-	//NSLog(@"NamenAusKlassenlisteNotificationAktion: %@",[note description]);
+	NSLog(@"NamenAusKlassenlisteNotificationAktion: %@",[note description]);
 	if([[note userInfo]objectForKey:@"NamenDicAusKlassenliste"])
 	{
 		NSDictionary* tempNamenAusKlassenlisteDic=[[note userInfo]objectForKey:@"NamenDicAusKlassenliste"];

@@ -1031,7 +1031,7 @@ return versionOK;
 			KlassenArray=[[KlassenListeString componentsSeparatedByString:@"\r"]mutableCopy];
 		}
 		//NSLog(@"KlassenArray: %@",[KlassenArray description]);
-		unsigned int Trennstelle=0;
+		unsigned int TrennStelle=0;
 		if([KlassenArray count])
 		{
 			
@@ -1058,7 +1058,7 @@ return versionOK;
 				NSRange Leerschlag;
 				if (Tabulator.location<=[tempName length])
 				{
-					Trennstelle=Tabulator.location;
+					TrennStelle=Tabulator.location;
 				}
 				else
 				{
@@ -1066,21 +1066,21 @@ return versionOK;
 					//NSLog(@"KlassenArray tempName: %@   Leerschlag: %d",tempName,Leerschlag.location);
 					if (Leerschlag.location<=[tempName length])
 					{
-						Trennstelle=Leerschlag.location;
+						TrennStelle=Leerschlag.location;
 					}
 					else
 					{						
-						Trennstelle=[tempName length];
+						TrennStelle=[tempName length];
 					}
 					
 				}
-				NSRange tempNamenRange=NSMakeRange(0,Trennstelle);
+				NSRange tempNamenRange=NSMakeRange(0,TrennStelle);
 				tempOrdnername=[NSString stringWithString:[tempName substringWithRange:tempNamenRange]];
 				//NSLog(@"			KlassenArray tempOrdnername: %@   Trennstelle: %d",tempOrdnername,Trennstelle);
-				if (Trennstelle<[tempName length])
+				if (TrennStelle<[tempName length])
 				{
 					tempOrdnername=[tempOrdnername stringByAppendingString:@" "];
-					tempNamenRange=NSMakeRange(Trennstelle+1,[tempName length]-Trennstelle-1);
+					tempNamenRange=NSMakeRange(TrennStelle+1,[tempName length]-TrennStelle-1);
 					NSString* tempNachnamestring=[tempName substringWithRange:tempNamenRange];
 					//NSLog(@"tempNachnamestring: %@",tempNachnamestring);
 					tempOrdnername=[tempOrdnername stringByAppendingString:[tempName substringWithRange:tempNamenRange]];
@@ -1109,6 +1109,8 @@ return versionOK;
 	NSMutableDictionary* tempNamenDic=[[NSMutableDictionary alloc]initWithCapacity:0];
 
   NSMutableArray* KlassenArray=[[NSMutableArray alloc] initWithCapacity:0];
+   NSMutableArray* KlassenNamenArray=[[NSMutableArray alloc] initWithCapacity:0];
+ NSMutableArray* FehlerNamenArray=[[NSMutableArray alloc] initWithCapacity:0];
   
   NSOpenPanel * NamenDialog=[NSOpenPanel openPanel];
   [NamenDialog setCanChooseDirectories:NO];
@@ -1139,7 +1141,7 @@ return versionOK;
   erfolg=[KlassenlisteText readRTFDFromFile:NamenPfad];
   NSString* Klassenliste=[NSString stringWithString:[KlassenlisteText string]];
   
-  //NSLog(@"TextViewString: %@",KlassenlisteText );
+  NSLog(@"TextViewString: %@",KlassenlisteText );
   
   
   //NSString* Klassenliste=[NSString stringWithContentsOfFile:NamenPfad];
@@ -1148,88 +1150,234 @@ return versionOK;
   //NSArray* KlassenlisteArray=[Klassenliste componentsSeparatedByString:@"\n"];
   //NSLog(@"Klassenliste: %@",[KlassenArray description]);
   if ([Klassenliste length])
-	{
-	if(([[NamenPfad pathExtension]isEqualToString:@"rtf"])||([[NamenPfad pathExtension]isEqualToString:@"doc"]))
-	  {
-	  KlassenArray=[[Klassenliste componentsSeparatedByString:@"\n"]mutableCopy];
-	  }
-	else
-	  {
-	  KlassenArray=[[Klassenliste componentsSeparatedByString:@"\r"]mutableCopy];
-	  }
-	//NSLog(@"KlassenArray: %@",[KlassenArray description]);
-	unsigned int Trennstelle=0;
-	if([KlassenArray count])
-	  {
-	  
-	  int n=0;
-	  if (![KlassenArray indexOfObjectIdenticalTo:@""]==NSNotFound)
-		{
-		int leer=[KlassenArray indexOfObjectIdenticalTo:@""];
-		NSLog(@"leer: %d",leer);
-		}
-	  for(n=0;n<[KlassenArray count];n++)
-		{
-		
-		}
-	  NSCharacterSet* tab=[NSCharacterSet characterSetWithCharactersInString:@"\t"];
-	  NSCharacterSet* leer=[NSCharacterSet characterSetWithCharactersInString:@" "];
-	  NSCharacterSet* GROSS=[NSCharacterSet uppercaseLetterCharacterSet];
-	  NSLog(@"KlassenArray count %d",[KlassenArray count]);
-	  for(n=0;n<[KlassenArray count];n++)
-		{
-		NSString* tempOrdnername;
-		NSString* tempName=[KlassenArray objectAtIndex:n];
-		NSRange Tabulator =[tempName rangeOfCharacterFromSet:tab];
-		//NSLog(@"KlassenArray pos: %d  tempName: %@   Tabulator: %d",n,tempName,Tabulator.location);
-		NSRange Leerschlag;
-		if (Tabulator.location<=[tempName length])
-		  {
-		  Trennstelle=Tabulator.location;
-		  }
-		else
-		  {
-		  Leerschlag=[tempName rangeOfCharacterFromSet:leer];
-		  //NSLog(@"KlassenArray tempName: %@   Leerschlag: %d",tempName,Leerschlag.location);
-		  if (Leerschlag.location<=[tempName length])
-			{
-			Trennstelle=Leerschlag.location;
-			}
-		  else
-			{						
-			Trennstelle=[tempName length];
-			}
-		  
-		  }
-		NSRange tempNamenRange=NSMakeRange(0,Trennstelle);
-		tempOrdnername=[NSString stringWithString:[tempName substringWithRange:tempNamenRange]];
-		//NSLog(@"			KlassenArray tempOrdnername: %@   Trennstelle: %d",tempOrdnername,Trennstelle);
-		if (Trennstelle<[tempName length])
-		  {
-		  tempOrdnername=[tempOrdnername stringByAppendingString:@" "];
-		  tempNamenRange=NSMakeRange(Trennstelle+1,[tempName length]-Trennstelle-1);
-		  NSString* tempNachnamestring=[tempName substringWithRange:tempNamenRange];
-		  //NSLog(@"tempNachnamestring: %@",tempNachnamestring);
-		  tempOrdnername=[tempOrdnername stringByAppendingString:[tempName substringWithRange:tempNamenRange]];
-		  }
-		//NSLog(@"KlassenArray def: tempOrdnername: %@",[tempOrdnername description]);
-		
-		[KlassenArray replaceObjectAtIndex:n withObject:tempOrdnername];
-		}//for n
-	  }
-	NSLog(@"KlassenArray def: %@",[KlassenArray description]);
-	if ([KlassenArray containsObject:@""])
-	  {
-	  [KlassenArray removeObject:@""];
-	  }
-	}//Klassenliste length
-  [tempNamenDic setObject:KlassenArray forKey:@"KlassenArray"];
+  {
+     if ([Klassenliste rangeOfString:@"\n"].location < NSNotFound)
+     {
+        KlassenArray=[[Klassenliste componentsSeparatedByString:@"\n"]mutableCopy];
+     }
+     else if ([Klassenliste rangeOfString:@"\r"].location < NSNotFound)
+     {
+        KlassenArray=[[Klassenliste componentsSeparatedByString:@"\r"]mutableCopy];
+     }
+     
+     
+     /*
+      if([[NamenPfad pathExtension]isEqualToString:@"txt"])
+      {
+      KlassenArray=[[Klassenliste componentsSeparatedByString:@"\n"]mutableCopy];
+      }
+      else if([[NamenPfad pathExtension]isEqualToString:@"doc"])
+      {
+      KlassenArray=[[Klassenliste componentsSeparatedByString:@"\r"]mutableCopy];
+      }
+      */
+     
+     NSLog(@"KlassenArray: %@",[KlassenArray description]);
+     unsigned int Trennstelle=0;
+     if([KlassenArray count])
+     {
+        
+        int n=0;
+        if (!([KlassenArray indexOfObjectIdenticalTo:@""]==NSNotFound))
+        {
+           long leer=[KlassenArray indexOfObjectIdenticalTo:@""];
+           NSLog(@"leer: %d",leer);
+        }
+        
+        for(n=0;n<[KlassenArray count];n++)
+        {
+           
+        }
+        NSCharacterSet* tab=[NSCharacterSet characterSetWithCharactersInString:@"\t"];
+        NSCharacterSet* leer=[NSCharacterSet characterSetWithCharactersInString:@" "];
+        NSCharacterSet* GROSS=[NSCharacterSet uppercaseLetterCharacterSet];
+        NSLog(@"KlassenArray count %d",[KlassenArray count]);
+        
+        // Tabulatoren durch leerschlag ersetzen
+        for(n=0;n<[KlassenArray count];n++)
+        {
+           
+           
+           NSString* tempName=[KlassenArray objectAtIndex:n];
+         NSLog(@"tempName vor: %@",tempName);
+           
+           /*
+           // http://www.codeproject.com/Questions/492512/IplusneedplusaplusRegularplusexpressionplusforplus
+           // Regex (/^[a-zA-Z0-9]+ ?([a-zA-Z0-9]+$){1}/)
+           // ohne Ziffern (/^[a-zA-Z]+ ?([a-zA-Z]+$){1}/)
+           NSLog(@"tempName vor: %@",tempName);
+           
+           NSString* regexPatternString = @"(/^[a-zA-Z]+ ?([a-zA-Z]+$){1}/)";
+           tempName = [self stringTrimmedForLeadingAndTrailingWhiteSpacesFromString:@"  Hans Meier "];
+           
+           BOOL regexOK = [self validateString:tempName withPattern:regexPatternString];
+           NSLog(@"regexOK: %d",regexOK);
+           NSLog(@"tempName nach: %@",tempName);
+           */
+           
+          
+           
+           tempName = [self stringByTrimmingLeadingAndTrailingWhiteSpacesInString:tempName];
+           
+       //    tempName = [self stringByTrimmingTrailingCharactersInString:tempName InSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+           
+           
+           NSLog(@" tempName sauber: *%@*",tempName);
+
+           
+           NSString* trennzeichenString;
+           NSRange Tabulator =[tempName rangeOfCharacterFromSet:tab];
+           NSLog(@"KlassenArray pos: %d  tempName: %@   Tabulator: %d length: %d",n,tempName,Tabulator.location,[tempName length] );
+           
+           NSRange Leerschlag;
+           if (Tabulator.location<=[tempName length])
+           {
+              Trennstelle=Tabulator.location;
+              trennzeichenString = @"\t";
+           }
+           else
+           {
+              Leerschlag=[tempName rangeOfCharacterFromSet:leer];
+              //NSLog(@"KlassenArray tempName: %@   Leerschlag: %d",tempName,Leerschlag.location);
+              if (Leerschlag.location<=[tempName length])
+              {
+                 Trennstelle=Leerschlag.location;
+              }
+              else
+              {
+                 Trennstelle=[tempName length]; // Trennstelle ist am schluss
+              }
+              trennzeichenString = @" ";
+
+           }
+           while ([tempName rangeOfString:@"  "].location < NSNotFound)
+           {
+              tempName = [tempName stringByReplacingOccurrencesOfString:@"  " withString:@" "];
+           }
+           NSArray* elementeArray = [tempName componentsSeparatedByString:trennzeichenString];
+           NSLog(@"elementeArray: %@",elementeArray);
+           
+           //Vornamen erkennen: erstes Wort
+           NSRange tempNamenRange=NSMakeRange(0,Trennstelle);
+           // Namen fuer den Ordner aufbauen
+           // Vornamen einsetzen
+           NSString* tempOrdnername=[NSString stringWithString:[tempName substringWithRange:tempNamenRange]];
+           
+           NSLog(@" tempOrdnername: *%@*",tempOrdnername);
+           // leading und trailing Leerschlaege weg
+           tempOrdnername = [self stringByTrimmingLeadingAndTrailingWhiteSpacesInString:tempOrdnername];
+           NSLog(@" tempOrdnername sauber: *%@*",tempOrdnername);
+           
+           
+           //NSLog(@"			KlassenArray tempOrdnername: %@   Trennstelle: %d",tempOrdnername,Trennstelle);
+           // leerschlag einfuegen
+           if (Trennstelle<[tempName length]) // Trennstelle ist vor Ende, mindestens 2 Anteile
+           {
+              tempOrdnername=[tempOrdnername stringByAppendingString:@" "];
+              
+              //Range fuer zweiten Teil
+              tempNamenRange=NSMakeRange(Trennstelle+1,[tempName length]-Trennstelle-1);
+              
+             
+              
+              
+              // Nachnamen erkennen
+              NSString* tempNachnamestring=[tempName substringWithRange:tempNamenRange];
+              
+              
+              NSLog(@"tempNachnamestring: *%@*",tempNachnamestring);
+              
+              // leading und trailing Leerschlaege weg
+              
+              tempNachnamestring = [self stringByTrimmingLeadingAndTrailingWhiteSpacesInString:tempNachnamestring];
+
+              NSLog(@"tempNachnamestring sauber: *%@*",tempNachnamestring);
+
+              
+              
+              tempOrdnername=[tempOrdnername stringByAppendingString:tempNachnamestring];
+           }
+           
+           // Erste Buchstaben gross
+           tempOrdnername = [tempOrdnername capitalizedString];
+           
+           // definitiver Name des Ordners
+           
+           NSLog(@"KlassenArray def: tempOrdnername: *%@*",[tempOrdnername description]);
+           
+           int anzTeile = [[tempOrdnername componentsSeparatedByString:@" "]count];
+           
+           if (anzTeile == 2)
+           {
+              NSLog(@"tempOrdnername %@ hat 2 Teile.",tempOrdnername);
+                         }
+           else
+           {
+              NSLog(@"tempOrdnername %@ hat %d Teile anstatt 2.",tempOrdnername,anzTeile);
+              [FehlerNamenArray addObject:tempName];
+              continue;
+              
+           }
+           // tempName auf zulaessige Zeichen testen
+           // http://stackoverflow.com/questions/1656410/strip-non-alphanumeric-characters-from-an-nsstring
+           NSCharacterSet * okSet = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzäöüéèàçABCDEFGHIJKLKMNOPQRSTUVWXYZÄÖÜ _"] invertedSet];
+           
+           BOOL charOK = [self checkString:tempOrdnername  mitSet:okSet];
+           if (charOK)
+           {
+              NSLog(@"tempName %@ ist OK",tempOrdnername);
+              
+             // [KlassenArray replaceObjectAtIndex:n withObject:tempOrdnername];
+              [KlassenNamenArray addObject:tempOrdnername];
+
+           }
+           else
+           {
+              NSLog(@"tempName %@ enthaelt falsche Zeichen",tempOrdnername);
+              [FehlerNamenArray addObject:tempName];
+              //[KlassenArray removeObjectAtIndex:n ];
+           }
+          
+           
+           // Namen durch korrekte Form ersetzen
+                   }//for n
+     }
+     NSLog(@"KlassenNamenArray def: %@",[KlassenNamenArray description]);
+  }//Klassenliste length
+   if ([FehlerNamenArray count])
+   {
+      NSLog(@"FehlerNamenArray: %@",FehlerNamenArray);
+      
+      NSString* FehlerString = [FehlerNamenArray componentsJoinedByString:@"\n\t"];
+      
+      FehlerString = [NSString stringWithFormat:@"Folgende Namen enthalten Fehler: \n\t%@\nSie werden nicht importiert.\nWeiterfahren mit 'Neue Namen übernehmen'.",FehlerString];
+      NSAlert *Warnung = [[NSAlert alloc] init];
+      [Warnung addButtonWithTitle:@"OK"];
+      [Warnung setMessageText:@"Fehler beim Import aus Namenliste:"];
+      [Warnung setInformativeText:FehlerString];
+      [Warnung setAlertStyle:NSWarningAlertStyle];
+      
+      NSModalResponse antwort = [Warnung runModal];
+
+      
+   }
+  [tempNamenDic setObject:KlassenNamenArray forKey:@"KlassenArray"];
   
   
   return tempNamenDic;
 }
 
-
+- (BOOL)checkString:(NSString*)rawstring mitSet:(NSCharacterSet*)checkSet
+{
+   NSCharacterSet * set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzäöüéèàçABCDEFGHIJKLKMNOPQRSTUVWXYZÄÖÜ _"] invertedSet];
+   
+   if ([rawstring rangeOfCharacterFromSet:checkSet].location != NSNotFound)
+   {
+      NSLog(@"This string contains illegal characters");
+      return NO;
+   }
+   return YES;
+}
 
 - (NSArray*)ProjektArrayAusPListAnPfad:(NSString*)derLeseboxPfad
 {
@@ -2002,7 +2150,7 @@ return versionOK;
 			{
 				case 0://in den Papierkorb
 				{
-					//NSLog(@"UNamenEntfernenAktion in den Papierkorb");
+					NSLog(@"UNamenEntfernenAktion in den Papierkorb");
 				fehler=[self inPapierkorbMitPfad:einPfad];
 				}break;
 				case 1://ins Magazin
@@ -2021,7 +2169,7 @@ return versionOK;
 		}//while
 
 		
-			//NSLog(@"UNamenEntfernen: tempNamenFehler: %d",tempNamenFehler);
+			NSLog(@"UNamenEntfernen: tempNamenFehler: %d",tempNamenFehler);
 			if (tempNamenFehler==0)
 			{
 				NSMutableDictionary* NotificationDic=[[NSMutableDictionary alloc]initWithCapacity:0];
@@ -2062,7 +2210,7 @@ return versionOK;
 
  - (int) fileInPapierkorb:(NSString*) derFilepfad
 {
-   int tag;
+   long tag;
    BOOL succeeded;
    NSString* HomeDir=@"";// = [NSHomeDirectory() stringByAppendingPathComponent:@".Trash"];
    NSFileManager* Filemanager=[NSFileManager defaultManager];
@@ -2336,6 +2484,9 @@ return versionOK;
          [eingesetzteNamenArray addObject:[[einPfad stringByDeletingLastPathComponent]lastPathComponent]];
          // Anmerkungen-Ordner einsetzen
          erfolg=[Filemanager createDirectoryAtPath:[einPfad stringByAppendingPathComponent:@"Anmerkungen"]  withIntermediateDirectories:NO attributes:NULL error:NULL];
+         
+         
+         
       }
       
    }//while
@@ -2382,7 +2533,7 @@ return versionOK;
 
 - (void)UNamenAusListeAktion:(NSNotification*)note
 {
-	//NSLog(@"UNamenAusListeAktion: Notification: %@",[note description]);
+	NSLog(@"UNamenAusListeAktion: Notification: %@",[note description]);
 	NSDictionary* tempNamenDic=[self UOrdnernamenDicVonKlassenliste];
 	NSArray* tempNamenArray=[tempNamenDic objectForKey:@"KlassenArray"];
 	
@@ -2961,5 +3112,89 @@ NSUInteger dayOfYearForDate(NSDate *dasDatum)
    
    return jahr;
 }
+
+#pragma mark regex
+
+- (NSString *)stringByTrimmingLeadingCharactersInString:(NSString*)checkString InSet:(NSCharacterSet *)characterSet
+{
+   //http://stackoverflow.com/questions/5689288/how-to-remove-whitespace-from-right-end-of-nsstring/5691567#5691567
+   NSUInteger location = 0;
+   NSUInteger length = [checkString length];
+   unichar charBuffer[length];
+   [checkString getCharacters:charBuffer];
+   
+   for (location; location < length; location++) {
+      if (![characterSet characterIsMember:charBuffer[location]]) {
+         break;
+      }
+   }
+   
+   return [checkString substringWithRange:NSMakeRange(location, length - location)];
+   
+}
+
+
+
+- (NSString *)stringByTrimmingTrailingCharactersInString:(NSString*)checkString InSet:(NSCharacterSet *)characterSet
+{
+   //http://stackoverflow.com/questions/5689288/how-to-remove-whitespace-from-right-end-of-nsstring/5691567#5691567
+   NSUInteger location = 0;
+   NSUInteger length = [checkString length];
+   unichar charBuffer[length];
+   [checkString getCharacters:charBuffer];
+   
+   for (length; length > 0; length--) {
+      if (![characterSet characterIsMember:charBuffer[length - 1]]) {
+         break;
+      }
+   }
+   
+   return [checkString substringWithRange:NSMakeRange(location, length - location)];
+}
+
+- (NSString *)stringByTrimmingLeadingAndTrailingWhiteSpacesInString:(NSString*)checkString
+{
+   NSString* returnString;
+ //  [NSCharacterSet whitespaceAndNewlineCharacterSet]
+   returnString = [self stringByTrimmingLeadingCharactersInString: checkString InSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+   returnString = [self stringByTrimmingTrailingCharactersInString: returnString InSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  
+   return returnString;
+}
+
+- (NSString *)stringTrimmedForLeadingAndTrailingWhiteSpacesFromString:(NSString *)string
+{
+   NSString *leadingTrailingWhiteSpacesPattern = @"(?:^\\s+)|(?:\\s+$)";
+   
+   NSError* err;
+   NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:leadingTrailingWhiteSpacesPattern options:NSRegularExpressionCaseInsensitive error: &err];
+   
+   NSRange stringRange = NSMakeRange(0, string.length);
+   NSString *trimmedString = [regex stringByReplacingMatchesInString:string options:NSMatchingReportProgress range:stringRange withTemplate:@"$1"];
+   
+   return trimmedString;
+}
+
+// Validate the input string with the given pattern and
+// return the result as a boolean
+- (BOOL)validateString:(NSString *)string withPattern:(NSString *)pattern
+{
+   NSError *error = nil;
+   NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+   
+   NSAssert(regex, @"Unable to create regular expression");
+   
+   NSRange textRange = NSMakeRange(0, string.length);
+   NSRange matchRange = [regex rangeOfFirstMatchInString:string options:0 range:textRange];
+   
+   BOOL didValidate = NO;
+   
+   // Did we find a matching range
+   if (matchRange.location != NSNotFound)
+      didValidate = YES;
+   
+   return didValidate;
+}
+
 
 @end
